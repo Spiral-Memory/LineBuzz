@@ -56,7 +56,7 @@ class RocketChatApi {
 
   public async handleLogin(credentials: any): Promise<any> {
     try {
-      const res = await fetch(`${this.host}/api/login`, {
+      const res = await fetch(`${this.host}/api/v1/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

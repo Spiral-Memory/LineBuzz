@@ -5,6 +5,23 @@ import { AuthData } from "../authData/authData";
 const host = "http://localhost:3000";
 const apiClient = new RocketChatApi(host);
 
+async function tempLogin() {
+  const loginResponse = await apiClient.handleLogin({
+    user: "your_email",
+    password: "your_password",
+  });
+
+  const authToken = loginResponse?.data?.authToken;
+  const userId = loginResponse?.data?.userId;
+
+  if (authToken && userId) {
+    AuthData.setAuthToken(authToken);
+    AuthData.setUserId(userId);
+  }
+}
+
+tempLogin();
+
 let selectedText: string | undefined;
 let commentId = 1;
 let mappings = new Map();
