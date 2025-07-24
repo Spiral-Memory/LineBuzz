@@ -7,8 +7,8 @@ const apiClient = new RocketChatApi(host);
 
 async function tempLogin() {
   const loginResponse = await apiClient.handleLogin({
-    user: "your_email",
-    password: "your_password",
+    user: "zishan.barun@gmail.com",
+    password: "spiral_memory",
   });
 
   const authToken = loginResponse?.data?.authToken;
