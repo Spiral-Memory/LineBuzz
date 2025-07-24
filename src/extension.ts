@@ -1,17 +1,9 @@
 import * as vscode from "vscode";
-import { RCPanelProvider } from "./panels/RCPanel";
 import { RCComment } from "./comments/RCComments";
 
 export function activate(context: vscode.ExtensionContext) {
-  const provider = new RCPanelProvider(context.extensionUri);
   const rcComment = new RCComment();
-
-  context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider(
-      RCPanelProvider.viewType,
-      provider
-    )
-  );
+  
   context.subscriptions.push(rcComment.commentController);
 
   context.subscriptions.push(

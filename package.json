@@ -1,7 +1,7 @@
 {
-  "name": "vscode-rc",
-  "displayName": "vscode-rc",
-  "description": "Learning to make vscode extension for rocket chat",
+  "name": "linebuzz",
+  "displayName": "linebuzz",
+  "description": "talk through code where it lives",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.87.0"
@@ -14,24 +14,6 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "vscode-rc-poc",
-          "title": "Rocket Chat",
-          "icon": "media/rc.svg"
-        }
-      ]
-    },
-    "views": {
-      "vscode-rc-poc": [
-        {
-          "type": "webview",
-          "id": "vsCodeRc.entry",
-          "name": "Rocket Chat"
-        }
-      ]
-    },
     "commands": [
       {
         "command": "vsCodeRc.startDiscussion",
@@ -110,7 +92,6 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@rocket.chat/sdk": "^1.0.0-alpha.42",
-    "@vscode/webview-ui-toolkit": "^1.4.0"
+    "@rocket.chat/sdk": "^1.0.0-alpha.42"
   }
 }
