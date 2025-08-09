@@ -1,34 +1,34 @@
 import * as vscode from "vscode";
-import { RCComment } from "./comments/RCComments";
+import { VSComment } from "./comments/vsComments";
 
 export function activate(context: vscode.ExtensionContext) {
-  const rcComment = new RCComment();
+  const vsComment = new VSComment();
   
-  context.subscriptions.push(rcComment.commentController);
+  context.subscriptions.push(vsComment.commentController);
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "vsCodeRc.startDiscussion",
+      "linebuzz.startDiscussion",
       (reply: vscode.CommentReply) => {
-        rcComment.startDiscussion(reply);
+        vsComment.startDiscussion(reply);
       }
     )
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "vsCodeRc.reply",
+      "linebuzz.reply",
       (reply: vscode.CommentReply) => {
-        rcComment.replyNote(reply);
+        vsComment.replyNote(reply);
       }
     )
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "vsCodeRc.refreshMsg",
+      "linebuzz.refreshMsg",
       (thread: vscode.CommentThread) => {
-        rcComment.refreshMsg(thread);
+        vsComment.refreshMsg(thread);
       }
     )
   );

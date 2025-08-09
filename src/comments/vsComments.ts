@@ -42,7 +42,7 @@ class NoteComment implements vscode.Comment {
   }
 }
 
-export class RCComment {
+export class VSComment {
   public commentController: vscode.CommentController;
 
   constructor() {
@@ -87,8 +87,6 @@ export class RCComment {
       reply.text,
       threadId
     );
-
-    console.log(res);
 
     const newComment = new NoteComment(
       reply.text,
@@ -145,7 +143,6 @@ export class RCComment {
       threadId
     );
 
-    console.log(res);
     thread.comments = [];
     res.messages?.forEach((message: any) => {
       const newComment = new NoteComment(

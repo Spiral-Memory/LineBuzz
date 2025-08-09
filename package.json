@@ -16,17 +16,17 @@
   "contributes": {
     "commands": [
       {
-        "command": "vsCodeRc.startDiscussion",
+        "command": "linebuzz.startDiscussion",
         "title": "Send Message",
         "enablement": "!commentIsEmpty"
       },
       {
-        "command": "vsCodeRc.reply",
+        "command": "linebuzz.reply",
         "title": "Reply",
         "enablement": "!commentIsEmpty"
       },
       {
-        "command": "vsCodeRc.refreshMsg",
+        "command": "linebuzz.refreshMsg",
         "title": "Refresh",
         "icon": {
           "dark": "resources/refresh.svg",
@@ -37,33 +37,33 @@
     "menus": {
       "commandPalette": [
         {
-          "command": "vsCodeRc.startDiscussion",
+          "command": "linebuzz.startDiscussion",
           "when": "false"
         },
         {
-          "command": "vsCodeRc.reply",
+          "command": "linebuzz.reply",
           "when": "false"
         },
         {
-          "command": "vsCodeRc.refreshMsg",
+          "command": "linebuzz.refreshMsg",
           "when": "false"
         }
       ],
       "comments/commentThread/title": [
         {
-          "command": "vsCodeRc.refreshMsg",
+          "command": "linebuzz.refreshMsg",
           "group": "navigation",
           "when": "commentController == send-code && !commentThreadIsEmpty"
         }
       ],
       "comments/commentThread/context": [
         {
-          "command": "vsCodeRc.startDiscussion",
+          "command": "linebuzz.startDiscussion",
           "group": "inline",
           "when": "commentController == send-code && commentThreadIsEmpty"
         },
         {
-          "command": "vsCodeRc.reply",
+          "command": "linebuzz.reply",
           "group": "inline",
           "when": "commentController == send-code && !commentThreadIsEmpty"
         }
