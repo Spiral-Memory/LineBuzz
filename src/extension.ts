@@ -5,6 +5,7 @@ import { AuthData } from "./auth/authData";
 import { askInput } from "./utils/askInput";
 import { getOriginRemoteUrl } from "./utils/gitRemote";
 import { supabase } from "./api/supabaseClient";
+import { setContextId } from "./store/contextStore";
 
 const WORKSPACE_URL_KEY = "linebuzz.workspaceUrl";
 
@@ -92,6 +93,8 @@ export async function activate(context: vscode.ExtensionContext) {
       vscode.window.showErrorMessage("Failed to fetch workspace context UUID");
       return;
     }
+
+    setContextId(data.uuid);
 
     const buzzController = new BuzzCommentController(provider);
 

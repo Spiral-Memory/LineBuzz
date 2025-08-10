@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 
-export function getOriginRemoteUrl(): string | undefined {
+function getGitRepository() {
   const gitExtension = vscode.extensions.getExtension("vscode.git")?.exports;
   if (!gitExtension) {
     return undefined;
@@ -11,8 +11,26 @@ export function getOriginRemoteUrl(): string | undefined {
     return undefined;
   }
 
-  const currentRepository = git.repositories[0];
-  const originRemote = currentRepository.state.remotes.find((remote: any) => remote.name === "origin");
+  return git.repositories[0];
+}
 
+export function getOriginRemoteUrl(): string | undefined {
+  const repo = getGitRepository();
+  if (!repo) {
+    return undefined;
+  }
+
+  const originRemote = repo.state.remotes.find(
+    (remote: any) => remote.name === "origin"
+  );
   return originRemote?.fetchUrl;
+}
+
+export function getCurrentCommitHash(): string | undefined {
+  const repo = getGitRepository();
+  if (!repo) {
+    return undefined;
+  }
+
+  return repo.state.HEAD?.commit;
 }

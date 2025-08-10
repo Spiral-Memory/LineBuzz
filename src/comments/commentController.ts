@@ -3,6 +3,8 @@ import { supabase } from "../api/supabaseClient";
 import { ChatProvider } from "../providers/chatProvider";
 import { rangeToKey } from "../utils/rangeToKey";
 import { appendCommentToThread } from "./appendToThread";
+import { getContextId } from "../store/contextStore";
+import { getCurrentCommitHash } from "../utils/gitRemote";
 
 let mappings = new Map<string, string>();
 
@@ -54,11 +56,24 @@ export class BuzzCommentController {
     }
 
     const rangeString = rangeToKey(thread.range);
+    const contextId = getContextId();
+    const commitHash = getCurrentCommitHash();
+    if (!contextId) {
+      vscode.window.showErrorMessage(
+        "Context ID not found. Cannot save comment."
+      );
+      return;
+    }
 
-    const { error } = await supabase.from("comment_mappings").insert([
+    const filename = doc.uri.path.split("/").pop() || "unknown";
+
+    const { error } = await supabase.from("comments").insert([
       {
+        filename,
         range_string: rangeString,
         thread_id: threadId,
+        context_uuid: contextId,
+        commit_hash: commitHash,
       },
     ]);
 
