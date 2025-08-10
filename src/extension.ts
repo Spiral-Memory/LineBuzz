@@ -3,6 +3,8 @@ import { BuzzCommentController } from "./comments/commentController";
 import { RocketChatProvider } from "./providers/rocketChatProvider";
 import { AuthData } from "./auth/authData";
 import { askInput } from "./utils/askInput";
+import { getOriginRemoteUrl } from "./utils/gitRemote";
+import { supabase } from "./api/supabaseClient";
 
 const WORKSPACE_URL_KEY = "linebuzz.workspaceUrl";
 
@@ -50,29 +52,81 @@ export async function activate(context: vscode.ExtensionContext) {
       await provider.login({ user: email, password });
     }
 
+    const remoteUrl = getOriginRemoteUrl();
+    if (!remoteUrl) {
+      vscode.window.showErrorMessage(
+        "Origin remote URL not found or Git extension not available"
+      );
+      return;
+    }
+
+    const { error: upsertError } = await supabase.from("contexts").upsert(
+      [
+        {
+          repo: remoteUrl,
+          platform: "rocketchat",
+          server: workspaceUrl,
+          channel: "general",
+        },
+      ],
+      { onConflict: "repo,platform,server,channel", ignoreDuplicates: true }
+    );
+
+    if (upsertError) {
+      console.error("Failed to save context:", upsertError);
+      vscode.window.showErrorMessage("Failed to save workspace context");
+      return;
+    }
+
+    const { data, error: fetchError } = await supabase
+      .from("contexts")
+      .select("uuid")
+      .eq("repo", remoteUrl)
+      .eq("platform", "rocketchat")
+      .eq("server", workspaceUrl)
+      .eq("channel", "general")
+      .single();
+
+    if (fetchError) {
+      console.error("Failed to fetch context UUID:", fetchError);
+      vscode.window.showErrorMessage("Failed to fetch workspace context UUID");
+      return;
+    }
+
     const buzzController = new BuzzCommentController(provider);
 
     context.subscriptions.push(buzzController.commentController);
 
     context.subscriptions.push(
-      vscode.commands.registerCommand("linebuzz.startDiscussion", (initialMessage: vscode.CommentReply) => {
-        buzzController.startDiscussion(initialMessage);
-      })
+      vscode.commands.registerCommand(
+        "linebuzz.startDiscussion",
+        (initialMessage: vscode.CommentReply) => {
+          buzzController.startDiscussion(initialMessage);
+        }
+      )
     );
 
     context.subscriptions.push(
-      vscode.commands.registerCommand("linebuzz.reply", (reply: vscode.CommentReply) => {
-        buzzController.replyToMessage(reply);
-      })
+      vscode.commands.registerCommand(
+        "linebuzz.reply",
+        (reply: vscode.CommentReply) => {
+          buzzController.replyToMessage(reply);
+        }
+      )
     );
 
     context.subscriptions.push(
-      vscode.commands.registerCommand("linebuzz.refreshMessage", (thread: vscode.CommentThread) => {
-        buzzController.refreshMessage(thread);
-      })
+      vscode.commands.registerCommand(
+        "linebuzz.refreshMessage",
+        (thread: vscode.CommentThread) => {
+          buzzController.refreshMessage(thread);
+        }
+      )
     );
   } catch (error) {
-    vscode.window.showErrorMessage("Login failed. Extension features will be disabled.");
+    vscode.window.showErrorMessage(
+      "Login failed. Extension features will be disabled."
+    );
     console.error("Login error:", error);
   }
 }
