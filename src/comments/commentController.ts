@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { ChatProvider } from "../providers/chatProvider";
-import { BuzzComment } from "./comment";
+import { rangeToKey } from "../utils/rangeToKey";
+import { appendCommentToThread } from "./appendToThread";
 
 let mappings = new Map<string, string>();
 
@@ -51,9 +52,9 @@ export class BuzzCommentController {
       return;
     }
 
-    const rangeString = this._rangeToKey(thread.range);
+    const rangeString = rangeToKey(thread.range);
     mappings.set(rangeString, threadId);
-    this._appendCommentToThread(thread, message, res?.message?.u?.username);
+    appendCommentToThread(thread, message, res?.message?.u?.username);
   }
 
   public async replyToMessage(reply: vscode.CommentReply) {
@@ -63,7 +64,7 @@ export class BuzzCommentController {
       return;
     }
 
-    const rangeString = this._rangeToKey(thread.range);
+    const rangeString = rangeToKey(thread.range);
     const threadId = mappings.get(rangeString);
 
     if (!threadId) {
@@ -72,7 +73,7 @@ export class BuzzCommentController {
     }
 
     const res = await this.provider.sendMessage(reply.text, threadId);
-    this._appendCommentToThread(thread, reply.text, res?.message?.u?.username);
+    appendCommentToThread(thread, reply.text, res?.message?.u?.username);
   }
 
   public async refreshMessage(thread: vscode.CommentThread) {
@@ -81,7 +82,7 @@ export class BuzzCommentController {
       return;
     }
 
-    const rangeString = this._rangeToKey(thread.range);
+    const rangeString = rangeToKey(thread.range);
     const threadId = mappings.get(rangeString);
 
     if (!threadId) {
@@ -93,41 +94,14 @@ export class BuzzCommentController {
 
     thread.comments = [];
     if (parentRes?.message) {
-      this._appendCommentToThread(
+      appendCommentToThread(
         thread,
         parentRes.message?.msg,
         parentRes.message?.u?.username
       );
     }
     res?.messages?.forEach((message: any) => {
-      this._appendCommentToThread(thread, message.msg, message.u?.username);
+      appendCommentToThread(thread, message.msg, message.u?.username);
     });
-  }
-
-  private _appendCommentToThread(
-    thread: vscode.CommentThread,
-    text: string,
-    username?: string
-  ) {
-    const markdownText = new vscode.MarkdownString(text);
-    markdownText.isTrusted = true;
-    const newComment = new BuzzComment(
-      markdownText,
-      vscode.CommentMode.Preview,
-      {
-        name: username ? `@${username}` : "Unknown",
-        iconPath: username
-          ? vscode.Uri.parse(`https://open.rocket.chat/avatar/${username}`)
-          : undefined,
-      },
-      thread.comments.length ? "canDelete" : undefined,
-      thread
-    );
-
-    thread.comments = [...thread.comments, newComment];
-  }
-
-  private _rangeToKey(range: vscode.Range): string {
-    return `${range.start.line}-${range.start.character}-${range.end.line}-${range.end.character}`;
   }
 }
