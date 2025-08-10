@@ -10,7 +10,6 @@ export class BuzzComment implements vscode.Comment {
     public mode: vscode.CommentMode,
     public author: vscode.CommentAuthorInformation,
     public contextValue?: string,
-	public parent?: vscode.CommentThread, // Optional parent thread
   ) {
     this.id = randomUUID();
     this.savedBody = body;

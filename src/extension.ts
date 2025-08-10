@@ -3,7 +3,7 @@ import { BuzzCommentController } from "./comments/commentController";
 import { RocketChatProvider } from "./providers/rocketChatProvider";
 import { AuthData } from "./auth/authData";
 import { askInput } from "./utils/askInput";
-import { getOriginRemoteUrl } from "./utils/gitRemote";
+import { getOriginRemoteUrl } from "./utils/gitUtils";
 import { supabase } from "./api/supabaseClient";
 import { setContextId } from "./store/contextStore";
 

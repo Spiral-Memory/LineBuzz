@@ -4,7 +4,7 @@ import { ChatProvider } from "../providers/chatProvider";
 import { rangeToKey } from "../utils/rangeToKey";
 import { appendCommentToThread } from "./appendToThread";
 import { getContextId } from "../store/contextStore";
-import { getCurrentCommitHash } from "../utils/gitRemote";
+import { getCurrentCommitHash } from "../utils/gitUtils";
 import { parseRangeString } from "../utils/rangeUtils";
 
 let mappings = new Map<string, string>();
@@ -53,14 +53,19 @@ export class BuzzCommentController {
         continue;
       }
 
-      const thread = this.commentController.createCommentThread(
+      this.commentController.createCommentThread(
         document.uri,
         range,
         [
           {
             body: "Please refresh",
             mode: vscode.CommentMode.Preview,
-            author: { name: "LineBuzz" },
+            author: {
+              name: "LineBuzz",
+              iconPath: vscode.Uri.parse(
+                `https://open.rocket.chat/avatar/linebuzz`
+              ),
+            },
           },
         ]
       );

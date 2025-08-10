@@ -18,7 +18,6 @@ export function appendCommentToThread(
           : undefined,
       },
       thread.comments.length ? "canDelete" : undefined,
-      thread
     );
 
     thread.comments = [...thread.comments, newComment];
