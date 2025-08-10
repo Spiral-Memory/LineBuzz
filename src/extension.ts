@@ -100,6 +100,18 @@ export async function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(buzzController.commentController);
 
+    if (vscode.window.activeTextEditor) {
+      buzzController.loadCommentsForFile(
+        vscode.window.activeTextEditor.document
+      );
+    }
+
+    vscode.window.onDidChangeActiveTextEditor(async (editor) => {
+      if (editor) {
+        await buzzController.loadCommentsForFile(editor.document);
+      }
+    });
+
     context.subscriptions.push(
       vscode.commands.registerCommand(
         "linebuzz.startDiscussion",

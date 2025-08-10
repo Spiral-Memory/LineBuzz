@@ -5,6 +5,7 @@ import { rangeToKey } from "../utils/rangeToKey";
 import { appendCommentToThread } from "./appendToThread";
 import { getContextId } from "../store/contextStore";
 import { getCurrentCommitHash } from "../utils/gitRemote";
+import { parseRangeString } from "../utils/rangeUtils";
 
 let mappings = new Map<string, string>();
 
@@ -23,6 +24,49 @@ export class BuzzCommentController {
         return [new vscode.Range(0, 0, lineCount - 1, 0)];
       },
     };
+  }
+
+  public async loadCommentsForFile(document: vscode.TextDocument) {
+    const contextId = getContextId();
+    if (!contextId) {
+      vscode.window.showErrorMessage(
+        "Context ID not found. Cannot save comment."
+      );
+      return;
+    }
+
+    const filename = document.uri.path.split("/").pop() || "unknown";
+    const { data: comments, error } = await supabase
+      .from("comments")
+      .select("*")
+      .eq("context_uuid", contextId)
+      .eq("filename", filename);
+
+    if (error) {
+      console.error("Failed to fetch comments for file", error);
+      return;
+    }
+
+    for (const comment of comments) {
+      const range = parseRangeString(comment.range_string, document);
+      if (!range) {
+        continue;
+      }
+
+      const thread = this.commentController.createCommentThread(
+        document.uri,
+        range,
+        [
+          {
+            body: "Please refresh",
+            mode: vscode.CommentMode.Preview,
+            author: { name: "LineBuzz" },
+          },
+        ]
+      );
+
+      mappings.set(comment.range_string, comment.thread_id);
+    }
   }
 
   public async startDiscussion(initialMessage: vscode.CommentReply) {
