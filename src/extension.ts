@@ -15,20 +15,20 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(buzzController.commentController);
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("linebuzz.startDiscussion", (reply: vscode.CommentReply) => {
-      buzzController.startDiscussion(reply);
+    vscode.commands.registerCommand("linebuzz.startDiscussion", (initialMessage: vscode.CommentReply) => {
+      buzzController.startDiscussion(initialMessage);
     })
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand("linebuzz.reply", (reply: vscode.CommentReply) => {
-      buzzController.replyNote(reply);
+      buzzController.replyToMessage(reply);
     })
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand("linebuzz.refreshMsg", (thread: vscode.CommentThread) => {
-      buzzController.refreshMsg(thread);
+      buzzController.refreshMessage(thread);
     })
   );
 }

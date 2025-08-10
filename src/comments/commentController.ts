@@ -21,15 +21,15 @@ export class BuzzCommentController {
     };
   }
 
-  public async startDiscussion(reply: vscode.CommentReply) {
-    const thread = reply.thread;
+  public async startDiscussion(initialMessage: vscode.CommentReply) {
+    const thread = initialMessage.thread;
     if (!thread.range) {
       vscode.window.showErrorMessage("Thread range is missing");
       return;
     }
 
-    const doc = vscode.workspace.textDocuments.find(d =>
-      d.uri.toString() === thread.uri.toString()
+    const doc = vscode.workspace.textDocuments.find(
+      (d) => d.uri.toString() === thread.uri.toString()
     );
 
     if (!doc) {
@@ -42,7 +42,8 @@ export class BuzzCommentController {
       ? "```\n" + snippetText.replace(/`/g, "\\`") + "\n```"
       : "No code selected";
 
-    const sentResponse = await this.provider.sendMessage(snippet);
+    const message = initialMessage.text + "\n" + snippet;
+    const sentResponse = await this.provider.sendMessage(message);
     const threadId = sentResponse?.message?._id;
 
     if (!threadId) {
@@ -53,12 +54,11 @@ export class BuzzCommentController {
     const rangeString = this._rangeToKey(thread.range);
     mappings.set(rangeString, threadId);
 
-    // Add first reply to that thread
-    const res = await this.provider.sendMessage(reply.text, threadId);
-    this._appendCommentToThread(thread, reply.text, res?.message?.u?.username);
+    const res = await this.provider.sendMessage(initialMessage.text, threadId);
+    this._appendCommentToThread(thread, initialMessage.text, res?.message?.u?.username);
   }
 
-  public async replyNote(reply: vscode.CommentReply) {
+  public async replyToMessage(reply: vscode.CommentReply) {
     const thread = reply.thread;
     if (!thread.range) {
       vscode.window.showErrorMessage("Thread range is missing");
@@ -77,7 +77,7 @@ export class BuzzCommentController {
     this._appendCommentToThread(thread, reply.text, res?.message?.u?.username);
   }
 
-  public async refreshMsg(thread: vscode.CommentThread) {
+  public async refreshMessage(thread: vscode.CommentThread) {
     if (!thread.range) {
       vscode.window.showErrorMessage("Thread range is missing");
       return;
@@ -94,6 +94,7 @@ export class BuzzCommentController {
     const res = await this.provider.getThreadMessages(threadId);
 
     thread.comments = [];
+
     res?.messages?.forEach((message: any) => {
       this._appendCommentToThread(thread, message.msg, message.u?.username);
     });
@@ -104,8 +105,10 @@ export class BuzzCommentController {
     text: string,
     username?: string
   ) {
+    const markdownText = new vscode.MarkdownString(text);
+    markdownText.isTrusted = true;
     const newComment = new BuzzComment(
-      text,
+      markdownText,
       vscode.CommentMode.Preview,
       {
         name: username ? `@${username}` : "Unknown",
