@@ -1,20 +1,33 @@
+import * as vscode from "vscode";
+
 export class AuthData {
-  private static authToken: string | null = null;
-  private static userId: string | null = null;
+  private static secretStorage: vscode.SecretStorage;
 
-  static setAuthToken(token: string) {
-    AuthData.authToken = token;
+  public static initialize(context: vscode.ExtensionContext) {
+    AuthData.secretStorage = context.secrets;
   }
 
-  static getAuthToken() {
-    return AuthData.authToken;
+  static async setAuthToken(token: string) {
+    await AuthData.secretStorage.store("authToken", token);
   }
 
-  static setUserId(id: string) {
-    AuthData.userId = id;
+  static async getAuthToken(): Promise<string | undefined> {
+    return await AuthData.secretStorage.get("authToken");
   }
 
-  static getUserId() {
-    return AuthData.userId;
+  static async setUserId(id: string) {
+    await AuthData.secretStorage.store("userId", id);
+  }
+
+  static async getUserId(): Promise<string | undefined> {
+    return await AuthData.secretStorage.get("userId");
+  }
+
+  static async deleteAuthToken() {
+    await AuthData.secretStorage.delete("authToken");
+  }
+
+  static async deleteUserId() {
+    await AuthData.secretStorage.delete("userId");
   }
 }

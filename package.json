@@ -26,7 +26,7 @@
         "enablement": "!commentIsEmpty"
       },
       {
-        "command": "linebuzz.refreshMsg",
+        "command": "linebuzz.refreshMessage",
         "title": "Refresh",
         "icon": {
           "dark": "resources/refresh.svg",
@@ -45,13 +45,13 @@
           "when": "false"
         },
         {
-          "command": "linebuzz.refreshMsg",
+          "command": "linebuzz.refreshMessage",
           "when": "false"
         }
       ],
       "comments/commentThread/title": [
         {
-          "command": "linebuzz.refreshMsg",
+          "command": "linebuzz.refreshMessage",
           "group": "navigation",
           "when": "commentController == buzz-comments && !commentThreadIsEmpty"
         }

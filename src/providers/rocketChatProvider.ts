@@ -1,5 +1,5 @@
 import { RocketChatApi } from "../api/rocketChatApi";
-import { ChatProvider, LoginCredentials } from "./chatProvider";
+import { ChatProvider } from "./chatProvider";
 import { AuthData } from "../auth/authData";
 
 export class RocketChatProvider implements ChatProvider {
@@ -9,7 +9,12 @@ export class RocketChatProvider implements ChatProvider {
     this.api = new RocketChatApi(host);
   }
 
-  async login(credentials: LoginCredentials) {
+  async login(credentials: {
+    user: string;
+    password?: string;
+    resume?: string;
+    code?: string;
+  }) {
     const res = await this.api.handleLogin(credentials);
     const authToken = res?.data?.authToken;
     const userId = res?.data?.userId;
@@ -18,34 +23,42 @@ export class RocketChatProvider implements ChatProvider {
       throw new Error("Login failed: Missing authToken or userId");
     }
 
-    AuthData.setAuthToken(authToken);
-    AuthData.setUserId(userId);
+    await AuthData.setAuthToken(authToken);
+    await AuthData.setUserId(userId);
 
     return { authToken, userId };
   }
 
   async sendMessage(text: string, threadId?: string) {
-    return this.api.handleSendMessage(
-      AuthData.getAuthToken(),
-      AuthData.getUserId(),
-      text,
-      threadId
-    );
+    const authToken = await AuthData.getAuthToken();
+    const userId = await AuthData.getUserId();
+
+    if (!authToken || !userId) {
+      throw new Error("Missing authentication token or user ID");
+    }
+
+    return this.api.handleSendMessage(authToken, userId, text, threadId);
   }
 
   async getThreadMessages(threadId: string) {
-    return this.api.getThreadMessage(
-      AuthData.getAuthToken(),
-      AuthData.getUserId(),
-      threadId
-    );
+    const authToken = await AuthData.getAuthToken();
+    const userId = await AuthData.getUserId();
+
+    if (!authToken || !userId) {
+      throw new Error("Missing authentication token or user ID");
+    }
+
+    return this.api.getThreadMessage(authToken, userId, threadId);
   }
 
   async getParentMessage(threadId: string) {
-    return this.api.getParentMessage(
-      AuthData.getAuthToken(),
-      AuthData.getUserId(),
-      threadId
-    );
+    const authToken = await AuthData.getAuthToken();
+    const userId = await AuthData.getUserId();
+
+    if (!authToken || !userId) {
+      throw new Error("Missing authentication token or user ID");
+    }
+
+    return this.api.getParentMessage(authToken, userId, threadId);
   }
 }
