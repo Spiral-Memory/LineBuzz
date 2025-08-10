@@ -29,6 +29,38 @@ class RocketChatApi {
     }
   }
 
+  public async getParentMessage(
+    authToken: string | null,
+    userID: string | null,
+    msgId: string | null
+  ): Promise<any | null> {
+    if (authToken && userID && msgId) {
+      try {
+        const res = await fetch(
+          `${this.host}/api/v1/chat.getMessage?msgId=${msgId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Auth-Token": authToken,
+              "X-User-Id": userID,
+            },
+          }
+        );
+
+        if (!res.ok) {
+          console.error(`Failed to fetch parent message: ${res.statusText}`);
+          return null;
+        }
+
+        return await res.json();
+      } catch (error) {
+        console.error("Error:", error);
+        return null;
+      }
+    }
+  }
+
   public async getThreadMessage(
     authToken: string | null,
     userID: string | null,

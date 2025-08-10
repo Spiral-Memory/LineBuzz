@@ -40,11 +40,11 @@ export class BuzzCommentController {
     const snippetText = doc.getText(thread.range);
     const snippet = snippetText
       ? "```\n" + snippetText.replace(/`/g, "\\`") + "\n```"
-      : "No code selected";
+      : "";
 
     const message = initialMessage.text + "\n" + snippet;
-    const sentResponse = await this.provider.sendMessage(message);
-    const threadId = sentResponse?.message?._id;
+    const res = await this.provider.sendMessage(message);
+    const threadId = res?.message?._id;
 
     if (!threadId) {
       vscode.window.showErrorMessage("Failed to start discussion thread");
@@ -53,9 +53,7 @@ export class BuzzCommentController {
 
     const rangeString = this._rangeToKey(thread.range);
     mappings.set(rangeString, threadId);
-
-    const res = await this.provider.sendMessage(initialMessage.text, threadId);
-    this._appendCommentToThread(thread, initialMessage.text, res?.message?.u?.username);
+    this._appendCommentToThread(thread, message, res?.message?.u?.username);
   }
 
   public async replyToMessage(reply: vscode.CommentReply) {
@@ -90,11 +88,17 @@ export class BuzzCommentController {
       vscode.window.showErrorMessage("No thread ID found for this range");
       return;
     }
-
+    const parentRes = await this.provider.getParentMessage(threadId);
     const res = await this.provider.getThreadMessages(threadId);
 
     thread.comments = [];
-
+    if (parentRes?.message) {
+      this._appendCommentToThread(
+        thread,
+        parentRes.message?.msg,
+        parentRes.message?.u?.username
+      );
+    }
     res?.messages?.forEach((message: any) => {
       this._appendCommentToThread(thread, message.msg, message.u?.username);
     });

@@ -40,4 +40,12 @@ export class RocketChatProvider implements ChatProvider {
       threadId
     );
   }
+
+  async getParentMessage(threadId: string) {
+    return this.api.getParentMessage(
+      AuthData.getAuthToken(),
+      AuthData.getUserId(),
+      threadId
+    );
+  }
 }

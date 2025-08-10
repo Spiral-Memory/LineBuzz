@@ -9,4 +9,5 @@ export interface ChatProvider {
   ): Promise<{ authToken: string; userId: string }>;
   sendMessage(text: string, threadId?: string): Promise<any>;
   getThreadMessages(threadId: string): Promise<any>;
+  getParentMessage(threadId: string): Promise<any>;
 }
