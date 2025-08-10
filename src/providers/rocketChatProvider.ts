@@ -1,4 +1,4 @@
-import { RocketChatApi } from "../api/api";
+import { RocketChatApi } from "../api/rocketChatApi";
 import { ChatProvider, LoginCredentials } from "./chatProvider";
 import { AuthData } from "../auth/authData";
 

@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { supabase } from "../api/supabaseClient";
 import { ChatProvider } from "../providers/chatProvider";
 import { rangeToKey } from "../utils/rangeToKey";
 import { appendCommentToThread } from "./appendToThread";
@@ -53,7 +54,19 @@ export class BuzzCommentController {
     }
 
     const rangeString = rangeToKey(thread.range);
-    mappings.set(rangeString, threadId);
+
+    const { error } = await supabase.from("comment_mappings").insert([
+      {
+        range_string: rangeString,
+        thread_id: threadId,
+      },
+    ]);
+
+    if (error) {
+      console.error("Failed to save comment mapping:", error);
+      vscode.window.showErrorMessage("Failed to save comment metadata");
+    }
+
     appendCommentToThread(thread, message, res?.message?.u?.username);
   }
 
