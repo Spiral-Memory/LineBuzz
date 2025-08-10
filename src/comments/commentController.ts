@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 import { ChatProvider } from "../providers/chatProvider";
 import { BuzzComment } from "./comment";
 
-let selectedText: string | undefined;
 let mappings = new Map<string, string>();
 
 export class BuzzCommentController {
@@ -13,13 +12,6 @@ export class BuzzCommentController {
       "buzz-comments",
       "LineBuzz Comments"
     );
-
-    vscode.window.onDidChangeTextEditorSelection(() => {
-      const newSelectedText = this._getSelectedText();
-      if (newSelectedText.length > (selectedText?.length || 0)) {
-        selectedText = newSelectedText;
-      }
-    });
 
     this.commentController.commentingRangeProvider = {
       provideCommentingRanges: (document: vscode.TextDocument) => {
@@ -36,8 +28,18 @@ export class BuzzCommentController {
       return;
     }
 
-    const snippet = selectedText
-      ? "```\n" + selectedText.replace(/`/g, "\\`") + "\n```"
+    const doc = vscode.workspace.textDocuments.find(d =>
+      d.uri.toString() === thread.uri.toString()
+    );
+
+    if (!doc) {
+      vscode.window.showErrorMessage("Document not found for thread");
+      return;
+    }
+
+    const snippetText = doc.getText(thread.range);
+    const snippet = snippetText
+      ? "```\n" + snippetText.replace(/`/g, "\\`") + "\n```"
       : "No code selected";
 
     const sentResponse = await this.provider.sendMessage(snippet);
@@ -116,26 +118,6 @@ export class BuzzCommentController {
     );
 
     thread.comments = [...thread.comments, newComment];
-  }
-
-  private _getSelectedText(): string {
-    const editor = vscode.window.activeTextEditor;
-    if (!editor) {
-      return "";
-    }
-
-    const selection = editor.selection;
-    if (!selection || selection.isEmpty) {
-      return "";
-    }
-
-    const selectionRange = new vscode.Range(
-      selection.start.line,
-      selection.start.character,
-      selection.end.line,
-      selection.end.character
-    );
-    return editor.document.getText(selectionRange);
   }
 
   private _rangeToKey(range: vscode.Range): string {
