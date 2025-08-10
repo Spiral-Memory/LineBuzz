@@ -1,36 +1,35 @@
 import * as vscode from "vscode";
-import { VSComment } from "./comments/vsComments";
+import { BuzzCommentController } from "./comments/commentController";
+import { RocketChatProvider } from "./providers/rocketChatProvider";
 
-export function activate(context: vscode.ExtensionContext) {
-  const vsComment = new VSComment();
-  
-  context.subscriptions.push(vsComment.commentController);
+export async function activate(context: vscode.ExtensionContext) {
+  const provider = new RocketChatProvider("http://localhost:3000");
+
+  await provider.login({
+    user: "zishan.barun@gmail.com",
+    password: "spiral_memory"
+  });
+
+  const buzzController = new BuzzCommentController(provider);
+
+  context.subscriptions.push(buzzController.commentController);
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "linebuzz.startDiscussion",
-      (reply: vscode.CommentReply) => {
-        vsComment.startDiscussion(reply);
-      }
-    )
+    vscode.commands.registerCommand("linebuzz.startDiscussion", (reply: vscode.CommentReply) => {
+      buzzController.startDiscussion(reply);
+    })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "linebuzz.reply",
-      (reply: vscode.CommentReply) => {
-        vsComment.replyNote(reply);
-      }
-    )
+    vscode.commands.registerCommand("linebuzz.reply", (reply: vscode.CommentReply) => {
+      buzzController.replyNote(reply);
+    })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "linebuzz.refreshMsg",
-      (thread: vscode.CommentThread) => {
-        vsComment.refreshMsg(thread);
-      }
-    )
+    vscode.commands.registerCommand("linebuzz.refreshMsg", (thread: vscode.CommentThread) => {
+      buzzController.refreshMsg(thread);
+    })
   );
 }
 

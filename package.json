@@ -53,19 +53,19 @@
         {
           "command": "linebuzz.refreshMsg",
           "group": "navigation",
-          "when": "commentController == send-code && !commentThreadIsEmpty"
+          "when": "commentController == buzz-comments && !commentThreadIsEmpty"
         }
       ],
       "comments/commentThread/context": [
         {
           "command": "linebuzz.startDiscussion",
           "group": "inline",
-          "when": "commentController == send-code && commentThreadIsEmpty"
+          "when": "commentController == buzz-comments && commentThreadIsEmpty"
         },
         {
           "command": "linebuzz.reply",
           "group": "inline",
-          "when": "commentController == send-code && !commentThreadIsEmpty"
+          "when": "commentController == buzz-comments && !commentThreadIsEmpty"
         }
       ]
     }
