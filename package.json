@@ -29,8 +29,8 @@
         "command": "linebuzz.refreshMessage",
         "title": "Refresh",
         "icon": {
-          "dark": "resources/refresh.svg",
-          "light": "resources/refresh.svg"
+          "dark": "assets/refresh.svg",
+          "light": "assets/refresh.svg"
         }
       }
     ],

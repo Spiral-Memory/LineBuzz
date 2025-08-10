@@ -1,6 +1,6 @@
 import { RocketChatApi } from "../api/rocketChatApi";
 import { ChatProvider } from "./chatProvider";
-import { AuthData } from "../auth/authData";
+import { AuthSecrets } from "../../core/auth/authSecrets";
 
 export class RocketChatProvider implements ChatProvider {
   private api: RocketChatApi;
@@ -23,15 +23,15 @@ export class RocketChatProvider implements ChatProvider {
       throw new Error("Login failed: Missing authToken or userId");
     }
 
-    await AuthData.setAuthToken(authToken);
-    await AuthData.setUserId(userId);
+    await AuthSecrets.setAuthToken(authToken);
+    await AuthSecrets.setUserId(userId);
 
     return { authToken, userId };
   }
 
   async sendMessage(text: string, threadId?: string) {
-    const authToken = await AuthData.getAuthToken();
-    const userId = await AuthData.getUserId();
+    const authToken = await AuthSecrets.getAuthToken();
+    const userId = await AuthSecrets.getUserId();
 
     if (!authToken || !userId) {
       throw new Error("Missing authentication token or user ID");
@@ -41,8 +41,8 @@ export class RocketChatProvider implements ChatProvider {
   }
 
   async getThreadMessages(threadId: string) {
-    const authToken = await AuthData.getAuthToken();
-    const userId = await AuthData.getUserId();
+    const authToken = await AuthSecrets.getAuthToken();
+    const userId = await AuthSecrets.getUserId();
 
     if (!authToken || !userId) {
       throw new Error("Missing authentication token or user ID");
@@ -51,14 +51,14 @@ export class RocketChatProvider implements ChatProvider {
     return this.api.getThreadMessage(authToken, userId, threadId);
   }
 
-  async getParentMessage(threadId: string) {
-    const authToken = await AuthData.getAuthToken();
-    const userId = await AuthData.getUserId();
+  async getMessageById(threadId: string) {
+    const authToken = await AuthSecrets.getAuthToken();
+    const userId = await AuthSecrets.getUserId();
 
     if (!authToken || !userId) {
       throw new Error("Missing authentication token or user ID");
     }
 
-    return this.api.getParentMessage(authToken, userId, threadId);
+    return this.api.getMessageById(authToken, userId, threadId);
   }
 }

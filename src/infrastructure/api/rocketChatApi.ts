@@ -5,31 +5,7 @@ class RocketChatApi {
     this.host = host;
   }
 
-  public async getMessage(
-    authToken: string | null,
-    userID: string | null
-  ): Promise<any> {
-    if (authToken && userID) {
-      try {
-        const res = await fetch(
-          `${this.host}/api/v1/channels.messages?roomId=GENERAL`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "X-Auth-Token": authToken,
-              "X-User-Id": userID,
-            },
-          }
-        );
-        return await res.json();
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  }
-
-  public async getParentMessage(
+  public async getMessageById(
     authToken: string | null,
     userID: string | null,
     msgId: string | null
@@ -47,11 +23,6 @@ class RocketChatApi {
             },
           }
         );
-
-        if (!res.ok) {
-          console.error(`Failed to fetch parent message: ${res.statusText}`);
-          return null;
-        }
 
         return await res.json();
       } catch (error) {

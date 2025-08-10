@@ -1,11 +1,12 @@
 import * as vscode from "vscode";
-import { supabase } from "../api/supabaseClient";
-import { ChatProvider } from "../providers/chatProvider";
-import { rangeToKey } from "../utils/rangeToKey";
+import { supabase } from "../../infrastructure/api/supabaseClient";
+import { ChatProvider } from "../../infrastructure/providers/chatProvider";
+import { rangeToKey } from "../../wrappers/rangeToKey";
 import { appendCommentToThread } from "./appendToThread";
-import { getContextId } from "../store/contextStore";
-import { getCurrentCommitHash } from "../utils/gitUtils";
-import { parseRangeString } from "../utils/rangeUtils";
+import { WorkspaceStorage } from "../../store/workspaceStorage";
+import { getCurrentCommitHash } from "../../wrappers/gitUtils";
+import { parseRangeString } from "../../wrappers/rangeUtils";
+import { getOriginRemoteUrl } from "../../wrappers/gitUtils";
 
 let mappings = new Map<string, string>();
 
@@ -27,10 +28,19 @@ export class BuzzCommentController {
   }
 
   public async loadCommentsForFile(document: vscode.TextDocument) {
-    const contextId = getContextId();
-    if (!contextId) {
+    const remoteUrl = getOriginRemoteUrl();
+    if (!remoteUrl) {
       vscode.window.showErrorMessage(
-        "Context ID not found. Cannot save comment."
+        "Origin remote URL not found or Git extension not available"
+      );
+      return;
+    }
+
+    const contextUuid = WorkspaceStorage.get<string>(remoteUrl);
+
+    if (!contextUuid) {
+      vscode.window.showErrorMessage(
+        "No workspace context UUID found for this repository"
       );
       return;
     }
@@ -39,7 +49,7 @@ export class BuzzCommentController {
     const { data: comments, error } = await supabase
       .from("comments")
       .select("*")
-      .eq("context_uuid", contextId)
+      .eq("context_uuid", contextUuid)
       .eq("filename", filename);
 
     if (error) {
@@ -53,22 +63,18 @@ export class BuzzCommentController {
         continue;
       }
 
-      this.commentController.createCommentThread(
-        document.uri,
-        range,
-        [
-          {
-            body: "Please refresh",
-            mode: vscode.CommentMode.Preview,
-            author: {
-              name: "LineBuzz",
-              iconPath: vscode.Uri.parse(
-                `https://open.rocket.chat/avatar/linebuzz`
-              ),
-            },
+      this.commentController.createCommentThread(document.uri, range, [
+        {
+          body: "Please refresh",
+          mode: vscode.CommentMode.Preview,
+          author: {
+            name: "LineBuzz",
+            iconPath: vscode.Uri.parse(
+              `https://open.rocket.chat/avatar/linebuzz`
+            ),
           },
-        ]
-      );
+        },
+      ]);
 
       mappings.set(comment.range_string, comment.thread_id);
     }
@@ -105,9 +111,25 @@ export class BuzzCommentController {
     }
 
     const rangeString = rangeToKey(thread.range);
-    const contextId = getContextId();
+    const remoteUrl = getOriginRemoteUrl();
+    if (!remoteUrl) {
+      vscode.window.showErrorMessage(
+        "Origin remote URL not found or Git extension not available"
+      );
+      return;
+    }
+
+    const contextUuid = WorkspaceStorage.get<string>(remoteUrl);
+
+    if (!contextUuid) {
+      vscode.window.showErrorMessage(
+        "No workspace context UUID found for this repository"
+      );
+      return;
+    }
+
     const commitHash = getCurrentCommitHash();
-    if (!contextId) {
+    if (!contextUuid) {
       vscode.window.showErrorMessage(
         "Context ID not found. Cannot save comment."
       );
@@ -121,7 +143,7 @@ export class BuzzCommentController {
         filename,
         range_string: rangeString,
         thread_id: threadId,
-        context_uuid: contextId,
+        context_uuid: contextUuid,
         commit_hash: commitHash,
       },
     ]);
@@ -166,7 +188,7 @@ export class BuzzCommentController {
       vscode.window.showErrorMessage("No thread ID found for this range");
       return;
     }
-    const parentRes = await this.provider.getParentMessage(threadId);
+    const parentRes = await this.provider.getMessageById(threadId);
     const res = await this.provider.getThreadMessages(threadId);
 
     thread.comments = [];
