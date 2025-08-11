@@ -1,17 +1,17 @@
 import * as vscode from "vscode";
+import * as path from "path";
 import { supabase } from "../../infrastructure/api/supabaseClient";
 import { ChatProvider } from "../../infrastructure/providers/chatProvider";
 import { rangeToKey } from "../../wrappers/rangeToKey";
 import { appendCommentToThread } from "./appendToThread";
 import { WorkspaceStorage } from "../../store/workspaceStorage";
-import { getCurrentCommitHash } from "../../wrappers/gitUtils";
+import { getCurrentCommitHash, getRepoRelativePath } from "../../wrappers/gitUtils";
 import { parseRangeString } from "../../wrappers/rangeUtils";
 import { getOriginRemoteUrl } from "../../wrappers/gitUtils";
-
-let mappings = new Map<string, string>();
-
 export class BuzzCommentController {
   public commentController: vscode.CommentController;
+  private mappings = new Map<string, string>();
+  private loadedThreads = new Set<string>();
 
   constructor(private provider: ChatProvider) {
     this.commentController = vscode.comments.createCommentController(
@@ -28,16 +28,7 @@ export class BuzzCommentController {
   }
 
   public async loadCommentsForFile(document: vscode.TextDocument) {
-    const remoteUrl = getOriginRemoteUrl();
-    if (!remoteUrl) {
-      vscode.window.showErrorMessage(
-        "Origin remote URL not found or Git extension not available"
-      );
-      return;
-    }
-
-    const contextUuid = WorkspaceStorage.get<string>(remoteUrl);
-
+    const contextUuid = this._getContextUuid();
     if (!contextUuid) {
       vscode.window.showErrorMessage(
         "No workspace context UUID found for this repository"
@@ -45,7 +36,7 @@ export class BuzzCommentController {
       return;
     }
 
-    const filename = document.uri.path.split("/").pop() || "unknown";
+    const filename = getRepoRelativePath(document.uri.fsPath);
     const { data: comments, error } = await supabase
       .from("comments")
       .select("*")
@@ -58,6 +49,9 @@ export class BuzzCommentController {
     }
 
     for (const comment of comments) {
+      if (this.loadedThreads.has(comment.thread_id)) {
+        continue;
+      }
       const range = parseRangeString(comment.range_string, document);
       if (!range) {
         continue;
@@ -65,7 +59,7 @@ export class BuzzCommentController {
 
       this.commentController.createCommentThread(document.uri, range, [
         {
-          body: "Please refresh",
+          body: "Buzz not loaded yet -- refresh to hear the chatter",
           mode: vscode.CommentMode.Preview,
           author: {
             name: "LineBuzz",
@@ -76,7 +70,8 @@ export class BuzzCommentController {
         },
       ]);
 
-      mappings.set(comment.range_string, comment.thread_id);
+      this.mappings.set(comment.range_string, comment.thread_id);
+      this.loadedThreads.add(comment.thread_id);
     }
   }
 
@@ -87,16 +82,16 @@ export class BuzzCommentController {
       return;
     }
 
-    const doc = vscode.workspace.textDocuments.find(
+    const document = vscode.workspace.textDocuments.find(
       (d) => d.uri.toString() === thread.uri.toString()
     );
 
-    if (!doc) {
+    if (!document) {
       vscode.window.showErrorMessage("Document not found for thread");
       return;
     }
 
-    const snippetText = doc.getText(thread.range);
+    const snippetText = document.getText(thread.range);
     const snippet = snippetText
       ? "```\n" + snippetText.replace(/`/g, "\\`") + "\n```"
       : "";
@@ -111,15 +106,7 @@ export class BuzzCommentController {
     }
 
     const rangeString = rangeToKey(thread.range);
-    const remoteUrl = getOriginRemoteUrl();
-    if (!remoteUrl) {
-      vscode.window.showErrorMessage(
-        "Origin remote URL not found or Git extension not available"
-      );
-      return;
-    }
-
-    const contextUuid = WorkspaceStorage.get<string>(remoteUrl);
+    const contextUuid = this._getContextUuid();
 
     if (!contextUuid) {
       vscode.window.showErrorMessage(
@@ -136,7 +123,7 @@ export class BuzzCommentController {
       return;
     }
 
-    const filename = doc.uri.path.split("/").pop() || "unknown";
+    const filename = getRepoRelativePath(document.uri.fsPath);
 
     const { error } = await supabase.from("comments").insert([
       {
@@ -164,7 +151,7 @@ export class BuzzCommentController {
     }
 
     const rangeString = rangeToKey(thread.range);
-    const threadId = mappings.get(rangeString);
+    const threadId = this.mappings.get(rangeString);
 
     if (!threadId) {
       vscode.window.showErrorMessage("No thread ID found for this range");
@@ -182,7 +169,7 @@ export class BuzzCommentController {
     }
 
     const rangeString = rangeToKey(thread.range);
-    const threadId = mappings.get(rangeString);
+    const threadId = this.mappings.get(rangeString);
 
     if (!threadId) {
       vscode.window.showErrorMessage("No thread ID found for this range");
@@ -202,5 +189,23 @@ export class BuzzCommentController {
     res?.messages?.forEach((message: any) => {
       appendCommentToThread(thread, message.msg, message.u?.username);
     });
+  }
+
+  private _getContextUuid(): string | null {
+    const remoteUrl = getOriginRemoteUrl();
+    if (!remoteUrl) {
+      vscode.window.showErrorMessage(
+        "Origin remote URL not found or Git extension not available"
+      );
+      return null;
+    }
+    const contextUuid = WorkspaceStorage.get<string>(remoteUrl);
+    if (!contextUuid) {
+      vscode.window.showErrorMessage(
+        "No workspace context UUID found for this repository"
+      );
+      return null;
+    }
+    return contextUuid;
   }
 }

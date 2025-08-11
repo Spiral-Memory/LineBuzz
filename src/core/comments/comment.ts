@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { randomUUID } from "crypto";
 
 export class BuzzComment implements vscode.Comment {
   constructor(

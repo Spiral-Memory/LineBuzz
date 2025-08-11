@@ -1,4 +1,3 @@
-import * as vscode from "vscode";
 import { SecretStorage } from "../../store/secretStorage";
 
 export class AuthSecrets {

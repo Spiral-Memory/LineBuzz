@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import * as path from "path";
 
 function getGitRepository() {
   const gitExtension = vscode.extensions.getExtension("vscode.git")?.exports;
@@ -33,4 +34,14 @@ export function getCurrentCommitHash(): string | undefined {
   }
 
   return repo.state.HEAD?.commit;
+}
+
+export function getRepoRelativePath(filePath: string): string | undefined {
+  const repo = getGitRepository();
+  if (!repo) {
+    return undefined;
+  }
+
+  const repoRootPath = repo.rootUri.fsPath;
+  return path.relative(repoRootPath, filePath);
 }
