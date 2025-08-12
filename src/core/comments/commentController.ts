@@ -1,9 +1,8 @@
 import * as vscode from "vscode";
-import * as path from "path";
 import { supabase } from "../../infrastructure/api/supabaseClient";
 import { ChatProvider } from "../../infrastructure/providers/chatProvider";
 import { rangeToKey } from "../../wrappers/rangeToKey";
-import { appendCommentToThread } from "./appendToThread";
+import { BuzzComment } from "./comment";
 import { WorkspaceStorage } from "../../store/workspaceStorage";
 import { getCurrentCommitHash, getRepoRelativePath } from "../../wrappers/gitUtils";
 import { parseRangeString } from "../../wrappers/rangeUtils";
@@ -140,7 +139,7 @@ export class BuzzCommentController {
       vscode.window.showErrorMessage("Failed to save comment metadata");
     }
 
-    appendCommentToThread(thread, message, res?.message?.u?.username);
+    this._appendCommentToThread(thread, message, res?.message?.u?.username);
   }
 
   public async replyToMessage(reply: vscode.CommentReply) {
@@ -159,7 +158,7 @@ export class BuzzCommentController {
     }
 
     const res = await this.provider.sendMessage(reply.text, threadId);
-    appendCommentToThread(thread, reply.text, res?.message?.u?.username);
+    this._appendCommentToThread(thread, reply.text, res?.message?.u?.username);
   }
 
   public async refreshMessage(thread: vscode.CommentThread) {
@@ -180,14 +179,14 @@ export class BuzzCommentController {
 
     thread.comments = [];
     if (parentRes?.message) {
-      appendCommentToThread(
+      this._appendCommentToThread(
         thread,
         parentRes.message?.msg,
         parentRes.message?.u?.username
       );
     }
     res?.messages?.forEach((message: any) => {
-      appendCommentToThread(thread, message.msg, message.u?.username);
+      this._appendCommentToThread(thread, message.msg, message.u?.username);
     });
   }
 
@@ -208,4 +207,26 @@ export class BuzzCommentController {
     }
     return contextUuid;
   }
+
+  private _appendCommentToThread(
+  thread: vscode.CommentThread,
+  text: string,
+  username?: string
+) {
+  const markdownText = new vscode.MarkdownString(text);
+  markdownText.isTrusted = true;
+  const newComment = new BuzzComment(
+    markdownText,
+    vscode.CommentMode.Preview,
+    {
+      name: username ? `@${username}` : "Unknown",
+      iconPath: username
+        ? vscode.Uri.parse(`https://open.rocket.chat/avatar/${username}`)
+        : undefined,
+    },
+    thread.comments.length ? "canDelete" : undefined
+  );
+
+  thread.comments = [...thread.comments, newComment];
+}
 }
