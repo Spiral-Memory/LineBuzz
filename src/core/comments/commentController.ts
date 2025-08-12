@@ -4,9 +4,13 @@ import { ChatProvider } from "../../infrastructure/providers/chatProvider";
 import { rangeToKey } from "../../wrappers/rangeToKey";
 import { BuzzComment } from "./comment";
 import { WorkspaceStorage } from "../../store/workspaceStorage";
-import { getCurrentCommitHash, getRepoRelativePath } from "../../wrappers/gitUtils";
+import {
+  getCurrentCommitHash,
+  getRepoRelativePath,
+} from "../../wrappers/gitUtils";
 import { parseRangeString } from "../../wrappers/rangeUtils";
 import { getOriginRemoteUrl } from "../../wrappers/gitUtils";
+import { createSnippet } from "../../utils/createSnippet";
 export class BuzzCommentController {
   public commentController: vscode.CommentController;
   private mappings = new Map<string, string>();
@@ -91,9 +95,7 @@ export class BuzzCommentController {
     }
 
     const snippetText = document.getText(thread.range);
-    const snippet = snippetText
-      ? "```\n" + snippetText.replace(/`/g, "\\`") + "\n```"
-      : "";
+    const snippet = createSnippet(snippetText);
 
     const message = initialMessage.text + "\n" + snippet;
     const res = await this.provider.sendMessage(message);
@@ -209,24 +211,24 @@ export class BuzzCommentController {
   }
 
   private _appendCommentToThread(
-  thread: vscode.CommentThread,
-  text: string,
-  username?: string
-) {
-  const markdownText = new vscode.MarkdownString(text);
-  markdownText.isTrusted = true;
-  const newComment = new BuzzComment(
-    markdownText,
-    vscode.CommentMode.Preview,
-    {
-      name: username ? `@${username}` : "Unknown",
-      iconPath: username
-        ? vscode.Uri.parse(`https://open.rocket.chat/avatar/${username}`)
-        : undefined,
-    },
-    thread.comments.length ? "canDelete" : undefined
-  );
+    thread: vscode.CommentThread,
+    text: string,
+    username?: string
+  ) {
+    const markdownText = new vscode.MarkdownString(text);
+    markdownText.isTrusted = true;
+    const newComment = new BuzzComment(
+      markdownText,
+      vscode.CommentMode.Preview,
+      {
+        name: username ? `@${username}` : "Unknown",
+        iconPath: username
+          ? vscode.Uri.parse(`https://open.rocket.chat/avatar/${username}`)
+          : undefined,
+      },
+      thread.comments.length ? "canDelete" : undefined
+    );
 
-  thread.comments = [...thread.comments, newComment];
-}
+    thread.comments = [...thread.comments, newComment];
+  }
 }
