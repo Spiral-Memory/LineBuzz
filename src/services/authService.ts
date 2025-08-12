@@ -1,8 +1,8 @@
-import { RocketChatProvider } from "../../infrastructure/providers/rocketChatProvider";
-import { AuthSecrets } from "../../core/auth/authSecrets";
-import { askInput } from "../../wrappers/askInput";
-import { AuthSettings } from "../../core/auth/authSettings";
-import { cacheRepoContext } from "../../core/services/cacheRepoContext";
+import { RocketChatProvider } from "../infrastructure/providers/rocketChatProvider";
+import { AuthSecrets } from "../core/auth/authSecrets";
+import { askInput } from "../wrappers/askInput";
+import { AuthSettings } from "../core/auth/authSettings";
+import { cacheRepoContext } from "./cacheRepoContext";
 
 export const authService = {
   async create() {

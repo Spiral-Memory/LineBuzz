@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
-import { BuzzCommentController } from "../../core/comments/commentController";
-import { RocketChatProvider } from "../../infrastructure/providers/rocketChatProvider";
+import { BuzzCommentController } from "../core/comments/commentController";
+import { RocketChatProvider } from "../infrastructure/providers/rocketChatProvider";
 
 export const commentService = {
   async initialize(

@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
-import { storageService } from "./core/services/initializeStorage";
-import { commentService } from "./core/services/commentService";
-import { authService } from "./core/services/authService";
+import { storageService } from "./services/initializeStorage";
+import { commentService } from "./services/commentService";
+import { authService } from "./services/authService";
 
 export async function activate(context: vscode.ExtensionContext) {
   try {

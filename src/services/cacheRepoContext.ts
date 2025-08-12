@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
-import { WorkspaceStorage } from "../../store/workspaceStorage";
-import { getOriginRemoteUrl } from "../../wrappers/gitUtils";
-import { supabase } from "../../infrastructure/api/supabaseClient";
+import { WorkspaceStorage } from "../store/workspaceStorage";
+import { getOriginRemoteUrl } from "../wrappers/gitUtils";
+import { supabase } from "../infrastructure/api/supabaseClient";
 
 export async function cacheRepoContext(
   serverUrl: string,
