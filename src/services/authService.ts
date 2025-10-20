@@ -20,19 +20,13 @@ export const authService = {
     const authToken = await AuthSecrets.getAuthToken();
     const userId = await AuthSecrets.getUserId();
     if (authToken && userId) {
-      await provider.login({ user: "", resume: authToken });
+      await provider.login({ resume: authToken });
     } else {
-      const email = await askInput("Your email");
-      if (!email) {
-        throw new Error("Email is required.");
+      const patToken = await askInput("Your PAT Token");
+      if (!patToken) {
+        throw new Error("PAT Token is required.");
       }
-
-      const password = await askInput("Your password", { password: true });
-      if (!password) {
-        throw new Error("Password is required.");
-      }
-
-      await provider.login({ user: email, password });
+      await provider.login({ resume: patToken });
     }
 
     await cacheRepoContext(serverUrl);

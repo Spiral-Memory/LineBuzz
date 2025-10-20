@@ -10,9 +10,7 @@ export class RocketChatProvider implements ChatProvider {
   }
 
   async login(credentials: {
-    user: string;
-    password?: string;
-    resume?: string;
+    resume: string;
     code?: string;
   }) {
     const res = await this.api.handleLogin(credentials);

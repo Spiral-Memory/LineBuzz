@@ -1,6 +1,6 @@
 export interface LoginCredentials {
-  user: string;
-  password: string;
+  token?: string;
+  code?: string;
 }
 
 export interface ChatProvider {
