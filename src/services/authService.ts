@@ -1,3 +1,4 @@
+import * as vscode from "vscode";
 import { RocketChatProvider } from "../infrastructure/providers/rocketChatProvider";
 import { AuthSecrets } from "../core/auth/authSecrets";
 import { askInput } from "../wrappers/askInput";
@@ -16,17 +17,31 @@ export const authService = {
     }
 
     const provider = new RocketChatProvider(serverUrl);
-
     const authToken = await AuthSecrets.getAuthToken();
-    const userId = await AuthSecrets.getUserId();
-    if (authToken && userId) {
-      await provider.login({ resume: authToken });
-    } else {
+
+    try {
+      if (authToken) {
+        await provider.login({ resume: authToken });
+      } else {
+        throw new Error("No stored authentication token found.");
+      }
+    } catch {
+      AuthSecrets.deleteAuthToken();
       const patToken = await askInput("Your PAT Token");
       if (!patToken) {
-        throw new Error("PAT Token is required.");
+        vscode.window.showErrorMessage(
+          "Please provide a valid PAT token to continue."
+        );
+      } else {
+        try {
+          await provider.login({ resume: patToken });
+        } catch (error) {
+          vscode.window.showErrorMessage(
+            "Login failed. Please check your PAT token and try again."
+          );
+          throw error;
+        }
       }
-      await provider.login({ resume: patToken });
     }
 
     await cacheRepoContext(serverUrl);
