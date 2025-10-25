@@ -9,10 +9,7 @@ export class RocketChatProvider implements ChatProvider {
     this.api = new RocketChatApi(host);
   }
 
-  async login(credentials: {
-    resume: string;
-    code?: string;
-  }) {
+  async login(credentials: { resume: string; code?: string }) {
     const res = await this.api.handleLogin(credentials);
     const authToken = res?.data?.authToken;
     const userId = res?.data?.userId;
@@ -20,9 +17,6 @@ export class RocketChatProvider implements ChatProvider {
     if (!authToken || !userId) {
       throw new Error("Login failed: Missing authToken or userId");
     }
-
-    await AuthSecrets.setAuthToken(authToken);
-    await AuthSecrets.setUserId(userId);
 
     return { authToken, userId };
   }

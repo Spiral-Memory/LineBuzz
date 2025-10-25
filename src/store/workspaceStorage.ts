@@ -14,4 +14,7 @@ export class WorkspaceStorage {
   public static get<T>(key: string): T | undefined {
     return WorkspaceStorage.workspaceStorage.get<T>(key);
   }
+  public static delete(key: string) {
+    WorkspaceStorage.workspaceStorage.update(key, undefined);
+  }
 }

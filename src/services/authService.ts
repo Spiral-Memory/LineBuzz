@@ -1,51 +1,63 @@
-import * as vscode from "vscode";
 import { RocketChatProvider } from "../infrastructure/providers/rocketChatProvider";
 import { AuthSecrets } from "../core/auth/authSecrets";
 import { askInput } from "../wrappers/askInput";
 import { AuthSettings } from "../core/auth/authSettings";
-import { cacheRepoContext } from "./cacheRepoContext";
 
 export const authService = {
-  async create() {
+  async initialize(setup = false) {
     let serverUrl = AuthSettings.getServerUrl();
-    if (!serverUrl) {
-      serverUrl = await askInput("Your Server URL");
+
+    if (setup) {
+      serverUrl = await askInput("Rocket.Chat Server URL");
       if (!serverUrl) {
-        throw new Error("Server URL is required.");
+        throw new Error("Server URL is required to connect.");
       }
-      AuthSettings.setServerUrl(serverUrl);
+    }
+
+    if (!serverUrl) {
+      return;
     }
 
     const provider = new RocketChatProvider(serverUrl);
-    const authToken = await AuthSecrets.getAuthToken();
+    const storedToken = await AuthSecrets.getAuthToken();
 
     try {
-      if (authToken) {
-        await provider.login({ resume: authToken });
+      let loginResult;
+
+      if (storedToken) {
+        loginResult = await provider.login({ resume: storedToken });
+      } else if (setup) {
+        const patToken = await this._promptForToken();
+        loginResult = await provider.login({ resume: patToken });
       } else {
-        throw new Error("No stored authentication token found.");
+        return;
       }
+
+      AuthSettings.setServerUrl(serverUrl);
+      await AuthSecrets.setAuthToken(loginResult.authToken);
+      await AuthSecrets.setUserId(loginResult.userId);
+      return provider;
     } catch {
-      AuthSecrets.deleteAuthToken();
-      const patToken = await askInput("Your PAT Token");
-      if (!patToken) {
-        vscode.window.showErrorMessage(
-          "Please provide a valid PAT token to continue."
-        );
-      } else {
-        try {
-          await provider.login({ resume: patToken });
-        } catch (error) {
-          vscode.window.showErrorMessage(
-            "Login failed. Please check your PAT token and try again."
-          );
-          throw error;
-        }
+      if (setup) {
+        const patToken = await this._promptForToken();
+        const loginResult = await provider.login({ resume: patToken });
+
+        AuthSettings.setServerUrl(serverUrl);
+        await AuthSecrets.setAuthToken(loginResult.authToken);
+        await AuthSecrets.setUserId(loginResult.userId);
+
+        return provider;
       }
+
+      throw new Error("Failed to authenticate with Rocket.Chat");
     }
+  },
 
-    await cacheRepoContext(serverUrl);
-
-    return provider;
+  async _promptForToken() {
+    const patToken = await askInput("Your PAT Token");
+    if (!patToken) {
+      throw new Error("PAT token is required for login.");
+    }
+    return patToken;
   },
 };

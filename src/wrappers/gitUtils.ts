@@ -12,7 +12,14 @@ function getGitRepository() {
     return undefined;
   }
 
-  return git.repositories[0];
+  const activeEditor = vscode.window.activeTextEditor;
+  if (!activeEditor) {
+    return undefined;
+  }
+
+  return git.repositories.find((repo: any) =>
+    activeEditor.document.uri.fsPath.startsWith(repo.rootUri.fsPath)
+  );
 }
 
 export function getOriginRemoteUrl(): string | undefined {

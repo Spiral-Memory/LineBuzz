@@ -8,4 +8,8 @@ export class AuthSettings {
   static getServerUrl(): string | undefined {
     return GlobalStorage.get<string>("serverUrl");
   }
+
+  static deleteServerUrl() {
+    GlobalStorage.delete("serverUrl");
+  }
 }

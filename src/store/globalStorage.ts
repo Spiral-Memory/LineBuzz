@@ -14,4 +14,8 @@ export class GlobalStorage {
   public static get<T>(key: string): T | undefined {
     return GlobalStorage.globalStorage.get<T>(key);
   }
+
+  public static delete(key: string) {
+    GlobalStorage.globalStorage.update(key, undefined);
+  }
 }

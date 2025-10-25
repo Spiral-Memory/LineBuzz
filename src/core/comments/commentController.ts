@@ -33,9 +33,6 @@ export class BuzzCommentController {
   public async loadCommentsForFile(document: vscode.TextDocument) {
     const contextUuid = this._getContextUuid();
     if (!contextUuid) {
-      vscode.window.showErrorMessage(
-        "No workspace context UUID found for this repository"
-      );
       return;
     }
 
@@ -62,7 +59,7 @@ export class BuzzCommentController {
 
       this.commentController.createCommentThread(document.uri, range, [
         {
-          body: "Buzz not loaded yet -- refresh to hear the chatter",
+          body: "Buzz not loaded yet: refresh to hear the chatter",
           mode: vscode.CommentMode.Preview,
           author: {
             name: "LineBuzz",
@@ -195,16 +192,10 @@ export class BuzzCommentController {
   private _getContextUuid(): string | null {
     const remoteUrl = getOriginRemoteUrl();
     if (!remoteUrl) {
-      vscode.window.showErrorMessage(
-        "Origin remote URL not found or Git extension not available"
-      );
       return null;
     }
     const contextUuid = WorkspaceStorage.get<string>(remoteUrl);
     if (!contextUuid) {
-      vscode.window.showErrorMessage(
-        "No workspace context UUID found for this repository"
-      );
       return null;
     }
     return contextUuid;
@@ -230,5 +221,11 @@ export class BuzzCommentController {
     );
 
     thread.comments = [...thread.comments, newComment];
+  }
+
+  public dispose() {
+    this.mappings.clear();
+    this.loadedThreads.clear();
+    this.commentController.dispose();
   }
 }

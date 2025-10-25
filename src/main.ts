@@ -1,23 +1,20 @@
 import * as vscode from "vscode";
-import { storageService } from "./services/initializeStorage";
-import { commentService } from "./services/commentService";
-import { authService } from "./services/authService";
+import { storageService } from "./services/storageService";
+import { StatusService } from "./services/statusService";
+import { ConnectionService } from "./services/connectionService";
 
 export async function activate(context: vscode.ExtensionContext) {
   try {
     storageService.initializeStorage(context);
-
-    const provider = await authService.create();
-    await commentService.initialize(provider, context);
+    const statusBar = new StatusService(context);
+    const connectionService = new ConnectionService(statusBar);
+    await connectionService.initialize(context);
   } catch (error) {
     const message =
       error instanceof Error
         ? error.message
         : "An unexpected error occurred during extension activation.";
-
     vscode.window.showErrorMessage(`LineBuzz failed to activate: ${message}`);
-
-    console.error("Extension activation error:", error);
   }
 }
 
