@@ -1,63 +1,66 @@
-# LineBuzz 🧵 Inline Code Collaboration in VS Code
+# **LineBuzz 🧵 Inline Code Collaboration in VS Code**
 
-## Overview 📘
+## **Overview 📘**
 
-LineBuzz is a VS Code extension for real-time, line-based code discussions. It lets you comment on code, start threads, and collaborate directly inside the editor - no context switching.
+**LineBuzz** brings real-time, line-based code discussions directly into Visual Studio Code.
+It lets you comment on any line, start focused threads, and collaborate inside your editor - no tabs, no switching, no noise.
 
-Currently works with Rocket.Chat as the backend. Support for Slack, Google Workspace, and others is planned.
+Everything stays linked to the code itself, so your team’s conversations remain clear, contextual, and persistent across commits.
 
-## Features ✨
+## **Features ✨**
 
-* Threaded discussions linked to code lines
-* Real-time messaging in-editor
-* Comments persist across sessions and commits
-* Clean chat UI in the sidebar
+* Inline, threaded discussions on any line of code
+* Real-time sync and collaboration
+* Conversations persist across files and branches
+* Minimal, clean chat panel inside VS Code
+* Secure backend built on Supabase
 
-## Installation ⚙️
+## **Installation ⚙️**
 
-To use LineBuzz, follow these steps:
-
-1. Clone the repository to your local machine:
+1. Clone the repository:
 
    ```bash
    git clone https://github.com/Spiral-Memory/LineBuzz.git
    ```
-
-2. Move to the repository directory:
+2. Open the project in **Visual Studio Code**:
 
    ```bash
    cd LineBuzz
+   code .
    ```
+3. Press **F5** to launch the extension in a new VS Code window (Extension Development Host).
 
-3. Open the code sample in Visual Studio Code.
+That’s it -> LineBuzz will start running in the new window.
 
-4. Press `F5` to start the extension.
+## **Usage 🔍**
 
-## Usage 🔍
+1. Open any code file in the development host window.
+2. Highlight a line or block of code and open the **LineBuzz** sidebar.
+3. Start a new discussion or join an existing one.
+4. Conversations appear instantly and stay linked to your code context.
 
-Once the extension is up and running, follow these steps to utilize its features:
+## **Configuration 🧰**
 
-1. You'll be logged in directly to the GENERAL channel, where you can start chatting with your teammates.
-2. To discuss a specific code segment, open any project in VSCode, select the code segment you want to discuss.
+Before you run the extension, set up your Supabase credentials:
 
-3. A popup will open, allowing you to have a chat conversation about that specific code segment with your teammates.
+```env
+SUPABASE_API_URL=<your-supabase-url>
+SUPABASE_KEY=<your-supabase-anon-key>
+```
 
-## Prerequisites 🧰
+These values connect LineBuzz to your project’s backend for authentication and data sync.
 
-Before using this extension, ensure that you have the following:
+## **Roadmap 🛣️**
 
-* Rocket Chat server running locally on port 3000 or change the required code in extension.
+* **Team workspaces** with shared threads per project
+* **Commit-aware threads** that track changes automatically
+* **AI-generated summaries** of code changes and conversation threads
+* **Mentions and notifications** for team discussions
+* **Context-aware** linking between discussions and code changes
 
-  * If you don't have Rocket Chat installed, you can set it up by following the instructions on the [Rocket Chat website](https://developer.rocket.chat/open-source-projects/server/server-environment-setup).
-  * Make sure the Rocket Chat server is running and accessible at [http://localhost:3000](http://localhost:3000).
+## **Contributing 🤝**
 
-## Roadmap 🛣️
+Contributions are always welcome.
+Fork the repository, open it in VS Code, and use the built-in debugger to test your changes.
 
-* [ ] Multi-platform chat: add native support for Slack and Google Chat
-* [ ] Git-smart threads: auto-link discussions to commits, branches, and PRs
-* [ ] AI-powered discussion: surface code summaries and intelligent fix suggestions within threads
-
-## Contributing 🤝
-
-Contributions are welcome! Feel free to fork the repository, make your changes, and submit a pull request. For major changes, please open an issue first to discuss what you would like to change.
-
+For significant updates, open an issue first to discuss your approach.
