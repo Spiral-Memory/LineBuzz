@@ -12,9 +12,11 @@ export class ConnectionService {
   private statusBar: StatusService;
   private currentRepoUrl: string | undefined;
   private commentServiceInitialized = false;
+  private currentProvider: string;
 
   constructor(statusBar: StatusService) {
     this.statusBar = statusBar;
+    this.currentProvider = AuthSettings.getProviderName() || "rocketchat";
   }
 
   public async initialize(context: vscode.ExtensionContext) {
@@ -24,7 +26,7 @@ export class ConnectionService {
       )
     );
     this.statusBar.showConnecting();
-    const provider = await authService.initialize();
+    const provider = await authService.initialize(this.currentProvider, false);
     if (!provider) {
       this.statusBar.setDisconnected();
       return;
@@ -53,30 +55,70 @@ export class ConnectionService {
 
   private async showWorkspaceActions() {
     const action = await this.statusBar.promptForAction();
+
     if (action === "connect") {
-      await this.connect();
+      const providerName = await this.promptForProvider();
+      if (!providerName) {
+        return;
+      }
+      await this.connect(providerName);
     } else if (action === "disconnect") {
       await this.disconnect();
     }
   }
 
-  private async connect() {
+  private async promptForProvider(): Promise<
+    "rocketchat" | "slack" | undefined
+  > {
+    type ProviderOption = {
+      label: string;
+      provider: "rocketchat" | "slack";
+      description?: string;
+      alwaysShow?: boolean;
+    };
+
+    const options: readonly ProviderOption[] = [
+      {
+        label: "Rocket.Chat",
+        provider: "rocketchat",
+        description: "Use Rocket.Chat for workspace connection",
+      },
+      {
+        label: "Slack",
+        provider: "slack",
+        description: "Coming soon",
+        alwaysShow: true,
+      },
+    ];
+
+    const selection = await vscode.window.showQuickPick(options, {
+      placeHolder: "Select a chat provider",
+      matchOnDescription: true,
+    });
+
+    return selection?.provider;
+  }
+
+  private async connect(providerName: "rocketchat" | "slack") {
     this.statusBar.showConnecting();
+
     try {
-      const provider = await authService.initialize(true);
-      if (!provider) {
+      const result = await authService.initialize(providerName, true);
+
+      if (!result) {
         this.statusBar.showError("Failed to connect workspace.");
         return;
       }
+
       this.statusBar.setConnected();
-    } catch {
+    } catch (error) {
       this.statusBar.showError("Failed to connect workspace.");
     }
   }
 
   private async disconnect() {
     this.statusBar.showDisconnecting();
-
+    AuthSettings.deleteProviderName();
     AuthSettings.deleteServerUrl();
     AuthSecrets.deleteAuthToken();
     AuthSecrets.deleteUserId();

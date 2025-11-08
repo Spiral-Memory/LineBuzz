@@ -1,14 +1,16 @@
-import { RocketChatProvider } from "../infrastructure/providers/rocketChatProvider";
+import * as vscode from "vscode";
 import { AuthSecrets } from "../core/auth/authSecrets";
 import { askInput } from "../wrappers/askInput";
 import { AuthSettings } from "../core/auth/authSettings";
+import { RocketChatProvider } from "../infrastructure/providers/rocketChatProvider";
+import { ChatProvider } from "../infrastructure/providers/chatProvider";
 
 export const authService = {
-  async initialize(setup = false) {
+  async initialize(providerName: string, setup = false) {
     let serverUrl = AuthSettings.getServerUrl();
 
     if (setup) {
-      serverUrl = await askInput("Rocket.Chat Server URL");
+      serverUrl = await askInput("Workspace Server URL");
       if (!serverUrl) {
         throw new Error("Server URL is required to connect.");
       }
@@ -18,46 +20,28 @@ export const authService = {
       return;
     }
 
-    const provider = new RocketChatProvider(serverUrl);
-    const storedToken = await AuthSecrets.getAuthToken();
+    let provider: ChatProvider;
+    if (providerName === "rocketchat") {
+      provider = new RocketChatProvider(serverUrl);
+    } else {
+      vscode.window.showErrorMessage(`Unsupported provider: ${providerName}`);
+      throw new Error(`Unsupported provider: ${providerName}`);
+    }
 
     try {
-      let loginResult;
-
-      if (storedToken) {
-        loginResult = await provider.login({ resume: storedToken });
-      } else if (setup) {
-        const patToken = await this._promptForToken();
-        loginResult = await provider.login({ resume: patToken });
-      } else {
+      const loginResult = await provider.loginWithSetupFlow(setup);
+      if (!loginResult) {
         return;
       }
 
       AuthSettings.setServerUrl(serverUrl);
+      AuthSettings.setProviderName(providerName);
       await AuthSecrets.setAuthToken(loginResult.authToken);
       await AuthSecrets.setUserId(loginResult.userId);
+
       return provider;
     } catch {
-      if (setup) {
-        const patToken = await this._promptForToken();
-        const loginResult = await provider.login({ resume: patToken });
-
-        AuthSettings.setServerUrl(serverUrl);
-        await AuthSecrets.setAuthToken(loginResult.authToken);
-        await AuthSecrets.setUserId(loginResult.userId);
-
-        return provider;
-      }
-
-      throw new Error("Failed to authenticate with Rocket.Chat");
+      throw new Error(`Failed to authenticate with ${providerName}.`);
     }
-  },
-
-  async _promptForToken() {
-    const patToken = await askInput("Your PAT Token");
-    if (!patToken) {
-      throw new Error("PAT token is required for login.");
-    }
-    return patToken;
   },
 };

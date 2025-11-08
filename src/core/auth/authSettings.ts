@@ -12,4 +12,16 @@ export class AuthSettings {
   static deleteServerUrl() {
     GlobalStorage.delete("serverUrl");
   }
+
+  static setProviderName(name: string) {
+    GlobalStorage.set("providerName", name);
+  }
+
+  static getProviderName(): string | undefined {
+    return GlobalStorage.get<string>("providerName");
+  }
+
+  static deleteProviderName() {
+    GlobalStorage.delete("providerName");
+  }
 }

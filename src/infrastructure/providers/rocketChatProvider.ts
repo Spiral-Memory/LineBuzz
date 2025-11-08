@@ -1,6 +1,7 @@
 import { RocketChatApi } from "../api/rocketChatApi";
 import { ChatProvider } from "./chatProvider";
 import { AuthSecrets } from "../../core/auth/authSecrets";
+import { askInput } from "../../wrappers/askInput";
 
 export class RocketChatProvider implements ChatProvider {
   private api: RocketChatApi;
@@ -52,5 +53,23 @@ export class RocketChatProvider implements ChatProvider {
     }
 
     return this.api.getMessageById(authToken, userId, threadId);
+  }
+
+  async loginWithSetupFlow(setup: boolean) {
+    const storedToken = await AuthSecrets.getAuthToken();
+
+    if (storedToken) {
+      return this.login({ resume: storedToken });
+    }
+
+    if (setup) {
+      const patToken = await askInput("Your PAT Token");
+      if (!patToken) {
+        throw new Error("PAT token is required for login.");
+      }
+      return this.login({ resume: patToken });
+    }
+
+    return undefined;
   }
 }
