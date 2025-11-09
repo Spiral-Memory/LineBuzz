@@ -1,6 +1,6 @@
 {
   "name": "linebuzz",
-  "displayName": "linebuzz",
+  "displayName": "Linebuzz",
   "description": "talk through code where it lives",
   "version": "0.0.1",
   "engines": {
@@ -13,6 +13,9 @@
     "*"
   ],
   "main": "./dist/extension.js",
+  "contributes": {
+    "commands": []
+  },
   "scripts": {
     "prewatch": "node scripts/write-config.js",
     "watch": "node scripts/esbuild.js --watch",
