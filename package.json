@@ -13,70 +13,13 @@
     "*"
   ],
   "main": "./dist/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "linebuzz.startDiscussion",
-        "title": "Send Message",
-        "enablement": "!commentIsEmpty"
-      },
-      {
-        "command": "linebuzz.reply",
-        "title": "Reply",
-        "enablement": "!commentIsEmpty"
-      },
-      {
-        "command": "linebuzz.refreshMessage",
-        "title": "Refresh",
-        "icon": {
-          "dark": "assets/refresh.svg",
-          "light": "assets/refresh.svg"
-        }
-      }
-    ],
-    "menus": {
-      "commandPalette": [
-        {
-          "command": "linebuzz.startDiscussion",
-          "when": "false"
-        },
-        {
-          "command": "linebuzz.reply",
-          "when": "false"
-        },
-        {
-          "command": "linebuzz.refreshMessage",
-          "when": "false"
-        }
-      ],
-      "comments/commentThread/title": [
-        {
-          "command": "linebuzz.refreshMessage",
-          "group": "navigation",
-          "when": "commentController == buzz-comments && !commentThreadIsEmpty"
-        }
-      ],
-      "comments/commentThread/context": [
-        {
-          "command": "linebuzz.startDiscussion",
-          "group": "inline",
-          "when": "commentController == buzz-comments && commentThreadIsEmpty"
-        },
-        {
-          "command": "linebuzz.reply",
-          "group": "inline",
-          "when": "commentController == buzz-comments && !commentThreadIsEmpty"
-        }
-      ]
-    }
-  },
   "scripts": {
+    "prewatch": "node scripts/write-config.js",
+    "watch": "node scripts/esbuild.js --watch",
+    "prebuild": "node scripts/write-config.js",
+    "build": "node scripts/esbuild.js --production",
+    "package": "vsce package",
     "vscode:prepublish": "npm run package",
-    "compile": "npm run check-types && npm run lint && node esbuild.js",
-    "watch": "npm-run-all -p watch:*",
-    "watch:esbuild": "node esbuild.js --watch",
-    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
-    "package": "npm run check-types && npm run lint && node esbuild.js --production",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
