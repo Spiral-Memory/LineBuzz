@@ -14,7 +14,9 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": []
+    "commands": [
+      
+    ]
   },
   "scripts": {
     "prewatch": "node scripts/write-config.js",

@@ -19,16 +19,4 @@ export async function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(disposable);
-    
-    context.subscriptions.push(
-        vscode.commands.registerCommand('linebuzz.getStatus', () => {
-            const service = Container.get('AuthService');
-            const session = service.getSession();
-            if (session) {
-                vscode.window.showInformationMessage(`Logged in! User ID: ${session.user_id}`);
-            } else {
-                vscode.window.showWarningMessage("Not currently logged in.");
-            }
-        })
-    );
 }

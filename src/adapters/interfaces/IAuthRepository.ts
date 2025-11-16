@@ -1,6 +1,7 @@
 export interface AuthSession {
+  username: string;
   access_token: string;
-  user_id: string;
+  refresh_token: string;
 }
 
 

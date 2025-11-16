@@ -19,12 +19,14 @@ export class AuthService {
 
         try {
             const session = await this.authRepo.exchangeTokenForSession(githubSession.accessToken);
+            console.log("[AuthService] Secure session established with backend.");
+            vscode.window.showInformationMessage(`Logged in as ${session.username}`);
             this.setSession(session);
             
             return session;
         } catch (error) {
             console.error("Token exchange failed:", error);
-            vscode.window.showErrorMessage("Failed to establish secure session with backend.");
+            vscode.window.showErrorMessage("Failed to log in. Please try again.");
             this.setSession(null);
             return null;
         }
@@ -44,3 +46,4 @@ export class AuthService {
         return this.AuthSession !== null;
     }
 }
+
