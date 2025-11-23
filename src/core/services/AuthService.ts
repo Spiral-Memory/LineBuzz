@@ -9,10 +9,8 @@ export class AuthService {
 
     public async initializeSession(): Promise<AuthSession | null> {
         const githubSession = await vscode.authentication.getSession("github", ["user"], { createIfNone: false });
-        logger.info("AuthService", "GitHub session:", githubSession)
 
         if (!githubSession) {
-            logger.info("AuthService", "No GitHub session found.");
             await this.authRepo.signOut();
             vscode.commands.executeCommand('setContext', 'extension.isLoggedIn', false);
             return null;

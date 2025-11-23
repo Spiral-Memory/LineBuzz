@@ -6,15 +6,13 @@ import { Storage } from "./core/platform/storage";
 import { logger } from './core/utils/logger';
 
 export async function activate(context: vscode.ExtensionContext) {
-    Storage.initialize(context);
     let authService: AuthService | undefined;
-
+    let debounceTimer: NodeJS.Timeout;
+    Storage.initialize(context);
     try {
         const supbaseAuthRepository = new SupabaseAuthRepository();
         authService = new AuthService(supbaseAuthRepository);
-
         Container.register('AuthService', authService);
-
         await authService.initializeSession();
 
     } catch (e) {
@@ -22,12 +20,13 @@ export async function activate(context: vscode.ExtensionContext) {
         return;
     }
 
-    const disposable = vscode.authentication.onDidChangeSessions(async (e) => {
-        logger.info("Extension", "Session changed:", e);
+    const disposable = vscode.authentication.onDidChangeSessions((e) => {
         if (e.provider.id !== "github") return;
-
         if (authService) {
-            await authService.initializeSession();
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(async () => {
+                await authService.initializeSession();
+            }, 500);
         } else {
             logger.error("Extension", "AuthService not initialized when onDidChangeSessions fired.");
         }
