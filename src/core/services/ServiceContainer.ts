@@ -1,8 +1,10 @@
 import { AuthService } from './AuthService';
+import { TeamService } from './TeamService';
 import { logger } from "../utils/logger";
 
 interface Services {
     AuthService: AuthService;
+    TeamService: TeamService;
 }
 
 export class ServiceContainer {

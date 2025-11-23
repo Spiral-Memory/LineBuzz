@@ -15,8 +15,29 @@
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
-      
-    ]
+      {
+        "command": "linebuzz.createTeam",
+        "title": "Create Team",
+        "category": "LineBuzz"
+      },
+      {
+        "command": "linebuzz.joinTeam",
+        "title": "Join Team",
+        "category": "LineBuzz"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "linebuzz.createTeam",
+          "when": "extension.isLoggedIn && !linebuzz.hasTeam"
+        },
+        {
+          "command": "linebuzz.joinTeam",
+          "when": "extension.isLoggedIn && !linebuzz.hasTeam"
+        }
+      ]
+    }
   },
   "scripts": {
     "prewatch": "node scripts/write-config.js",

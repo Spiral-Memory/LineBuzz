@@ -4,6 +4,10 @@ import { AuthService } from './core/services/AuthService';
 import { Container } from './core/services/ServiceContainer';
 import { Storage } from "./core/platform/storage";
 import { logger } from './core/utils/logger';
+import { SupabaseTeamRepository } from "./adapters/supabase/SupabaseTeamRepository";
+import { TeamService } from "./core/services/TeamService";
+import { createTeamCommand } from "./core/commands/CreateTeamCommand";
+import { joinTeamCommand } from "./core/commands/JoinTeamCommand";
 
 export async function activate(context: vscode.ExtensionContext) {
     let authService: AuthService | undefined;
@@ -14,6 +18,16 @@ export async function activate(context: vscode.ExtensionContext) {
         authService = new AuthService(supbaseAuthRepository);
         Container.register('AuthService', authService);
         await authService.initializeSession();
+
+        const supabaseTeamRepository = new SupabaseTeamRepository();
+        const teamService = new TeamService(supabaseTeamRepository);
+        Container.register('TeamService', teamService);
+        await teamService.initialize();
+
+        context.subscriptions.push(
+            vscode.commands.registerCommand('linebuzz.createTeam', createTeamCommand),
+            vscode.commands.registerCommand('linebuzz.joinTeam', joinTeamCommand)
+        );
 
     } catch (e) {
         logger.error("Extension", "Failed to activate extension:", e);
