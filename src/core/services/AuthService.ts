@@ -1,49 +1,38 @@
 
 import * as vscode from "vscode";
 import { IAuthRepository, AuthSession } from '../../adapters/interfaces/IAuthRepository';
+import { logger } from "../utils/logger";
 
 export class AuthService {
-    private AuthSession: AuthSession | null = null;
-    
-    constructor(private authRepo: IAuthRepository) {}
+
+    constructor(private authRepo: IAuthRepository) { }
 
     public async initializeSession(): Promise<AuthSession | null> {
         const githubSession = await vscode.authentication.getSession("github", ["user"], { createIfNone: false });
-        
+        logger.info("AuthService", "GitHub session:", githubSession)
+
         if (!githubSession) {
-            this.setSession(null);
+            logger.info("AuthService", "No GitHub session found.");
+            await this.authRepo.signOut();
+            vscode.commands.executeCommand('setContext', 'extension.isLoggedIn', false);
             return null;
         }
 
-        console.log(`[AuthService] GitHub token available for: ${githubSession.account.label}`);
+        logger.info("AuthService", `GitHub token available for: ${githubSession.account.label}`);
 
         try {
             const session = await this.authRepo.exchangeTokenForSession(githubSession.accessToken);
-            console.log("[AuthService] Secure session established with backend.");
+            logger.info("AuthService", "Secure session established with backend.");
             vscode.window.showInformationMessage(`Logged in as ${session.username}`);
-            this.setSession(session);
-            
+            vscode.commands.executeCommand('setContext', 'extension.isLoggedIn', true);
+
             return session;
         } catch (error) {
-            console.error("Token exchange failed:", error);
+            logger.error("AuthService", "Token exchange failed:", error);
             vscode.window.showErrorMessage("Failed to log in. Please try again.");
-            this.setSession(null);
+            vscode.commands.executeCommand('setContext', 'extension.isLoggedIn', false);
             return null;
         }
-    }
-
-
-    private setSession(session: AuthSession | null): void {
-        this.AuthSession = session;
-        vscode.commands.executeCommand('setContext', 'extension.isLoggedIn', !!session);
-    }
-
-    public getSession(): AuthSession | null {
-        return this.AuthSession;
-    }
-
-    public isLoggedIn(): boolean {
-        return this.AuthSession !== null;
     }
 }
 

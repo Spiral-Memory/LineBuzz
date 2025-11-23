@@ -7,4 +7,5 @@ export interface AuthSession {
 
 export interface IAuthRepository {
   exchangeTokenForSession(thirdPartyToken: string): Promise<AuthSession>;
+  signOut(): Promise<void>;
 }

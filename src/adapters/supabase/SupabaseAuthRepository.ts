@@ -1,14 +1,19 @@
 import { IAuthRepository, AuthSession } from "../interfaces/IAuthRepository";
-import { createClient } from "@supabase/supabase-js";
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from "../../core/platform/config";
+import { SupabaseClient } from "./SupabaseClient";
+import { logger } from "../../core/utils/logger";
 
 export class SupabaseAuthRepository implements IAuthRepository {
   async exchangeTokenForSession(githubToken: string): Promise<AuthSession> {
-    console.log(
-      "[SupabaseAuthRepository] Initiating token exchange via Edge Function."
-    );
+    logger.info("SupabaseAuthRepository", "Initiating token exchange via Edge Function.");
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = SupabaseClient.getInstance().client;
+
+    const { data: currentSession } = await supabase.auth.getSession();
+    logger.info("SupabaseAuthRepository", "Current session:", currentSession);
+    if (currentSession.session) {
+      logger.info("SupabaseAuthRepository", "Found existing session.")
+      return this.extractSessionData(currentSession.session);
+    }
 
     const { data, error } = await supabase.functions.invoke("auth-exchange", {
       body: { githubToken: githubToken }
@@ -28,9 +33,29 @@ export class SupabaseAuthRepository implements IAuthRepository {
       throw new Error("Failed to verify OTP: " + sessionError.message);
     }
 
-    const accessToken = sessionData.session?.access_token;
-    const refreshToken = sessionData.session?.refresh_token;
-    const userName = sessionData.user?.user_metadata?.display_name || sessionData.user?.email;
+    if (!sessionData.session) {
+      throw new Error("Missing session data after OTP verification");
+    }
+
+    return this.extractSessionData(sessionData.session);
+  }
+
+  async signOut(): Promise<void> {
+    logger.info("SupabaseAuthRepository", "Clearing Supabase session.");
+    const supabase = SupabaseClient.getInstance().client;
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      await supabase.auth.signOut();
+      logger.info("SupabaseAuthRepository", "Signed out successfully.");
+    } else {
+      logger.info("SupabaseAuthRepository", "No active session found to sign out.");
+    }
+  }
+
+  private extractSessionData(session: any): AuthSession {
+    const accessToken = session.access_token;
+    const refreshToken = session.refresh_token;
+    const userName = session.user?.user_metadata?.display_name || session.user?.email;
 
     if (!accessToken || !refreshToken) {
       throw new Error("Missing access token or refresh token in Supabase session");

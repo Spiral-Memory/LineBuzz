@@ -1,24 +1,27 @@
 import { AuthService } from './AuthService';
+import { logger } from "../utils/logger";
 
 interface Services {
     AuthService: AuthService;
 }
 
-const serviceInstances = new Map<keyof Services, any>();
+export class ServiceContainer {
+    private static services: Map<string, any> = new Map();
 
-export const Container = {
-    register<K extends keyof Services>(key: K, instance: Services[K]): void {
-        if (serviceInstances.has(key)) {
-            console.warn(`Service ${key} already registered.`);
+    static register<K extends keyof Services>(key: K, service: Services[K]): void {
+        if (this.services.has(key)) {
+            logger.warn("ServiceContainer", `Service ${key} already registered.`);
             return;
         }
-        serviceInstances.set(key, instance);
-    },
+        this.services.set(key, service);
+    }
 
-    get<K extends keyof Services>(key: K): Services[K] {
-        if (!serviceInstances.has(key)) {
+    static get<K extends keyof Services>(key: K): Services[K] {
+        if (!this.services.has(key)) {
             throw new Error(`Service ${key} not registered in container.`);
         }
-        return serviceInstances.get(key) as Services[K];
+        return this.services.get(key) as Services[K];
     }
-};
+}
+
+export const Container = ServiceContainer;
