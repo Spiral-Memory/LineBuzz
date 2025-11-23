@@ -27,7 +27,6 @@ export class TeamService {
         } catch (error: any) {
             logger.error("TeamService", "Error creating team", error);
             vscode.window.showErrorMessage(`Failed to create team: ${error.message}`);
-            throw error;
         }
     }
 
@@ -39,7 +38,6 @@ export class TeamService {
         } catch (error: any) {
             logger.error("TeamService", "Error joining team", error);
             vscode.window.showErrorMessage(`Failed to join team: ${error.message}`);
-            throw error;
         }
     }
 
@@ -51,6 +49,13 @@ export class TeamService {
 
     private async updateContext(hasTeam: boolean) {
         await vscode.commands.executeCommand('setContext', 'linebuzz.hasTeam', hasTeam);
+    }
+
+    public async leaveTeam(): Promise<void> {
+        this.currentTeam = undefined;
+        Storage.deleteGlobal("currentTeam");
+        await this.updateContext(false);
+        vscode.window.showInformationMessage("You have left the team.");
     }
 
     public getTeam(): TeamInfo | undefined {

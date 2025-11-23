@@ -24,6 +24,11 @@
         "command": "linebuzz.joinTeam",
         "title": "Join Team",
         "category": "LineBuzz"
+      },
+      {
+        "command": "linebuzz.leaveTeam",
+        "title": "Leave Team",
+        "category": "LineBuzz"
       }
     ],
     "menus": {
@@ -35,6 +40,10 @@
         {
           "command": "linebuzz.joinTeam",
           "when": "extension.isLoggedIn && !linebuzz.hasTeam"
+        },
+        {
+          "command": "linebuzz.leaveTeam",
+          "when": "extension.isLoggedIn && linebuzz.hasTeam"
         }
       ]
     }

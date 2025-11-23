@@ -8,6 +8,7 @@ import { SupabaseTeamRepository } from "./adapters/supabase/SupabaseTeamReposito
 import { TeamService } from "./core/services/TeamService";
 import { createTeamCommand } from "./core/commands/CreateTeamCommand";
 import { joinTeamCommand } from "./core/commands/JoinTeamCommand";
+import { leaveTeamCommand } from "./core/commands/LeaveTeamCommand";
 
 export async function activate(context: vscode.ExtensionContext) {
     let authService: AuthService | undefined;
@@ -26,7 +27,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
         context.subscriptions.push(
             vscode.commands.registerCommand('linebuzz.createTeam', createTeamCommand),
-            vscode.commands.registerCommand('linebuzz.joinTeam', joinTeamCommand)
+            vscode.commands.registerCommand('linebuzz.joinTeam', joinTeamCommand),
+            vscode.commands.registerCommand('linebuzz.leaveTeam', leaveTeamCommand)
         );
 
     } catch (e) {

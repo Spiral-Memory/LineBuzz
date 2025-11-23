@@ -53,7 +53,10 @@ export class SupabaseTeamRepository implements ITeamRepository {
         }
 
         if (response.status === 'warning') {
-            throw new Error(response.message);
+            return {
+                id: response.team_id,
+                name: response.team_name,
+            };
         }
 
         if (response.status === 'success') {
