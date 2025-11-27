@@ -22,11 +22,24 @@ export class TeamService {
     public async createTeam(name: string): Promise<void> {
         try {
             const team = await this.teamRepo.createTeam(name);
+            if (!team.invite_code) {
+                logger.error("TeamService", "No invite code was generated.");
+                throw new Error("No invite code was generated.");
+            }
+            const selection = await vscode.window.showInformationMessage(
+                `Team '${team.name}' created successfully! Invite Code: ${team.invite_code}`,
+                // { modal: true }, 
+                'Copy Invite Code'
+            );
+            // TOOO: Once UI is ready, we may provide an option to retreive invite code per team
+            if (selection === 'Copy Invite Code') {
+                await vscode.env.clipboard.writeText(`Join my team '${team.name}' on LineBuzz using this invite code: ${team.invite_code!}`);
+                vscode.window.showInformationMessage("All set. Invite code is ready to share.");
+            }
             this.setTeam(team);
-            vscode.window.showInformationMessage(`Team '${team.name}' created successfully!`);
         } catch (error: any) {
             logger.error("TeamService", "Error creating team", error);
-            vscode.window.showErrorMessage(`Failed to create team: ${error.message}`);
+            vscode.window.showErrorMessage("Failed to create team. Please try again.");
         }
     }
 
@@ -37,8 +50,15 @@ export class TeamService {
             vscode.window.showInformationMessage(`Joined team '${team.name}' successfully!`);
         } catch (error: any) {
             logger.error("TeamService", "Error joining team", error);
-            vscode.window.showErrorMessage(`Failed to join team: ${error.message}`);
+            vscode.window.showErrorMessage("Failed to join team. Please try again.");
         }
+    }
+
+    public async leaveTeam(): Promise<void> {
+        this.currentTeam = undefined;
+        Storage.deleteGlobal("currentTeam");
+        await this.updateContext(false);
+        vscode.window.showInformationMessage("You have left the team.");
     }
 
     private setTeam(team: TeamInfo) {
@@ -49,13 +69,6 @@ export class TeamService {
 
     private async updateContext(hasTeam: boolean) {
         await vscode.commands.executeCommand('setContext', 'linebuzz.hasTeam', hasTeam);
-    }
-
-    public async leaveTeam(): Promise<void> {
-        this.currentTeam = undefined;
-        Storage.deleteGlobal("currentTeam");
-        await this.updateContext(false);
-        vscode.window.showInformationMessage("You have left the team.");
     }
 
     public getTeam(): TeamInfo | undefined {
