@@ -9,6 +9,8 @@ import { TeamService } from "./core/services/TeamService";
 import { createTeamCommand } from "./core/commands/CreateTeamCommand";
 import { joinTeamCommand } from "./core/commands/JoinTeamCommand";
 import { leaveTeamCommand } from "./core/commands/LeaveTeamCommand";
+import { TeamFeedProvider } from "./core/providers/TeamFeedProvider";
+import { ChatPanelProvider } from "./core/providers/ChatPanelProvider";
 
 export async function activate(context: vscode.ExtensionContext) {
     let authService: AuthService | undefined;
@@ -24,6 +26,14 @@ export async function activate(context: vscode.ExtensionContext) {
         const teamService = new TeamService(supabaseTeamRepository);
         Container.register('TeamService', teamService);
         await teamService.initialize();
+
+        const teamFeedPanelProvider = new TeamFeedProvider();
+        vscode.window.registerTreeDataProvider(TeamFeedProvider.viewId, teamFeedPanelProvider);
+
+        const chatPanelProvider = new ChatPanelProvider(context.extensionUri);
+        context.subscriptions.push(
+            vscode.window.registerWebviewViewProvider(ChatPanelProvider.viewId, chatPanelProvider)
+        );
 
         context.subscriptions.push(
             vscode.commands.registerCommand('linebuzz.createTeam', createTeamCommand),

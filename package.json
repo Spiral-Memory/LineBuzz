@@ -46,6 +46,28 @@
           "when": "extension.isLoggedIn && linebuzz.hasTeam"
         }
       ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "linebuzz-view-container",
+          "title": "LineBuzz",
+          "icon": "$(comment-discussion)"
+        }
+      ]
+    },
+    "views": {
+      "linebuzz-view-container": [
+        {
+          "id": "linebuzz.teamfeed",
+          "name": "Team Feed"
+        },
+        {
+          "id": "linebuzz.chatpanel",
+          "name": "Chat Panel",
+          "type": "webview"
+        }
+      ]
     }
   },
   "scripts": {
