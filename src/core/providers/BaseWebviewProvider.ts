@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { getNonce } from '../utils/getNonce';
 
 export abstract class BaseWebviewProvider implements vscode.WebviewViewProvider {
     protected _view?: vscode.WebviewView;
@@ -24,18 +25,25 @@ export abstract class BaseWebviewProvider implements vscode.WebviewViewProvider 
         webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
     }
 
-    protected abstract _getHtmlForWebview(webview: vscode.Webview): string;
+    protected _getHtmlForWebview(webview: vscode.Webview): string {
+        const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'webview.js'));
+        const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'webview.css'));
 
-    protected _getStyles(webview: vscode.Webview): string {
-        return `
-            <style>
-                body {
-                    padding: 10px;
-                    font-family: var(--vscode-font-family);
-                    color: var(--vscode-foreground);
-                    background-color: var(--vscode-editor-background);
-                }
-            </style>
-        `;
+        const nonce = getNonce();
+
+        return `<!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+                <link href="${styleUri}" rel="stylesheet">
+                <title>LineBuzz</title>
+            </head>
+            <body>
+                <div id="app"></div>
+                <script nonce="${nonce}" src="${scriptUri}"></script>
+            </body>
+            </html>`;
     }
 }

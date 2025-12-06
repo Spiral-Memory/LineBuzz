@@ -60,11 +60,13 @@
       "linebuzz-view-container": [
         {
           "id": "linebuzz.teamfeed",
+          "icon": "$(comment-discussion)",
           "name": "Team Feed"
         },
         {
           "id": "linebuzz.chatpanel",
-          "name": "Chat Panel",
+          "icon": "$(comment-discussion)",
+          "name": "LineBuzz Huddle",
           "type": "webview"
         }
       ]
