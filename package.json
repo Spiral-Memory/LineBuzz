@@ -29,6 +29,11 @@
         "command": "linebuzz.leaveTeam",
         "title": "Leave Team",
         "category": "LineBuzz"
+      },
+      {
+        "command": "linebuzz.sendMessage",
+        "title": "Send Message",
+        "category": "LineBuzz"
       }
     ],
     "menus": {

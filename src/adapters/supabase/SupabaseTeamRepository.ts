@@ -68,4 +68,6 @@ export class SupabaseTeamRepository implements ITeamRepository {
 
         throw new Error(`Unexpected response status: ${response.status}`);
     }
+
+
 }

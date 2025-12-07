@@ -6,7 +6,10 @@ import { Storage } from "./core/platform/storage";
 import { logger } from './core/utils/logger';
 import { SupabaseTeamRepository } from "./adapters/supabase/SupabaseTeamRepository";
 import { TeamService } from "./core/services/TeamService";
+import { MessageService } from "./core/services/MessageService";
+import { SupabaseMessageRepository } from "./adapters/supabase/SupabaseMessageRepository";
 import { createTeamCommand } from "./core/commands/CreateTeamCommand";
+import { sendMessageCommand } from "./core/commands/SendMessageCommand";
 import { joinTeamCommand } from "./core/commands/JoinTeamCommand";
 import { leaveTeamCommand } from "./core/commands/LeaveTeamCommand";
 import { TeamFeedProvider } from "./core/providers/TeamFeedProvider";
@@ -27,6 +30,10 @@ export async function activate(context: vscode.ExtensionContext) {
         Container.register('TeamService', teamService);
         await teamService.initialize();
 
+        const supabaseMessageRepository = new SupabaseMessageRepository();
+        const messageService = new MessageService(supabaseMessageRepository);
+        Container.register('MessageService', messageService);
+
         const teamFeedPanelProvider = new TeamFeedProvider();
         vscode.window.registerTreeDataProvider(TeamFeedProvider.viewId, teamFeedPanelProvider);
 
@@ -38,7 +45,8 @@ export async function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(
             vscode.commands.registerCommand('linebuzz.createTeam', createTeamCommand),
             vscode.commands.registerCommand('linebuzz.joinTeam', joinTeamCommand),
-            vscode.commands.registerCommand('linebuzz.leaveTeam', leaveTeamCommand)
+            vscode.commands.registerCommand('linebuzz.leaveTeam', leaveTeamCommand),
+            vscode.commands.registerCommand('linebuzz.sendMessage', sendMessageCommand)
         );
 
     } catch (e) {
