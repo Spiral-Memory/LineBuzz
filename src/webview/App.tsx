@@ -1,9 +1,8 @@
 import { h } from 'preact';
+import { ChatView } from './views/ChatView/ChatView';
 
 export function App() {
   return (
-    <div>
-      <h1>Hello from Preact!</h1>
-    </div>
+    <ChatView />
   );
 }
