@@ -47,6 +47,10 @@
           "when": "extension.isLoggedIn && !linebuzz.hasTeam"
         },
         {
+          "command": "linebuzz.sendMessage",
+          "when": "extension.isLoggedIn && linebuzz.hasTeam"
+        },
+        {
           "command": "linebuzz.leaveTeam",
           "when": "extension.isLoggedIn && linebuzz.hasTeam"
         }

@@ -5,15 +5,14 @@ import { logger } from "../../core/utils/logger";
 export class SupabaseMessageRepository implements IMessageRepository {
     async sendMessage(message: string, teamId: string): Promise<MessageInfo> {
         const supabase = SupabaseClient.getInstance().client;
-        logger.info("SupabaseMessageRepository", `Sending message: ${message}`);
+        logger.info("SupabaseMessageRepository", `Sending message: ${message} in team: ${teamId}`);
 
         const { data, error } = await supabase.rpc('create_message', {
-            p_content: message,
             p_team_id: teamId,
             p_parent_id: null,
+            p_content: message,
             p_is_code_thread: false
         });
-
         if (error) {
             logger.error("SupabaseMessageRepository", "RPC call failed", error);
             throw new Error(`RPC call failed: ${error.message}`);
@@ -26,6 +25,7 @@ export class SupabaseMessageRepository implements IMessageRepository {
         }
 
         if (response.status === 'success') {
+            logger.info("SupabaseMessageRepository", `Message sent successfully: ${response.message_id}`);
             return {
                 id: response.message_id,
                 thread_id: response.thread_id,

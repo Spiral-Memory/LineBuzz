@@ -17,7 +17,6 @@ export class MessageService {
             }
 
             await this.messageRepo.sendMessage(message, currentTeam.id);
-            vscode.window.showInformationMessage("Message sent successfully!");
         } catch (error: any) {
             logger.error("MessageService", "Error sending message", error);
             vscode.window.showErrorMessage("Failed to send message. Please try again.");

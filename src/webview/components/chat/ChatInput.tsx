@@ -1,5 +1,6 @@
 import { h } from 'preact';
 import { useState, useRef } from 'preact/hooks';
+import { vscode } from '../../utils/vscode';
 import './ChatInput.css';
 
 export const ChatInput = () => {
@@ -22,7 +23,11 @@ export const ChatInput = () => {
 
     const handleSend = () => {
         if (!value.trim()) return;
-        console.log('Sending message:', value);
+
+        vscode.postMessage({
+            command: 'sendMessage',
+            text: value
+        });
 
         setValue('');
 
@@ -32,7 +37,7 @@ export const ChatInput = () => {
             textareaRef.current.focus();
         }
     };
- 
+
     const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();

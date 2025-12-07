@@ -23,6 +23,14 @@ export abstract class BaseWebviewProvider implements vscode.WebviewViewProvider 
         };
 
         webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+
+        webviewView.webview.onDidReceiveMessage(async (data) => {
+            await this._onDidReceiveMessage(data);
+        });
+    }
+
+    protected async _onDidReceiveMessage(_data: any): Promise<void> {
+        // Override in child classes
     }
 
     protected _getHtmlForWebview(webview: vscode.Webview): string {
