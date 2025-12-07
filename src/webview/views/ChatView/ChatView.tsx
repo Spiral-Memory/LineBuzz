@@ -12,7 +12,7 @@ export const ChatView = () => {
                         <path d="M6 12h8v-2H6v2zm0-3h12V7H6v2z" />
                     </svg>
                 </div>
-                <h1 class="welcome-title">LineBuzz Huddle</h1>
+                <h1 class="welcome-title">LineBuzz</h1>
                 <p class="welcome-desc">
                     Connect with your team instantly.<br />
                     Share snippets, discuss logic, and stay in sync.
