@@ -15,7 +15,15 @@ export class ChatPanelProvider extends BaseWebviewProvider {
             case 'sendMessage': {
                 try {
                     const messageService = Container.get("MessageService");
-                    await messageService.sendMessage(data.text);
+                    const messageInfo = await messageService.sendMessage(data.text);
+
+                    if (messageInfo) {
+                        this._view?.webview.postMessage({
+                            command: 'addMessage',
+                            message: messageInfo,
+                            senderType: 'me'
+                        });
+                    }
                 } catch (error) {
                     console.error('Error handling sendMessage:', error);
                     vscode.window.showErrorMessage('Failed to send message.');
@@ -27,7 +35,12 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                 try {
                     const messageService = Container.get("MessageService");
                     const messages = await messageService.getMessages();
-                    console.log("Messages", JSON.stringify(messages));
+
+                    this._view?.webview.postMessage({
+                        command: 'updateMessages',
+                        messages: messages
+                    });
+
                 } catch (error) {
                     console.error('Error handling getMessages:', error);
                     vscode.window.showErrorMessage('Failed to get messages.');

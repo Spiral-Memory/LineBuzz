@@ -25,7 +25,7 @@ export class SupabaseMessageRepository implements IMessageRepository {
         }
 
         if (response.status === 'success') {
-            logger.info("SupabaseMessageRepository", `Message sent successfully: ${response.message_id}`);
+            logger.info("SupabaseMessageRepository", `Message sent successfully: ${response.message?.message_id}`);
             return response.message;
         }
 

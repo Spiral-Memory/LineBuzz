@@ -40,5 +40,74 @@
     opacity: 0.8;
     max-width: 300px;
     line-height: 1.5;
-    margin: 0;
 }
+
+    .message-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0 4px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    /* Scrollbar styling for message list */
+    .message-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .message-list::-webkit-scrollbar-thumb {
+        background-color: var(--vscode-scrollbarSlider-background);
+        border-radius: 3px;
+    }
+
+    .message-list::-webkit-scrollbar-thumb:hover {
+        background-color: var(--vscode-scrollbarSlider-hoverBackground);
+    }
+
+    .message-wrapper {
+        display: flex;
+        width: 100%;
+    }
+
+    .message-wrapper.sent {
+        justify-content: flex-end;
+    }
+
+    .message-wrapper.received {
+        justify-content: flex-start;
+    }
+
+    .message-bubble {
+        max-width: 85%;
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        position: relative;
+        word-wrap: break-word;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-wrapper.sent .message-bubble {
+        background-color: var(--vscode-button-background);
+        color: var(--vscode-button-foreground);
+        border-bottom-right-radius: 2px;
+    }
+
+    .message-wrapper.received .message-bubble {
+        background-color: var(--vscode-editor-inactiveSelectionBackground);
+        color: var(--vscode-editor-foreground);
+        border-bottom-left-radius: 2px;
+        border: 1px solid var(--vscode-widget-border);
+    }
+
+    .message-meta {
+        font-size: 0.7rem;
+        margin-top: 4px;
+        opacity: 0.7;
+        text-align: right;
+        display: none;
+        /* Hidden for now until we have data */
+    }

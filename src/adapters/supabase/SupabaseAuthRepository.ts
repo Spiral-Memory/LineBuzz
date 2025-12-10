@@ -55,6 +55,7 @@ export class SupabaseAuthRepository implements IAuthRepository {
   private extractSessionData(session: any): AuthSession {
     const accessToken = session.access_token;
     const refreshToken = session.refresh_token;
+    const userId = session.user?.id;
     const userName = session.user?.user_metadata?.display_name || session.user?.email;
 
     if (!accessToken || !refreshToken) {
@@ -62,6 +63,7 @@ export class SupabaseAuthRepository implements IAuthRepository {
     }
 
     return {
+      user_id: userId,
       username: userName,
       access_token: accessToken,
       refresh_token: refreshToken
