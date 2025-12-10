@@ -61,7 +61,7 @@
         {
           "id": "linebuzz-view-container",
           "title": "LineBuzz",
-          "icon": "$(comment-discussion)"
+          "icon": "assets/logo.svg"
         }
       ]
     },
@@ -69,12 +69,12 @@
       "linebuzz-view-container": [
         {
           "id": "linebuzz.teamfeed",
-          "icon": "$(comment-discussion)",
+          "icon": "assets/logo.svg",
           "name": "Team Feed"
         },
         {
           "id": "linebuzz.chatpanel",
-          "icon": "$(comment-discussion)",
+          "icon": "assets/logo.svg",
           "name": "LineBuzz Huddle",
           "type": "webview"
         }
