@@ -50,7 +50,7 @@ export class SupabaseMessageRepository implements IMessageRepository {
         }
 
         if (response.status === 'success') {
-            logger.info("SupabaseMessageRepository", `Messages retrieved successfully: ${JSON.stringify(response.messages)}`);
+            logger.info("SupabaseMessageRepository", `Messages retrieved successfully: ${response.messages?.length}`);
             return response.messages;
         }
 

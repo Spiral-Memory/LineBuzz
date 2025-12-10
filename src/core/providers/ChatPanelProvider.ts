@@ -18,7 +18,7 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                     await messageService.sendMessage(data.text);
                 } catch (error) {
                     console.error('Error handling sendMessage:', error);
-                    vscode.window.showErrorMessage('Failed to process message.');
+                    vscode.window.showErrorMessage('Failed to send message.');
                 }
                 break;
             }
@@ -27,9 +27,10 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                 try {
                     const messageService = Container.get("MessageService");
                     const messages = await messageService.getMessages();
+                    console.log("Messages", JSON.stringify(messages));
                 } catch (error) {
                     console.error('Error handling getMessages:', error);
-                    vscode.window.showErrorMessage('Failed to process message.');
+                    vscode.window.showErrorMessage('Failed to get messages.');
                 }
                 break;
             }
