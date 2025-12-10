@@ -1,5 +1,6 @@
 .chat-view-container {
     display: flex;
+    background-color: var(--bg-color);
     flex-direction: column;
     height: 100%;
     padding: 16px;
@@ -16,7 +17,6 @@
 }
 
 .art-decoration {
-    color: var(--vscode-disabledForeground);
     margin-bottom: 24px;
     display: flex;
     justify-content: center;
