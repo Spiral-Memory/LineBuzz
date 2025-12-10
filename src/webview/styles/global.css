@@ -1,10 +1,14 @@
 :root {
   --font-family: var(--vscode-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif);
-  --bg-color: var(--vscode-sideBar-background);
-  --text-color: var(--vscode-sideBar-foreground);
+  --bg-color: var(--vscode-sideBar-background, var(--vscode-editor-background));
+  --text-color: var(--vscode-sideBar-foreground, var(--vscode-editor-foreground));
+  --input-background: var(--vscode-quickInput-background, var(--vscode-input-background));
+  --input-foreground: var(--vscode-quickInput-foreground, var(--vscode-input-foreground));
   --primary-color: var(--vscode-button-background);
   --primary-hover: var(--vscode-button-hoverBackground);
-  --border-color: var(--vscode-widget-border);
+  --secondary-color: var(--vscode-button-secondaryBackground);
+  --secondary-hover: var(--vscode-button-secondaryHoverBackground);
+  --border-color: var(--vscode-widget-border, var(--vscode-editorGroup-border));
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -18,8 +22,6 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-family);
-  background: var(--bg-color);
-  color: var(--text-color);
   overflow: hidden;
   height: 100vh;
 }
