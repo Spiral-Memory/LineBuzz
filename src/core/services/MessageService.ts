@@ -34,7 +34,18 @@ export class MessageService {
                 return [];
             }
 
-            return await this.messageRepo.getMessages(currentTeam.id);
+            const authService = Container.get("AuthService");
+            const [messages, session] = await Promise.all([
+                this.messageRepo.getMessages(currentTeam.id),
+                authService.getSession()
+            ]);
+
+            const currentUserId = session?.user_id;
+
+            return messages.map(msg => ({
+                ...msg,
+                userType: msg.user_id === currentUserId ? 'me' : 'other'
+            }));
         } catch (error: any) {
             logger.error("MessageService", "Error getting messages", error);
             vscode.window.showErrorMessage("Failed to get messages. Please try again.");

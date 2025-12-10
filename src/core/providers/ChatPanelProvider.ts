@@ -16,12 +16,10 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                 try {
                     const messageService = Container.get("MessageService");
                     const messageInfo = await messageService.sendMessage(data.text);
-
                     if (messageInfo) {
                         this._view?.webview.postMessage({
                             command: 'addMessage',
                             message: messageInfo,
-                            senderType: 'me'
                         });
                     }
                 } catch (error) {

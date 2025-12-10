@@ -7,6 +7,15 @@ export class AuthService {
 
     constructor(private authRepo: IAuthRepository) { }
 
+    public async getSession(): Promise<AuthSession | null> {
+        try {
+            return await this.authRepo.getSession();
+        } catch (error) {
+            logger.error("AuthService", "Failed to retrieve session:", error);
+            return null;
+        }
+    }
+
     public async initializeSession(): Promise<AuthSession | null> {
         const githubSession = await vscode.authentication.getSession("github", ["user"], { createIfNone: false });
 

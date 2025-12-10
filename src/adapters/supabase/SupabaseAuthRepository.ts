@@ -3,14 +3,23 @@ import { SupabaseClient } from "./SupabaseClient";
 import { logger } from "../../core/utils/logger";
 
 export class SupabaseAuthRepository implements IAuthRepository {
-  async exchangeTokenForSession(githubToken: string): Promise<AuthSession> {
 
+    async getSession(): Promise<AuthSession | null> {
     const supabase = SupabaseClient.getInstance().client;
+    const { data: { session } } = await supabase.auth.getSession();
 
-    const { data: currentSession } = await supabase.auth.getSession();
-    if (currentSession.session) {
+    if (session) {
+      return this.extractSessionData(session);
+    }
+    return null;
+  }
+
+  async exchangeTokenForSession(githubToken: string): Promise<AuthSession> {
+    const supabase = SupabaseClient.getInstance().client;
+    const currentSession = await this.getSession()
+    if (currentSession) {
       logger.info("SupabaseAuthRepository", "Found existing session.")
-      return this.extractSessionData(currentSession.session);
+      return currentSession;
     }
 
     logger.info("SupabaseAuthRepository", "Initiating token exchange via Edge Function.");

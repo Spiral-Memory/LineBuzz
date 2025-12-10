@@ -69,7 +69,7 @@ export const ChatView = () => {
             ) : (
                 <div class="message-list">
                     {messages.map((msg) => {
-                        const isOwnMessage = currentUserId === msg.user_id;
+                        const isOwnMessage = msg.userType === 'me';
                         return (
                             <div class={`message-wrapper ${isOwnMessage ? 'sent' : 'received'}`} key={msg.message_id}>
                                 <div class="message-bubble">
