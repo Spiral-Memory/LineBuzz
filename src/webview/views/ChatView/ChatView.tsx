@@ -1,8 +1,18 @@
 import { h } from 'preact';
+import { useEffect } from 'preact/hooks';
+import { vscode } from '../../utils/vscode';
 import { ChatInput } from '../../components/chat/ChatInput';
 import './ChatView.css';
 
 export const ChatView = () => {
+    const getMessages = () => {
+        vscode.postMessage({ command: 'getMessages' });
+    };
+
+    useEffect(() => {
+        getMessages();
+    }, []);
+
     return (
         <div class="chat-view-container">
             <div class="center-content">

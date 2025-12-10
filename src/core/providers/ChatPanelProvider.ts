@@ -22,6 +22,17 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                 }
                 break;
             }
+
+            case 'getMessages': {
+                try {
+                    const messageService = Container.get("MessageService");
+                    const messages = await messageService.getMessages();
+                } catch (error) {
+                    console.error('Error handling getMessages:', error);
+                    vscode.window.showErrorMessage('Failed to process message.');
+                }
+                break;
+            }
         }
     }
 }
