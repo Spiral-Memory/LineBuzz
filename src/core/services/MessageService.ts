@@ -17,7 +17,12 @@ export class MessageService {
                 return;
             }
 
-            return await this.messageRepo.sendMessage(message, currentTeam.id);
+            const deliveredMessage = await this.messageRepo.sendMessage(message, currentTeam.id);
+            logger.info("MessageService", "Message sent successfully", deliveredMessage);
+            return {
+                ...deliveredMessage,
+                userType: 'me'
+            };
         } catch (error: any) {
             logger.error("MessageService", "Error sending message", error);
             vscode.window.showErrorMessage("Failed to send message. Please try again.");
@@ -40,11 +45,11 @@ export class MessageService {
                 authService.getSession()
             ]);
 
-            const currentUserId = session?.user_id;
+            logger.info("MessageService", "Messages retrieved successfully", messages);
 
             return messages.map(msg => ({
                 ...msg,
-                userType: msg.user_id === currentUserId ? 'me' : 'other'
+                userType: msg.u.user_id === session?.user_id ? 'me' : 'other'
             }));
         } catch (error: any) {
             logger.error("MessageService", "Error getting messages", error);

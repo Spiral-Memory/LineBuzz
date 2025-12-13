@@ -4,9 +4,13 @@ export interface MessageInfo {
     parent_id: string | null;
     is_code_thread: boolean;
     content: string;
-    team_id: string;
-    user_id: string;
     created_at: string;
+    u: {
+        user_id: string;
+        username: string;
+        display_name: string;
+        avatar_url: string;
+    };
     userType?: 'me' | 'other';
 }
 

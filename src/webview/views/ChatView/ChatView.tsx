@@ -6,7 +6,6 @@ import './ChatView.css';
 
 export const ChatView = () => {
     const [messages, setMessages] = useState<any[]>([]);
-    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -28,9 +27,6 @@ export const ChatView = () => {
                     break;
                 case 'addMessage':
                     setMessages(prev => [...prev, message.message]);
-                    break;
-                case 'setCurrentUser':
-                    setCurrentUserId(message.userId);
                     break;
             }
         };
@@ -75,7 +71,6 @@ export const ChatView = () => {
                                 <div class="message-bubble">
                                     <div class="message-content">{msg.content}</div>
                                     <div class="message-meta">
-                                        {/* Optional: Add timestamp or username if available */}
                                     </div>
                                 </div>
                             </div>
