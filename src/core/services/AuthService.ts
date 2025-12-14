@@ -5,6 +5,9 @@ import { IAuthRepository, AuthSession } from '../../adapters/interfaces/IAuthRep
 import { logger } from "../utils/logger";
 export class AuthService {
 
+    private _onDidChangeSession = new vscode.EventEmitter<AuthSession | null>();
+    public readonly onDidChangeSession = this._onDidChangeSession.event;
+
     constructor(private authRepo: IAuthRepository) { }
 
     public async getSession(): Promise<AuthSession | null> {
@@ -24,6 +27,8 @@ export class AuthService {
             const teamService = Container.get("TeamService");
             teamService.leaveTeam(false);
             vscode.commands.executeCommand('setContext', 'extension.isLoggedIn', false);
+            vscode.commands.executeCommand('setContext', 'extension.isLoggedIn', false);
+            this._onDidChangeSession.fire(null);
             return null;
         }
 
@@ -34,12 +39,14 @@ export class AuthService {
             logger.info("AuthService", "Secure session established with backend.");
             vscode.window.showInformationMessage(`Logged in as ${session.username}`);
             vscode.commands.executeCommand('setContext', 'extension.isLoggedIn', true);
+            this._onDidChangeSession.fire(session);
             return session;
 
         } catch (error) {
             logger.error("AuthService", "Token exchange failed:", error);
             vscode.window.showErrorMessage("Failed to log in. Please try again.");
             vscode.commands.executeCommand('setContext', 'extension.isLoggedIn', false);
+            this._onDidChangeSession.fire(null);
             return null;
         }
     }

@@ -29,6 +29,20 @@ export class ChatPanelProvider extends BaseWebviewProvider {
 
     protected async _onDidReceiveMessage(data: any): Promise<void> {
         switch (data.command) {
+            case 'getState':
+                await this.updateWebviewState();
+                break;
+            case 'signIn':
+                await vscode.commands.executeCommand('linebuzz.login');
+                const authService = Container.get('AuthService');
+                await authService.initializeSession();
+                break;
+            case 'createTeam':
+                await vscode.commands.executeCommand('linebuzz.createTeam');
+                break;
+            case 'joinTeam':
+                await vscode.commands.executeCommand('linebuzz.joinTeam');
+                break;
             case 'sendMessage': {
                 try {
                     const messageService = Container.get("MessageService");
@@ -59,14 +73,14 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                     if (this._subscription) {
                         this._subscription.unsubscribe();
                     }
-                    
+
                     const sub = await messageService.subscribeToMessages((message) => {
                         this._view?.webview.postMessage({
                             command: 'addMessage',
                             message: message,
                         });
                     });
-                    
+
                     if (sub) {
                         this._subscription = sub;
                     }
@@ -78,6 +92,24 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                 break;
             }
         }
+    }
+
+    private async updateWebviewState() {
+        if (!this._view) { return; }
+
+        const authService = Container.get('AuthService');
+        const teamService = Container.get('TeamService');
+
+        const session = await authService.getSession();
+        const team = teamService.getTeam();
+
+        this._view.webview.postMessage({
+            command: 'updateState',
+            state: {
+                isLoggedIn: !!session,
+                hasTeam: !!team
+            }
+        });
     }
 }
 

@@ -6,6 +6,9 @@ import { logger } from "../utils/logger";
 export class TeamService {
     private currentTeam: TeamInfo | undefined;
 
+    private _onDidChangeTeam = new vscode.EventEmitter<TeamInfo | undefined>();
+    public readonly onDidChangeTeam = this._onDidChangeTeam.event;
+
     constructor(private teamRepo: ITeamRepository) { }
 
     public async initialize() {
@@ -58,6 +61,7 @@ export class TeamService {
         this.currentTeam = undefined;
         Storage.deleteGlobal("currentTeam");
         await this.updateContext(false);
+        this._onDidChangeTeam.fire(undefined);
         if (showMessage) {
             vscode.window.showInformationMessage("You have left the team.");
         }
@@ -67,6 +71,7 @@ export class TeamService {
         this.currentTeam = team;
         Storage.setGlobal("currentTeam", team);
         this.updateContext(true);
+        this._onDidChangeTeam.fire(team);
     }
 
     private async updateContext(hasTeam: boolean) {

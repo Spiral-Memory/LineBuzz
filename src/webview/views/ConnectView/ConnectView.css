@@ -1,0 +1,94 @@
+.connect-view-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    background-color: var(--vscode-editor-background);
+    color: var(--vscode-editor-foreground);
+    text-align: center;
+}
+
+.intro-section {
+    margin-bottom: 32px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    font-size: 14px;
+    opacity: 0.8;
+    line-height: 1.5;
+    max-width: 280px;
+    margin: 0 auto;
+}
+
+.action-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 280px;
+}
+
+.connect-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.connect-btn.primary {
+    background-color: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+}
+
+.connect-btn.primary:hover {
+    background-color: var(--vscode-button-hoverBackground);
+}
+
+.connect-btn.secondary {
+    background-color: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-button-secondaryForeground);
+}
+
+.connect-btn.secondary:hover {
+    background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+.status-indicator {
+    margin-bottom: 24px;
+    font-size: 12px;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--vscode-disabledForeground);
+}
+
+.status-dot.active {
+    background-color: var(--vscode-testing-iconPassed);
+}

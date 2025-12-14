@@ -14,21 +14,22 @@ import { joinTeamCommand } from "./core/commands/JoinTeamCommand";
 import { leaveTeamCommand } from "./core/commands/LeaveTeamCommand";
 import { TeamFeedProvider } from "./core/providers/TeamFeedProvider";
 import { ChatPanelProvider } from "./core/providers/ChatPanelProvider";
+import { ConnectPanelProvider } from "./core/providers/ConnectPanelProvider";
 
 export async function activate(context: vscode.ExtensionContext) {
     let authService: AuthService | undefined;
     let debounceTimer: NodeJS.Timeout;
     Storage.initialize(context);
     try {
-        const supbaseAuthRepository = new SupabaseAuthRepository();
-        authService = new AuthService(supbaseAuthRepository);
-        Container.register('AuthService', authService);
-        await authService.initializeSession();
-
         const supabaseTeamRepository = new SupabaseTeamRepository();
         const teamService = new TeamService(supabaseTeamRepository);
         Container.register('TeamService', teamService);
         await teamService.initialize();
+
+        const supbaseAuthRepository = new SupabaseAuthRepository();
+        authService = new AuthService(supbaseAuthRepository);
+        Container.register('AuthService', authService);
+        await authService.initializeSession();
 
         const supabaseMessageRepository = new SupabaseMessageRepository();
         const messageService = new MessageService(supabaseMessageRepository);
@@ -40,6 +41,11 @@ export async function activate(context: vscode.ExtensionContext) {
         const chatPanelProvider = new ChatPanelProvider(context.extensionUri);
         context.subscriptions.push(
             vscode.window.registerWebviewViewProvider(ChatPanelProvider.viewId, chatPanelProvider)
+        );
+
+        const connectPanelProvider = new ConnectPanelProvider(context.extensionUri);
+        context.subscriptions.push(
+            vscode.window.registerWebviewViewProvider(ConnectPanelProvider.viewId, connectPanelProvider)
         );
 
         context.subscriptions.push(
