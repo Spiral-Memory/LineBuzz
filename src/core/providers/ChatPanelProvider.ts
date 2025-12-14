@@ -42,8 +42,6 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                 break;
             case 'signIn':
                 await vscode.commands.executeCommand('linebuzz.login');
-                const authService = Container.get('AuthService');
-                await authService.initializeSession();
                 break;
             case 'createTeam':
                 await vscode.commands.executeCommand('linebuzz.createTeam');

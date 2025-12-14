@@ -21,7 +21,6 @@ export class AuthService {
 
     public async initializeSession(): Promise<AuthSession | null> {
         const githubSession = await vscode.authentication.getSession("github", ["user"], { createIfNone: false });
-
         if (!githubSession) {
             await this.authRepo.signOut();
             const teamService = Container.get("TeamService");
