@@ -157,9 +157,8 @@
 
 
 .message-row-me .markdown-body blockquote {
-    text-align: right;
+    text-align: left;
     background-color: rgba(255, 255, 255, 0.1);
     color: var(--vscode-editor-foreground);
-    border-left: none;
-    border-right: 4px solid var(--vscode-textBlockQuote-border);
+    border-left: 4px solid var(--vscode-textBlockQuote-border);
 }
