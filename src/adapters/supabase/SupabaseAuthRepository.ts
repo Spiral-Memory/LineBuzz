@@ -1,6 +1,7 @@
 import { IAuthRepository, AuthSession } from "../interfaces/IAuthRepository";
 import { SupabaseClient } from "./SupabaseClient";
 import { logger } from "../../core/utils/logger";
+import { vscode } from "../../webview/utils/vscode";
 
 export class SupabaseAuthRepository implements IAuthRepository {
 
@@ -55,6 +56,7 @@ export class SupabaseAuthRepository implements IAuthRepository {
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
       await supabase.auth.signOut();
+      vscode.showInformationMessage("Signed out successfully.");
       logger.info("SupabaseAuthRepository", "Signed out successfully.");
     } else {
       logger.info("SupabaseAuthRepository", "No active session found to sign out.");

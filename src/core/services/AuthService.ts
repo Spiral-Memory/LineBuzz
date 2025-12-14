@@ -1,8 +1,8 @@
 
 import * as vscode from "vscode";
+import { Container } from "./ServiceContainer";
 import { IAuthRepository, AuthSession } from '../../adapters/interfaces/IAuthRepository';
 import { logger } from "../utils/logger";
-
 export class AuthService {
 
     constructor(private authRepo: IAuthRepository) { }
@@ -21,6 +21,8 @@ export class AuthService {
 
         if (!githubSession) {
             await this.authRepo.signOut();
+            const teamService = Container.get("TeamService");
+            teamService.leaveTeam(false);
             vscode.commands.executeCommand('setContext', 'extension.isLoggedIn', false);
             return null;
         }
@@ -32,8 +34,8 @@ export class AuthService {
             logger.info("AuthService", "Secure session established with backend.");
             vscode.window.showInformationMessage(`Logged in as ${session.username}`);
             vscode.commands.executeCommand('setContext', 'extension.isLoggedIn', true);
-
             return session;
+
         } catch (error) {
             logger.error("AuthService", "Token exchange failed:", error);
             vscode.window.showErrorMessage("Failed to log in. Please try again.");
