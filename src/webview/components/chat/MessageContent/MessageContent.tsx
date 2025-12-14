@@ -3,7 +3,6 @@ import { useMemo } from 'preact/hooks';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/github-dark.css';
 import './MessageContent.css'
 
 interface MessageContentProps {
@@ -51,7 +50,7 @@ marked.use({
 export const MessageContent = ({ content, className = '' }: MessageContentProps) => {
     const htmlContent = useMemo(() => {
         try {
-            const cleanContent = content.replace(/\\`/g, '`').trim();
+            const cleanContent = content.replace(/\\`/g, '`');
             const parsed = marked.parse(cleanContent, { async: false });
             return DOMPurify.sanitize(parsed as string, {
             });

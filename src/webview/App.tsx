@@ -3,6 +3,8 @@ import { useEffect, useState } from 'preact/hooks';
 import { ChatView } from './views/ChatView/ChatView';
 import { ConnectView } from './views/ConnectView/ConnectView';
 import { vscode } from './utils/vscode';
+import { useThemeDetector } from './hooks/useThemeDetector';
+import { atomOneDark, atomOneLight } from './constants/highlightThemes';
 
 interface AppState {
   isLoggedIn: boolean;
@@ -11,6 +13,7 @@ interface AppState {
 }
 
 export function App() {
+  const theme = useThemeDetector();
   const [state, setState] = useState<AppState>({
     isLoggedIn: false,
     hasTeam: false,
@@ -47,5 +50,10 @@ export function App() {
     return <ConnectView isLoggedIn={state.isLoggedIn} hasTeam={state.hasTeam} />;
   }
 
-  return <ChatView />;
+  return (
+    <Fragment>
+      <style>{theme === 'light' ? atomOneLight : atomOneDark}</style>
+      <ChatView />
+    </Fragment>
+  );
 }
