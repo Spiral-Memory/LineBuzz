@@ -1,0 +1,162 @@
+.code-block-wrapper {
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+    text-align: left;
+    font-size: 10px;
+}
+
+.code-block-header {
+    padding: 4px 8px;
+}
+
+.code-language {
+    font-family: var(--vscode-font-family);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--vscode-descriptionForeground);
+    text-transform: lowercase;
+    letter-spacing: 0.05em;
+}
+
+.code-block-content {
+    padding: 8px;
+    background-color: var(--vscode-editor-background);
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.code-block-content pre {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    word-break: break-all;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+.code-block-content code {
+    font-family: var(--vscode-editor-font-family, 'Courier New', monospace);
+    font-size: 12px;
+    background: none;
+}
+
+.markdown-body {
+    line-height: 1.6;
+}
+
+.markdown-body p {
+    margin: 0 0 8px 0;
+}
+
+.markdown-body p:last-child {
+    margin-bottom: 0;
+}
+
+.markdown-body strong {
+    font-weight: 700;
+    color: var(--vscode-textPreformat-foreground);
+}
+
+.markdown-body em {
+    font-style: italic;
+}
+
+.markdown-body blockquote {
+    border-left: 4px solid var(--vscode-textBlockQuote-border);
+    background-color: var(--vscode-textBlockQuote-background);
+    color: var(--vscode-descriptionForeground);
+    margin: 8px 0;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+.markdown-body a {
+    color: var(--vscode-textLink-foreground);
+    text-decoration: none;
+}
+
+.markdown-body a:hover {
+    text-decoration: underline;
+    color: var(--vscode-textLink-activeForeground);
+}
+
+.markdown-body hr {
+    border: none;
+    border-top: 1px solid var(--vscode-widget-border);
+    margin: 12px 0;
+}
+
+.markdown-body table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 8px 0;
+    border: 1px solid var(--vscode-widget-border);
+}
+
+.markdown-body th,
+.markdown-body td {
+    border: 1px solid var(--vscode-widget-border);
+    padding: 8px;
+    text-align: left;
+}
+
+.markdown-body th {
+    background-color: var(--vscode-editor-inactiveSelectionBackground);
+    font-weight: 600;
+}
+
+.markdown-body tr:nth-child(even) {
+    background-color: rgba(127, 127, 127, 0.05);
+}
+
+
+.markdown-body code:not(.hljs) {
+    background-color: var(--vscode-textBlockQuote-background);
+    color: var(--vscode-textPreformat-foreground);
+    border-radius: 4px;
+    font-family: var(--vscode-editor-font-family, 'Courier New', monospace);
+    font-size: 0.9em;
+}
+
+.message-row-me .code-block-wrapper {
+    text-align: left;
+}
+
+.message-row-me .markdown-body {
+    text-align: right;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+    margin: 8px 0 8px 20px;
+    padding: 0;
+    text-align: left;
+}
+
+.markdown-body li {
+    margin-bottom: 4px;
+}
+
+.message-row-me .markdown-body ul,
+.message-row-me .markdown-body ol {
+    text-align: left;
+    margin-right: 0;
+    margin-left: 20px;
+    direction: ltr;
+}
+
+.message-row-me .markdown-body blockquote {
+    text-align: left;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--vscode-editor-foreground);
+}
+
+.message-row-me .markdown-body table {
+    text-align: left;
+}

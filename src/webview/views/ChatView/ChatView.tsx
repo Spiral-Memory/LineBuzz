@@ -1,45 +1,14 @@
 import { h } from 'preact';
 import { useEffect, useState, useRef } from 'preact/hooks';
-import { marked } from 'marked';
-import DOMPurify from 'dompurify';
-import hljs from 'highlight.js';
-// Import a base style which we will override or complement with custom CSS
-import 'highlight.js/styles/github-dark.css';
 
-import { ChatInput } from '../../components/chat/ChatInput';
+import { ChatInput } from '../../components/chat/ChatInput/ChatInput';
+import { MessageContent } from '../../components/chat/MessageContent/MessageContent';
 import { vscode } from '../../utils/vscode';
 import { getInitials } from '../../utils/getInitials';
 import { formatTime } from '../../utils/formatTime';
 import { getAvatarColor } from '../../utils/getAvatarColor';
 import { WelcomeSplash } from '../../components/ui/WelcomeSplash';
 import './ChatView.css';
-
-const renderer = new marked.Renderer();
-
-renderer.code = ({ text, lang }: { text: string, lang?: string }) => {
-    let highlighted: string;
-    let validLanguage: string;
-
-    if (lang && hljs.getLanguage(lang)) {
-        validLanguage = lang;
-        highlighted = hljs.highlight(text, { language: validLanguage }).value;
-    } else {
-        validLanguage = 'javascript';
-        highlighted = hljs.highlight(text, { language: validLanguage }).value;
-    }
-
-    return `
-<div class="code-block-wrapper">
-    <div class="code-block-header">
-        <span class="code-language">${validLanguage}</span>
-    </div>
-    <div class="code-block-content">
-        <pre><code class="hljs language-${validLanguage}">${highlighted}</code></pre>
-    </div>
-</div>`;
-};
-
-marked.use({ renderer });
 
 export const ChatView = () => {
     const [messages, setMessages] = useState<any[]>([]);
@@ -77,16 +46,6 @@ export const ChatView = () => {
         };
     }, []);
 
-    const parseMessage = (content: string) => {
-        try {
-            const parsed = marked.parse(content.replace(/\\`/g, '`'), { async: false });
-            return DOMPurify.sanitize(parsed as string);
-        } catch (e) {
-            console.error('Markdown parsing error:', e);
-            return content;
-        }
-    };
-
     return (
         <div class="chat-view-container" ref={chatContainerRef}>
             {messages.length === 0 ? (
@@ -119,10 +78,7 @@ export const ChatView = () => {
                                         {msg.userType !== 'me' && <span class="user-name">{displayName}</span>}
                                         <span class="message-time">{formatTime(msg.created_at)}</span>
                                     </div>
-                                    <div
-                                        class="message-content markdown-body"
-                                        dangerouslySetInnerHTML={{ __html: parseMessage(msg.content) }}
-                                    />
+                                    <MessageContent content={msg.content} />
                                 </div>
                             </div>
                         );
