@@ -17,5 +17,5 @@ export interface MessageInfo {
 export interface IMessageRepository {
     sendMessage(message: string, teamId: string): Promise<MessageInfo>;
     getMessages(teamId: string): Promise<MessageInfo[]>;
-    subscribeToMessages(teamId: string, userId: string, callback: (message: MessageInfo) => void): { unsubscribe: () => void };
+    subscribeToMessages(teamId: string, userId: string, callback: (message: MessageInfo) => void): Promise<{ unsubscribe: () => void }>;
 }

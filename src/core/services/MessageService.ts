@@ -57,7 +57,7 @@ export class MessageService {
             return [];
         }
     }
-    public async subscribeToMessages(callback: (message: MessageInfo) => void): Promise<{ unsubscribe: () => void } | void> {
+    public async subscribeToMessages(postMessage: (message: MessageInfo) => void): Promise<{ unsubscribe: () => void } | void> {
         try {
             const teamService = Container.get("TeamService");
             const currentTeam = teamService.getTeam();
@@ -73,12 +73,12 @@ export class MessageService {
                 return;
             }
 
-            const subscription = this.messageRepo.subscribeToMessages(currentTeam.id, session?.user_id, (message) => {
+            const subscription = await this.messageRepo.subscribeToMessages(currentTeam.id, session?.user_id, (message) => {
                 const enrichedMessage = {
                     ...message,
                     userType: message.u.user_id === session?.user_id ? 'me' : 'other'
                 } as MessageInfo;
-                callback(enrichedMessage);
+                postMessage(enrichedMessage);
             });
 
             logger.info("MessageService", `Subscribed to messages for team ${currentTeam.id}`);

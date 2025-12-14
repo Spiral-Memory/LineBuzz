@@ -57,9 +57,14 @@ export class SupabaseMessageRepository implements IMessageRepository {
         throw new Error(`Unexpected response status: ${response.status}`);
     }
 
-    subscribeToMessages(teamId: string, userId: string, callback: (message: MessageInfo) => void): { unsubscribe: () => void } {
+    async subscribeToMessages(teamId: string, userId: string, callback: (message: MessageInfo) => void): Promise<{ unsubscribe: () => void }> {
         const supabase = SupabaseClient.getInstance().client;
         logger.info("SupabaseMessageRepository", `Subscribing to messages for team: ${teamId}`);
+
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.access_token) {
+            await supabase.realtime.setAuth(session.access_token);
+        }
 
         const channel = supabase
             .channel(`messages-team-${teamId}`)
