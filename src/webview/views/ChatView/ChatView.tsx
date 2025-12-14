@@ -4,6 +4,25 @@ import { vscode } from '../../utils/vscode';
 import { ChatInput } from '../../components/chat/ChatInput';
 import './ChatView.css';
 
+const getInitials = (name: string) => {
+    if (!name) return '?';
+    return name
+        .split(' ')
+        .map(word => word[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+};
+
+const formatTime = (dateString: string) => {
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    } catch (e) {
+        return '';
+    }
+};
+
 export const ChatView = () => {
     const [messages, setMessages] = useState<any[]>([]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -65,13 +84,29 @@ export const ChatView = () => {
             ) : (
                 <div class="message-list">
                     {messages.map((msg) => {
-                        const isOwnMessage = msg.userType === 'me';
+                        const displayName = msg.u?.display_name || msg.u?.username || 'Unknown';
+                        const avatarUrl = msg.u?.avatar_url;
+                        const initials = getInitials(displayName);
+
                         return (
-                            <div class={`message-wrapper ${isOwnMessage ? 'sent' : 'received'}`} key={msg.message_id}>
-                                <div class="message-bubble">
-                                    <div class="message-content">{msg.content}</div>
-                                    <div class="message-meta">
+                            <div class={`message-row ${msg.userType === 'me' ? 'message-row-me' : ''}`} key={msg.message_id}>
+                                <div class="avatar-container">
+                                    {avatarUrl ? (
+                                        <img src={avatarUrl} alt={displayName} class="avatar-image" onError={(e) => {
+                                            (e.target as HTMLImageElement).style.display = 'none';
+                                            ((e.target as HTMLImageElement).nextElementSibling as HTMLElement).style.display = 'flex';
+                                        }} />
+                                    ) : null}
+                                    <div class="avatar-fallback" style={{ display: avatarUrl ? 'none' : 'flex' }}>
+                                        {initials}
                                     </div>
+                                </div> 
+                                <div class="message-body">
+                                    <div class="message-header">
+                                        {msg.userType !== 'me' && <span class="user-name">@{displayName}</span>}
+                                        <span class="message-time">{formatTime(msg.created_at)}</span>
+                                    </div>
+                                    <div class="message-content">{msg.content}</div>
                                 </div>
                             </div>
                         );
