@@ -99,7 +99,9 @@ export const ChatView = () => {
                     <div ref={messagesEndRef} />
                 </div>
             )}
-            <ChatInput />
+            <div class="chat-input-container">
+                <ChatInput />
+            </div>
         </div>
     );
 };
