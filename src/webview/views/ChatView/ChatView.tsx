@@ -1,27 +1,10 @@
 import { h } from 'preact';
 import { useEffect, useState, useRef } from 'preact/hooks';
-import { vscode } from '../../utils/vscode';
 import { ChatInput } from '../../components/chat/ChatInput';
+import { vscode } from '../../utils/vscode';
+import { getInitials } from '../../utils/getInitials';
+import { formatTime } from '../../utils/formatTime';
 import './ChatView.css';
-
-const getInitials = (name: string) => {
-    if (!name) return '?';
-    return name
-        .split(' ')
-        .map(word => word[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2);
-};
-
-const formatTime = (dateString: string) => {
-    try {
-        const date = new Date(dateString);
-        return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-    } catch (e) {
-        return '';
-    }
-};
 
 export const ChatView = () => {
     const [messages, setMessages] = useState<any[]>([]);
