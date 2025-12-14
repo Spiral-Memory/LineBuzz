@@ -4,6 +4,7 @@ import { ChatInput } from '../../components/chat/ChatInput';
 import { vscode } from '../../utils/vscode';
 import { getInitials } from '../../utils/getInitials';
 import { formatTime } from '../../utils/formatTime';
+import { getAvatarColor } from '../../utils/getAvatarColor';
 import './ChatView.css';
 
 export const ChatView = () => {
@@ -70,6 +71,7 @@ export const ChatView = () => {
                         const displayName = msg.u?.display_name || msg.u?.username || 'Unknown';
                         const avatarUrl = msg.u?.avatar_url;
                         const initials = getInitials(displayName);
+                        const avatarColor = getAvatarColor(displayName);
 
                         return (
                             <div class={`message-row ${msg.userType === 'me' ? 'message-row-me' : ''}`} key={msg.message_id}>
@@ -80,10 +82,10 @@ export const ChatView = () => {
                                             ((e.target as HTMLImageElement).nextElementSibling as HTMLElement).style.display = 'flex';
                                         }} />
                                     ) : null}
-                                    <div class="avatar-fallback" style={{ display: avatarUrl ? 'none' : 'flex' }}>
+                                    <div class="avatar-fallback" style={{ display: avatarUrl ? 'none' : 'flex', backgroundColor: avatarColor, color: '#fff' }}>
                                         {initials}
                                     </div>
-                                </div> 
+                                </div>
                                 <div class="message-body">
                                     <div class="message-header">
                                         {msg.userType !== 'me' && <span class="user-name">@{displayName}</span>}
