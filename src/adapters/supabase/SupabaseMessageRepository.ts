@@ -43,7 +43,7 @@ export class SupabaseMessageRepository implements IMessageRepository {
             logger.error("SupabaseMessageRepository", "RPC call failed", error);
             throw new Error(`RPC call failed: ${error.message}`);
         }
-        
+
         const response = data as any;
         if (response.status === 'error') {
             throw new Error(response.message);
@@ -55,5 +55,60 @@ export class SupabaseMessageRepository implements IMessageRepository {
         }
 
         throw new Error(`Unexpected response status: ${response.status}`);
+    }
+
+    subscribeToMessages(teamId: string, userId: string, callback: (message: MessageInfo) => void): { unsubscribe: () => void } {
+        const supabase = SupabaseClient.getInstance().client;
+        logger.info("SupabaseMessageRepository", `Subscribing to messages for team: ${teamId}`);
+
+        const channel = supabase
+            .channel(`messages-team-${teamId}`)
+            .on(
+                'postgres_changes',
+                {
+                    event: 'INSERT',
+                    schema: 'public',
+                    table: 'messages',
+                    filter: `team_id=eq.${teamId}`
+                },
+                async (payload) => {
+                    logger.info("SupabaseMessageRepository", 'Realtime payload received', payload);
+
+                    if (!payload.new || !payload.new.id) {
+                        logger.warn("SupabaseMessageRepository", "Payload missing message_id");
+                        return;
+                    }
+
+                    if (payload.new.user_id === userId) {
+                        logger.info("SupabaseMessageRepository", "Message is from current user, skipping");
+                        return;
+                    }
+
+                    const { data, error } = await supabase.rpc('get_message_by_id', {
+                        p_team_id: teamId,
+                        p_message_id: payload.new.id
+                    });
+
+                    if (error) {
+                        logger.error("SupabaseMessageRepository", "Failed to get message details", error);
+                        return;
+                    }
+
+                    const response = data as any;
+                    if (response.status === 'success' && response.message) {
+                        callback(response.message);
+                    }
+                }
+            )
+            .subscribe((status) => {
+                logger.info("SupabaseMessageRepository", `Subscription status for team ${teamId}: ${status}`);
+            });
+
+        return {
+            unsubscribe: () => {
+                logger.info("SupabaseMessageRepository", `Unsubscribing from messages for team: ${teamId}`);
+                channel.unsubscribe();
+            }
+        };
     }
 }

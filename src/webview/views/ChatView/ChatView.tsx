@@ -88,7 +88,7 @@ export const ChatView = () => {
                                 </div>
                                 <div class="message-body">
                                     <div class="message-header">
-                                        {msg.userType !== 'me' && <span class="user-name">@{displayName}</span>}
+                                        {msg.userType !== 'me' && <span class="user-name">{displayName}</span>}
                                         <span class="message-time">{formatTime(msg.created_at)}</span>
                                     </div>
                                     <div class="message-content">{msg.content}</div>

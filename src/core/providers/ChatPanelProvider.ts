@@ -6,8 +6,25 @@ import { Container } from '../services/ServiceContainer';
 export class ChatPanelProvider extends BaseWebviewProvider {
     public static readonly viewId = 'linebuzz.chatpanel';
 
+    private _subscription: { unsubscribe: () => void } | undefined;
+
     constructor(extensionUri: vscode.Uri) {
         super(extensionUri);
+    }
+
+    public resolveWebviewView(
+        webviewView: vscode.WebviewView,
+        context: vscode.WebviewViewResolveContext,
+        _token: vscode.CancellationToken,
+    ) {
+        super.resolveWebviewView(webviewView, context, _token);
+
+        webviewView.onDidDispose(() => {
+            if (this._subscription) {
+                this._subscription.unsubscribe();
+                this._subscription = undefined;
+            }
+        });
     }
 
     protected async _onDidReceiveMessage(data: any): Promise<void> {
@@ -38,6 +55,21 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                         command: 'updateMessages',
                         messages: messages
                     });
+
+                    if (this._subscription) {
+                        this._subscription.unsubscribe();
+                    }
+                    
+                    const sub = await messageService.subscribeToMessages((message) => {
+                        this._view?.webview.postMessage({
+                            command: 'addMessage',
+                            message: message,
+                        });
+                    });
+                    
+                    if (sub) {
+                        this._subscription = sub;
+                    }
 
                 } catch (error) {
                     console.error('Error handling getMessages:', error);
