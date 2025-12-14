@@ -1,5 +1,4 @@
 import { h, Fragment } from 'preact';
-import { useState } from 'preact/hooks';
 import { vscode } from '../../utils/vscode';
 import { WelcomeSplash } from '../../components/ui/WelcomeSplash';
 import './ConnectView.css';
@@ -10,10 +9,8 @@ interface ConnectViewProps {
 }
 
 export const ConnectView = ({ isLoggedIn, hasTeam }: ConnectViewProps) => {
-    const [loading, setLoading] = useState(false);
 
     const handleSignIn = () => {
-        setLoading(true);
         vscode.postMessage({ command: 'signIn' });
     };
 
@@ -33,9 +30,8 @@ export const ConnectView = ({ isLoggedIn, hasTeam }: ConnectViewProps) => {
                     <button
                         class="connect-btn primary"
                         onClick={handleSignIn}
-                        disabled={loading}
                     >
-                        {loading ? 'Connecting...' : 'Sign in with GitHub'}
+                        Sign in with GitHub
                     </button>
                 ) : !hasTeam ? (
                     <>
