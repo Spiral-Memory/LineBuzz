@@ -6,8 +6,10 @@
   --input-foreground: var(--vscode-quickInput-foreground, var(--vscode-input-foreground));
   --primary-color: var(--vscode-button-background);
   --primary-hover: var(--vscode-button-hoverBackground);
+  --primary-foreground: var(--vscode-button-foreground);
   --secondary-color: var(--vscode-button-secondaryBackground);
   --secondary-hover: var(--vscode-button-secondaryHoverBackground);
+  --secondary-foreground: var(--vscode-button-secondaryForeground);
   --border-color: var(--vscode-widget-border, var(--vscode-editorGroup-border));
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);

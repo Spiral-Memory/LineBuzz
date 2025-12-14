@@ -5,6 +5,7 @@ import { vscode } from '../../utils/vscode';
 import { getInitials } from '../../utils/getInitials';
 import { formatTime } from '../../utils/formatTime';
 import { getAvatarColor } from '../../utils/getAvatarColor';
+import { WelcomeSplash } from '../../components/ui/WelcomeSplash';
 import './ChatView.css';
 
 export const ChatView = () => {
@@ -45,25 +46,8 @@ export const ChatView = () => {
     return (
         <div class="chat-view-container">
             {messages.length === 0 ? (
-                <div class="center-content">
-                    <div class="art-decoration">
-                        <svg width="200" height="200" viewBox="40 40 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M70 60 C50 60 50 80 50 100 C50 120 50 140 70 140"
-                                stroke="currentColor"
-                                stroke-width="12"
-                                stroke-linecap="round"
-                                fill="none" />
-                            <path d="M130 60 C150 60 150 80 150 100 C150 120 150 140 130 140"
-                                stroke="currentColor"
-                                stroke-width="12"
-                                stroke-linecap="round"
-                                fill="none" />
-                            <line x1="75" y1="90" x2="125" y2="90" stroke="currentColor" stroke-width="8" stroke-linecap="round" />
-                            <line x1="75" y1="110" x2="105" y2="110" stroke="currentColor" stroke-width="8" stroke-linecap="round" />
-                        </svg>
-                    </div>
-                    <h1 class="welcome-title">LineBuzz</h1>
-                    <p class="welcome-desc">Discuss efforts, define logic, and stay in sync.</p>
+                <div class="splash-container">
+                    <WelcomeSplash />
                 </div>
             ) : (
                 <div class="message-list">
@@ -102,6 +86,6 @@ export const ChatView = () => {
             <div class="chat-input-container">
                 <ChatInput />
             </div>
-        </div>
+        </div >
     );
 };

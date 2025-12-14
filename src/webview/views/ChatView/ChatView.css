@@ -6,39 +6,13 @@
     overflow: hidden;
 }
 
-.center-content {
+.splash-container {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-}
-
-.art-decoration {
-    margin-bottom: 24px;
-    display: flex;
-    justify-content: center;
-}
-
-.art-decoration svg {
-    width: 64px;
-    height: 64px;
-    opacity: 0.2;
-}
-
-.welcome-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin: 0 0 8px 0;
-    color: var(--text-color);
-}
-
-.welcome-desc {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    max-width: 300px;
-    line-height: 1.5;
 }
 
 .chat-input-container {

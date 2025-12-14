@@ -1,6 +1,7 @@
 import { h, Fragment } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 import { vscode } from '../../utils/vscode';
+import { WelcomeSplash } from '../../components/ui/WelcomeSplash';
 import './ConnectView.css';
 
 interface ConnectViewProps {
@@ -26,16 +27,7 @@ export const ConnectView = ({ isLoggedIn, hasTeam }: ConnectViewProps) => {
 
     return (
         <div class="connect-view-container">
-            <div class="intro-section">
-                <h1 class="title">LineBuzz</h1>
-                <p class="subtitle">Real-time collaboration for your codebase.</p>
-            </div>
-
-            <div class="status-indicator">
-                <span class={`status-dot ${isLoggedIn ? 'active' : ''}`}></span>
-                <span>{isLoggedIn ? 'Authenticated' : 'Not Connected'}</span>
-            </div>
-
+            <WelcomeSplash />
             <div class="action-section">
                 {!isLoggedIn ? (
                     <button

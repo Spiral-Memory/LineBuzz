@@ -1,0 +1,33 @@
+.welcome-splash-container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.welcome-splash-container .art-decoration {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.welcome-splash-container .art-decoration svg {
+    width: 64px;
+    height: 64px;
+    opacity: 0.2;
+}
+
+.welcome-splash-container .welcome-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: var(--text-color);
+}
+
+.welcome-splash-container .welcome-desc {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    max-width: 300px;
+    line-height: 1.5;
+    margin: 0 auto;
+    /* Ensure text is centered if container is wide */
+}
