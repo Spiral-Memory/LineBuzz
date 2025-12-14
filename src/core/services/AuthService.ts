@@ -27,7 +27,6 @@ export class AuthService {
             const teamService = Container.get("TeamService");
             teamService.leaveTeam(false);
             vscode.commands.executeCommand('setContext', 'extension.isLoggedIn', false);
-            vscode.commands.executeCommand('setContext', 'extension.isLoggedIn', false);
             this._onDidChangeSession.fire(null);
             return null;
         }

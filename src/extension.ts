@@ -14,7 +14,7 @@ import { joinTeamCommand } from "./core/commands/JoinTeamCommand";
 import { leaveTeamCommand } from "./core/commands/LeaveTeamCommand";
 import { TeamFeedProvider } from "./core/providers/TeamFeedProvider";
 import { ChatPanelProvider } from "./core/providers/ChatPanelProvider";
-import { ConnectPanelProvider } from "./core/providers/ConnectPanelProvider";
+
 
 export async function activate(context: vscode.ExtensionContext) {
     let authService: AuthService | undefined;
@@ -41,11 +41,6 @@ export async function activate(context: vscode.ExtensionContext) {
         const chatPanelProvider = new ChatPanelProvider(context.extensionUri);
         context.subscriptions.push(
             vscode.window.registerWebviewViewProvider(ChatPanelProvider.viewId, chatPanelProvider)
-        );
-
-        const connectPanelProvider = new ConnectPanelProvider(context.extensionUri);
-        context.subscriptions.push(
-            vscode.window.registerWebviewViewProvider(ConnectPanelProvider.viewId, connectPanelProvider)
         );
 
         context.subscriptions.push(

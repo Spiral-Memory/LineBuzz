@@ -19,11 +19,19 @@ export class ChatPanelProvider extends BaseWebviewProvider {
     ) {
         super.resolveWebviewView(webviewView, context, _token);
 
+        const authService = Container.get('AuthService');
+        const teamService = Container.get('TeamService');
+
+        const authSub = authService.onDidChangeSession(() => this.updateWebviewState());
+        const teamSub = teamService.onDidChangeTeam(() => this.updateWebviewState());
+
         webviewView.onDidDispose(() => {
             if (this._subscription) {
                 this._subscription.unsubscribe();
                 this._subscription = undefined;
             }
+            authSub.dispose();
+            teamSub.dispose();
         });
     }
 
