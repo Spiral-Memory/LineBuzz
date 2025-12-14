@@ -1,4 +1,5 @@
 .code-block-wrapper {
+    margin-top: 4px;
     border-radius: 6px;
     border: 1px solid var(--border-color);
     background-color: var(--bg-color);
@@ -132,6 +133,16 @@
     text-align: right;
 }
 
+.message-row-me .markdown-body ul,
+.message-row-me .markdown-body ol {
+    text-align: right;
+    direction: rtl;
+    margin-right: 20px;
+    margin-left: 0;
+}
+
+
+
 .markdown-body ul,
 .markdown-body ol {
     margin: 8px 0 8px 20px;
@@ -143,20 +154,12 @@
     margin-bottom: 4px;
 }
 
-.message-row-me .markdown-body ul,
-.message-row-me .markdown-body ol {
-    text-align: left;
-    margin-right: 0;
-    margin-left: 20px;
-    direction: ltr;
-}
+
 
 .message-row-me .markdown-body blockquote {
-    text-align: left;
+    text-align: right;
     background-color: rgba(255, 255, 255, 0.1);
     color: var(--vscode-editor-foreground);
-}
-
-.message-row-me .markdown-body table {
-    text-align: left;
+    border-left: none;
+    border-right: 4px solid var(--vscode-textBlockQuote-border);
 }

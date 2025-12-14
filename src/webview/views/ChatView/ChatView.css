@@ -129,7 +129,5 @@
 }
 
 .message-row-me .message-content {
-    /* Keep text left aligned for readability (especially code), even if bubble is on right */
     text-align: left;
 }
-
