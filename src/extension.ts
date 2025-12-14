@@ -8,6 +8,7 @@ import { SupabaseTeamRepository } from "./adapters/supabase/SupabaseTeamReposito
 import { TeamService } from "./core/services/TeamService";
 import { MessageService } from "./core/services/MessageService";
 import { SupabaseMessageRepository } from "./adapters/supabase/SupabaseMessageRepository";
+import { loginCommand } from "./core/commands/LoginCommand";
 import { createTeamCommand } from "./core/commands/CreateTeamCommand";
 import { sendMessageCommand } from "./core/commands/SendMessageCommand";
 import { joinTeamCommand } from "./core/commands/JoinTeamCommand";
@@ -44,6 +45,7 @@ export async function activate(context: vscode.ExtensionContext) {
         );
 
         context.subscriptions.push(
+            vscode.commands.registerCommand('linebuzz.login', loginCommand),
             vscode.commands.registerCommand('linebuzz.createTeam', createTeamCommand),
             vscode.commands.registerCommand('linebuzz.joinTeam', joinTeamCommand),
             vscode.commands.registerCommand('linebuzz.leaveTeam', leaveTeamCommand),
