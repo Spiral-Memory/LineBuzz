@@ -55,7 +55,7 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                     const messageInfo = await messageService.sendMessage(data.text);
                     if (messageInfo) {
                         this._view?.webview.postMessage({
-                            command: 'addMessage',
+                            command: 'appendMessage',
                             message: messageInfo,
                         });
                     }
@@ -73,7 +73,7 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                     const messages = await messageService.getMessages(limit, offset);
 
                     this._view?.webview.postMessage({
-                        command: offset && offset > 0 ? 'prependMessages' : 'updateMessages',
+                        command: offset && offset > 0 ? 'prependMessages' : 'loadInitialMessages',
                         messages: messages
                     });
 
@@ -83,7 +83,7 @@ export class ChatPanelProvider extends BaseWebviewProvider {
 
                     const sub = await messageService.subscribeToMessages((message) => {
                         this._view?.webview.postMessage({
-                            command: 'addMessage',
+                            command: 'appendMessage',
                             message: message,
                         });
                     });

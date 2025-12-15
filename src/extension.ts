@@ -30,7 +30,7 @@ export async function activate(context: vscode.ExtensionContext) {
         const supbaseAuthRepository = new SupabaseAuthRepository();
         authService = new AuthService(supbaseAuthRepository);
         Container.register('AuthService', authService);
-        await authService.initializeSession();
+        await authService.initializeSession(false);
 
         const supabaseMessageRepository = new SupabaseMessageRepository();
         const messageService = new MessageService(supabaseMessageRepository);

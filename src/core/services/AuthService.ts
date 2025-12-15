@@ -19,7 +19,7 @@ export class AuthService {
         }
     }
 
-    public async initializeSession(): Promise<AuthSession | null> {
+    public async initializeSession(showNotification: boolean = true): Promise<AuthSession | null> {
         const githubSession = await vscode.authentication.getSession("github", ["user"], { createIfNone: false });
         if (!githubSession) {
             await this.authRepo.signOut();
@@ -35,7 +35,9 @@ export class AuthService {
         try {
             const session = await this.authRepo.exchangeTokenForSession(githubSession.accessToken);
             logger.info("AuthService", "Secure session established with backend.");
-            vscode.window.showInformationMessage(`Logged in as ${session.username}`);
+            if (showNotification) {
+                vscode.window.showInformationMessage(`Logged in as ${session.username}`);
+            }
             vscode.commands.executeCommand('setContext', 'extension.isLoggedIn', true);
             this._onDidChangeSession.fire(session);
             return session;

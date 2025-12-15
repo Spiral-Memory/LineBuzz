@@ -57,12 +57,12 @@ export class TeamService {
         }
     }
 
-    public async leaveTeam(showMessage: boolean = true): Promise<void> {
+    public async leaveTeam(showNotification: boolean = true): Promise<void> {
         this.currentTeam = undefined;
         Storage.deleteGlobal("currentTeam");
         await this.updateContext(false);
         this._onDidChangeTeam.fire(undefined);
-        if (showMessage) {
+        if (showNotification) {
             vscode.window.showInformationMessage("You have left the team.");
         }
     }

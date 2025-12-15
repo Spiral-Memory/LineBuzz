@@ -86,7 +86,7 @@ export const ChatView = () => {
         const handleMessage = (event: MessageEvent) => {
             const message = event.data;
             switch (message.command) {
-                case 'updateMessages':
+                case 'loadInitialMessages':
                     setMessages(message.messages);
                     setOffset(message.messages.length);
                     setHasMore(message.messages.length >= LIMIT);
@@ -99,7 +99,7 @@ export const ChatView = () => {
                     setHasMore(newMessages.length >= LIMIT);
                     setIsLoading(false);
                     break;
-                case 'addMessage':
+                case 'appendMessage':
                     const msg = message.message;
                     setMessages(prev => [...prev, msg]);
                     setOffset(prev => prev + 1);
