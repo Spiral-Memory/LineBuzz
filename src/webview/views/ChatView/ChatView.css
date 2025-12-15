@@ -134,26 +134,49 @@
 
 .new-messages-indicator {
     position: absolute;
-    bottom: 100px;
+    bottom: 90px;
     right: 30px;
+    width: 24px;
+    height: 24px;
     background-color: var(--vscode-button-background);
     color: var(--vscode-button-foreground);
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
+    border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
     z-index: 10;
-    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 0.9;
 }
 
 .new-messages-indicator:hover {
-    background-color: var(--vscode-button-hoverBackground);
+    opacity: 1;
     transform: translateY(-2px);
+}
+
+.new-messages-indicator svg {
+    width: 14px;
+    height: 14px;
+}
+
+.indicator-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background-color: #ff4d4f;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    height: 14px;
+    min-width: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .new-messages-indicator:active {

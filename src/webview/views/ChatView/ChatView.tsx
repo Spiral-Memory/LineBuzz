@@ -104,7 +104,9 @@ export const ChatView = () => {
                     setMessages(prev => [...prev, msg]);
                     setOffset(prev => prev + 1);
 
-                    if (!isAtBottomRef.current && msg.userType !== 'me') {
+                    if (msg.userType === 'me') {
+                        isAtBottomRef.current = true;
+                    } else if (!isAtBottomRef.current) {
                         setUnreadCount(prev => prev + 1);
                     }
                     break;
@@ -161,7 +163,10 @@ export const ChatView = () => {
                     <div ref={messagesEndRef} />
                     {unreadCount > 0 && (
                         <div class="new-messages-indicator" onClick={scrollToBottom}>
-                            <span>↓ ({unreadCount})</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 13L12 18L17 13M7 6L12 11L17 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span class="indicator-count">{unreadCount}</span>
                         </div>
                     )}
                 </div>
