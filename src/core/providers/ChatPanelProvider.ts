@@ -69,7 +69,7 @@ export class ChatPanelProvider extends BaseWebviewProvider {
             case 'getMessages': {
                 try {
                     const messageService = Container.get("MessageService");
-                    const { limit, offset } = data; // Destructure parameters
+                    const { limit, offset } = data;
                     const messages = await messageService.getMessages(limit, offset);
 
                     this._view?.webview.postMessage({

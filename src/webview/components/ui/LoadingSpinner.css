@@ -1,0 +1,28 @@
+.loading-spinner-container {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    width: 100%;
+}
+
+.loading-spinner {
+    width: 15px;
+    height: 15px;
+    border: 2px solid var(--vscode-descriptionForeground);
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
