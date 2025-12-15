@@ -11,6 +11,7 @@
     "vscode": "^1.102.0"
   },
   "license": "Source Available License",
+  "publisher": "SpiralMemory",
   "categories": [
     "Other"
   ],
@@ -93,6 +94,7 @@
     "prebuild": "node scripts/write-config.js",
     "build": "node scripts/esbuild.js --production",
     "package": "vsce package",
+    "publish": "vsce publish --no-dependencies",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
