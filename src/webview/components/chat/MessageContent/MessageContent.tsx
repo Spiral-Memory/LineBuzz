@@ -1,6 +1,7 @@
 import { h } from 'preact';
 import { useMemo } from 'preact/hooks';
 import { marked } from 'marked';
+import { encode as htmlEncode } from 'he';
 import DOMPurify from 'dompurify';
 import hljs from 'highlight.js';
 import './MessageContent.css'
@@ -10,15 +11,6 @@ interface MessageContentProps {
     className?: string;
 }
 
-const htmlEncode = (unsafe: string) => {
-    return unsafe
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-};
-
 const renderer = new marked.Renderer();
 
 renderer.code = ({ text, lang }: { text: string, lang?: string }) => {
@@ -26,7 +18,7 @@ renderer.code = ({ text, lang }: { text: string, lang?: string }) => {
     let validLanguage: string;
 
     if (lang && hljs.getLanguage(lang)) {
-        validLanguage = lang;
+        validLanguage = (lang);
         try {
             highlighted = hljs.highlight(text, { language: validLanguage }).value;
         } catch (e) {
@@ -36,6 +28,7 @@ renderer.code = ({ text, lang }: { text: string, lang?: string }) => {
         validLanguage = 'text';
         highlighted = htmlEncode(text);
     }
+    validLanguage = htmlEncode(validLanguage);
 
     return `
 <div class="code-block-wrapper">
@@ -50,9 +43,10 @@ renderer.code = ({ text, lang }: { text: string, lang?: string }) => {
 
 renderer.html = ({ text }: { text: string }) => htmlEncode(text);
 renderer.link = ({ href, title, text }: { href: string, title?: string | null, text: string }) => {
-    return `<a href="${href}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${text}</a>`;
+    const safeHref = htmlEncode(href);
+    const safeTitle = title ? htmlEncode(title) : '';
+    return `<a href="${safeHref}" title="${safeTitle}" target="_blank" rel="noopener noreferrer">${text}</a>`;
 };
-
 
 
 marked.use({
@@ -66,7 +60,8 @@ export const MessageContent = ({ content, className = '' }: MessageContentProps)
         try {
             const parsed = marked.parse(content, { async: false });
             return DOMPurify.sanitize(parsed as string, {
-                ADD_ATTR: ['target', 'class']
+                ADD_ATTR: ['target'],
+                FORBID_TAGS: ['style', 'script'],
             });
         } catch (e) {
             console.error('Markdown rendering error:', e);
