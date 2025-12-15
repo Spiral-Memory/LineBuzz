@@ -2,10 +2,15 @@
   "name": "linebuzz",
   "displayName": "Linebuzz",
   "description": "talk through code where it lives",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Spiral-Memory/LineBuzz.git"
+  },
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.102.0"
   },
+  "license": "Source Available License",
   "categories": [
     "Other"
   ],
