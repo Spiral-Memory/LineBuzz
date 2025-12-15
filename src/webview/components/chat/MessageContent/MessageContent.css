@@ -12,6 +12,9 @@
 
 .code-block-header {
     padding: 4px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .code-language {
@@ -21,6 +24,31 @@
     color: var(--vscode-descriptionForeground);
     text-transform: lowercase;
     letter-spacing: 0.05em;
+}
+
+.copy-code-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: var(--vscode-descriptionForeground);
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+    height: 24px;
+    width: 24px;
+}
+
+.copy-code-btn:hover {
+    background-color: var(--vscode-toolbar-hoverBackground);
+    color: var(--vscode-foreground);
+}
+
+.copy-code-btn svg {
+    width: 14px;
+    height: 14px;
 }
 
 .code-block-content {

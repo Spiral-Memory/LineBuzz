@@ -7,8 +7,8 @@ import { vscode } from '../../utils/vscode';
 import { getInitials } from '../../utils/getInitials';
 import { formatTime } from '../../utils/formatTime';
 import { getAvatarColor } from '../../utils/getAvatarColor';
-import { WelcomeSplash } from '../../components/ui/WelcomeSplash';
-import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
+import { WelcomeSplash } from '../../components/chat/WelcomeSplash/WelcomeSplash';
+import { LoadingSpinner } from '../../components/ui/LoadingSpinner/LoadingSpinner';
 import './ChatView.css';
 
 export const ChatView = () => {
