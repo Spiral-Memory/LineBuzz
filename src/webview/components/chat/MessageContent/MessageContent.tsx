@@ -10,6 +10,15 @@ interface MessageContentProps {
     className?: string;
 }
 
+const htmlEncode = (unsafe: string) => {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+};
+
 const renderer = new marked.Renderer();
 
 renderer.code = ({ text, lang }: { text: string, lang?: string }) => {
@@ -21,11 +30,11 @@ renderer.code = ({ text, lang }: { text: string, lang?: string }) => {
         try {
             highlighted = hljs.highlight(text, { language: validLanguage }).value;
         } catch (e) {
-            highlighted = text;
+            highlighted = htmlEncode(text);
         }
     } else {
         validLanguage = 'text';
-        highlighted = text;
+        highlighted = htmlEncode(text);
     }
 
     return `
@@ -39,6 +48,11 @@ renderer.code = ({ text, lang }: { text: string, lang?: string }) => {
 </div>`;
 };
 
+renderer.html = ({ text }: { text: string }) => htmlEncode(text);
+renderer.link = ({ href, title, text }: { href: string, title?: string | null, text: string }) => {
+    return `<a href="${href}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${text}</a>`;
+};
+
 
 
 marked.use({
@@ -50,13 +64,13 @@ marked.use({
 export const MessageContent = ({ content, className = '' }: MessageContentProps) => {
     const htmlContent = useMemo(() => {
         try {
-            const cleanContent = content.replace(/\\`/g, '`');
-            const parsed = marked.parse(cleanContent, { async: false });
+            const parsed = marked.parse(content, { async: false });
             return DOMPurify.sanitize(parsed as string, {
+                ADD_ATTR: ['target', 'class']
             });
         } catch (e) {
             console.error('Markdown rendering error:', e);
-            return content;
+            return htmlEncode(content);
         }
     }, [content]);
 
