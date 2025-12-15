@@ -1,21 +1,24 @@
-# **LineBuzz 🧵 Inline Code Collaboration in VS Code**
+# **LineBuzz 🧵 Developer Collaboration in VS Code**
 
 ## **Overview 📘**
 
-**LineBuzz** brings real-time, line-based code discussions directly into Visual Studio Code.
-It lets you comment on any line, start focused threads, and collaborate inside your editor - no tabs, no switching, no noise.
-
-Everything stays linked to the code itself, so your team’s conversations remain clear, contextual, and persistent across commits.
+**LineBuzz** brings real-time collaboration directly into Visual Studio Code.
+Stay in flow with your team using built-in huddles, team management, and persistent chat context—all without leaving your editor.
 
 ## **Features ✨**
 
-* Inline, threaded discussions on any line of code
-* Real-time sync and collaboration
-* Conversations persist across files and branches
-* Minimal, clean chat panel inside VS Code
-* Secure backend built on Supabase
+* **LineBuzz Huddle**: Real-time team chat panel inside VS Code.
+* **Seamless Authentication**: Instant login with GitHub.
+* **Team Management**: Create, join, and switch teams easily.
+* **Rich Messaging**: Full Markdown support, code syntax highlighting, and copy-to-clipboard.
+* **Theme Aware**: Automatically adapts to your VS Code theme (Light/Dark).
+* **Secure Backend**: Built on Supabase for reliable real-time sync.
 
-## **Installation ⚙️**
+## **Development** 🛠️
+
+LineBuzz uses **Preact** for its frontend and **Supabase** for backend services (auth, real-time sync), integrating directly with the VS Code API.
+
+### **Installation ⚙️**
 
 1. Clone the repository:
 
@@ -28,35 +31,36 @@ Everything stays linked to the code itself, so your team’s conversations remai
    cd LineBuzz
    code .
    ```
-3. Press **F5** to launch the extension in a new VS Code window (Extension Development Host).
+3. Run `npm install` to install dependencies.
+
+### **Configuration 🧰**
+
+Create a `.env` file in the project root, based on `.env.example`, and populate it with your Supabase credentials:
+
+```env
+SUPABASE_URL=<your-supabase-url>
+SUPABASE_ANON_KEY=<your-supabase-anon-key>
+```
+These values connect LineBuzz to your project’s backend for authentication and data sync.
+Press **F5** to launch the extension in a new VS Code window (Extension Development Host).
 
 That’s it -> LineBuzz will start running in the new window.
 
 ## **Usage 🔍**
-
-1. Open any code file in the development host window.
-2. Highlight a line or block of code and open the **LineBuzz** sidebar.
-3. Start a new discussion or join an existing one.
-4. Conversations appear instantly and stay linked to your code context.
-
-## **Configuration 🧰**
-
-Before you run the extension, set up your Supabase credentials:
-
-```env
-SUPABASE_API_URL=<your-supabase-url>
-SUPABASE_KEY=<your-supabase-anon-key>
-```
-
-These values connect LineBuzz to your project’s backend for authentication and data sync.
+1. **Connect**: Open the "LineBuzz" view and sign in with GitHub.
+2. **Team Up**:
+   - **Create a Team**: Use the `LineBuzz: Create Team` command or header action.
+   - **Join a Team**: Enter a Team ID using `LineBuzz: Join Team`.
+3. **Collaborate**: Open the **LineBuzz Huddle** sidebar to start chatting with your team in real-time.
+4. **Code Sharing**: Paste code snippets directly into chat—LineBuzz handles formatting and highlighting automatically.
 
 ## **Roadmap 🛣️**
 
-* **Team workspaces** with shared threads per project
-* **Commit-aware threads** that track changes automatically
-* **AI-generated summaries** of code changes and conversation threads
-* **Mentions and notifications** for team discussions
-* **Context-aware** linking between discussions and code changes
+* **Inline Code Discussions**: Comment directly on specific lines of code.
+* **Team Feed**: Activity stream for team events and updates.
+* **Mentions & Notifications**: @mention team members and get notified.
+* **AI Summaries**: Auto-generated summaries of catch-up conversations.
+* **Deep Linking**: Jump from chat messages to relevant code files.
 
 ## **Contributing 🤝**
 
