@@ -29,7 +29,7 @@ export class MessageService {
         }
     }
 
-    public async getMessages(): Promise<MessageInfo[]> {
+    public async getMessages(limit?: number, offset?: number): Promise<MessageInfo[]> {
         try {
             const teamService = Container.get("TeamService");
             const currentTeam = teamService.getTeam();
@@ -41,7 +41,7 @@ export class MessageService {
 
             const authService = Container.get("AuthService");
             const [messages, session] = await Promise.all([
-                this.messageRepo.getMessages(currentTeam.id),
+                this.messageRepo.getMessages(currentTeam.id, limit, offset),
                 authService.getSession()
             ]);
 

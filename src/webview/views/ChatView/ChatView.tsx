@@ -12,8 +12,17 @@ import './ChatView.css';
 
 export const ChatView = () => {
     const [messages, setMessages] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const [offset, setOffset] = useState(0);
+
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
+    const messageListRef = useRef<HTMLDivElement>(null);
+    const prevScrollHeightRef = useRef<number>(0);
+    const isPrependingRef = useRef(false);
+
+    const LIMIT = 50;
 
     const scrollToBottom = () => {
         if (messagesEndRef.current) {
@@ -22,8 +31,39 @@ export const ChatView = () => {
     };
 
     useEffect(() => {
-        scrollToBottom();
+        if (isPrependingRef.current && messageListRef.current) {
+            const newScrollHeight = messageListRef.current.scrollHeight;
+            const diff = newScrollHeight - prevScrollHeightRef.current;
+            messageListRef.current.scrollTop = diff;
+            isPrependingRef.current = false;
+        } else if (!isPrependingRef.current && offset === 0) {
+            scrollToBottom();
+        } else if (!isPrependingRef.current) {
+            scrollToBottom();
+        }
     }, [messages]);
+
+    const loadMoreMessages = () => {
+        if (isLoading || !hasMore) return;
+
+        setIsLoading(true);
+        if (messageListRef.current) {
+            prevScrollHeightRef.current = messageListRef.current.scrollHeight;
+            isPrependingRef.current = true;
+        }
+
+        vscode.postMessage({
+            command: 'getMessages',
+            limit: LIMIT,
+            offset: messages.length
+        });
+    };
+
+    const handleScroll = () => {
+        if (messageListRef.current && messageListRef.current.scrollTop === 0) {
+            loadMoreMessages();
+        }
+    };
 
     useEffect(() => {
         const handleMessage = (event: MessageEvent) => {
@@ -31,15 +71,27 @@ export const ChatView = () => {
             switch (message.command) {
                 case 'updateMessages':
                     setMessages(message.messages);
+                    setOffset(message.messages.length);
+                    setHasMore(message.messages.length >= LIMIT);
+                    setIsLoading(false);
+                    isPrependingRef.current = false;
+                    break;
+                case 'prependMessages':
+                    const newMessages = message.messages;
+                    setMessages(prev => [...newMessages, ...prev]);
+                    setHasMore(newMessages.length >= LIMIT);
+                    setIsLoading(false);
                     break;
                 case 'addMessage':
                     setMessages(prev => [...prev, message.message]);
+                    setOffset(prev => prev + 1);
                     break;
             }
         };
 
         window.addEventListener('message', handleMessage);
-        vscode.postMessage({ command: 'getMessages' });
+
+        vscode.postMessage({ command: 'getMessages', limit: LIMIT, offset: 0 });
 
         return () => {
             window.removeEventListener('message', handleMessage);
@@ -53,7 +105,7 @@ export const ChatView = () => {
                     <WelcomeSplash />
                 </div>
             ) : (
-                <div class="message-list">
+                <div class="message-list" ref={messageListRef} onScroll={handleScroll}>
                     {messages.map((msg) => {
                         const displayName = msg.u?.display_name || msg.u?.username || 'Unknown';
                         const avatarUrl = msg.u?.avatar_url;
