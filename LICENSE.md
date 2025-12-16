@@ -1,51 +1,75 @@
-SOURCE AVAILABLE LICENSE
+# Elastic License 2.0
 
 Copyright (c) 2025 Zishan Ahmad
 
-This software is made available under the terms of this Source Available License.
-
-1. Grant of Rights
-
-You are granted a non exclusive, non transferable license to view, copy, and modify the source code of this software for personal, educational, or internal evaluation purposes.
-
-2. Restrictions
-
-You may not:
-
-* Redistribute the software or any modified version of it
-* Sell, sublicense, or otherwise commercialize the software
-* Offer the software or a modified version as a hosted service, SaaS, or API
-* Use the software to create a competing product or service
-* Remove or alter copyright or license notices
-
-3. Derivative Works
-
-You may create modified versions of the software for your own internal use. Any derivative work remains subject to this license and may not be distributed or made available to third parties.
-
-4. Contributions
-
-Any contribution you submit to this project, including but not limited to code, documentation, or tests, is provided under the same terms as this license. By submitting a contribution, you grant the copyright holder the right to use, modify, relicense, and distribute your contribution without restriction.
-
-5. Ownership
-
-The software is licensed, not sold. All rights, title, and interest in the software remain with the copyright holder.
-
-6. No Warranty
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON INFRINGEMENT.
-
-7. Limitation of Liability
-
-IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-8. Termination
-
-This license is automatically terminated if you violate any of its terms. Upon termination, you must cease all use of the software and destroy any copies in your possession.
-
-9. Governing Law
-
-This license shall be governed by and construed in accordance with the laws of India.
-
 ---
 
-This is a source available license. It is not an open source license as defined by the Open Source Initiative.
+### Acceptance
+
+By using the software, you agree to all of the terms and conditions below.
+
+### Copyright License
+
+The licensor grants you a non-exclusive, royalty-free, worldwide,
+non-sublicensable, non-transferable license to use, copy, distribute,
+make available, and prepare derivative works of the software, in each
+case subject to the limitations and conditions below.
+
+### Limitations
+
+You may not provide the software to third parties as a hosted or managed
+service, where the service provides users with access to any substantial
+set of the features or functionality of the software.
+
+You may not move, change, disable, or circumvent the license key
+functionality in the software, and you may not remove or obscure any
+functionality in the software that is protected by the license key.
+
+You may not alter, remove, or obscure any licensing, copyright, or other
+notices of the licensor in the software.
+
+### Patents
+
+The licensor grants you a license, under any patent claims the licensor
+can license, or becomes able to license, to make, have made, use, sell,
+offer for sale, import and have imported the software, in each case
+subject to the limitations and conditions in this license.
+
+This license does not cover any patent claims that you cause to be
+infringed by modifications or additions to the software.
+
+If you or your company make any written claim that the software infringes
+or contributes to infringement of any patent, your patent license for
+the software granted under these terms ends immediately.
+
+### Notices
+
+You must ensure that anyone who gets a copy of any part of the software
+from you also gets a copy of these terms.
+
+If you modify the software, you must include in any modified copies of
+the software prominent notices stating that you have modified the
+software.
+
+### No Other Rights
+
+These terms do not imply any licenses other than those expressly granted
+in these terms.
+
+### Termination
+
+If you use the software in violation of these terms, such use is not
+licensed, and your licenses will automatically terminate.
+
+If the licensor provides you with a notice of your violation, and you
+cease all violation of this license no later than 30 days after you
+receive that notice, your licenses will be reinstated retroactively.
+However, if you violate these terms after such reinstatement, any
+additional violation will cause your licenses to terminate permanently.
+
+### No Liability
+
+As far as the law allows, the software comes as is, without any warranty
+or condition, and the licensor will not be liable to you for any damages
+arising out of these terms or the use or nature of the software, under
+any kind of legal claim.

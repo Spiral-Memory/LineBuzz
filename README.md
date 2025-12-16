@@ -7,10 +7,10 @@ Stay in flow with your team using built-in huddles, team management, and persist
 
 ## **Features ✨**
 
-* **LineBuzz Huddle**: Real-time team chat panel inside VS Code.
-* **Seamless Authentication**: Instant login with GitHub.
+* **Native Chat**: Real-time team panel directly inside VS Code.
+* **GitHub Auth**: One-click login using your GitHub account.
 * **Team Management**: Create, join, and switch teams easily.
-* **Rich Messaging**: Full Markdown support, code syntax highlighting, and copy-to-clipboard.
+* **Dev-First**: Markdown support with code syntax highlighting.
 * **Theme Aware**: Automatically adapts to your VS Code theme (Light/Dark).
 * **Secure Backend**: Built on Supabase for reliable real-time sync.
 

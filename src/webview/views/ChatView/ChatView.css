@@ -2,6 +2,7 @@
     display: flex;
     background-color: var(--bg-color);
     flex-direction: column;
+    padding-top: 4px;
     height: 100%;
     overflow: hidden;
 }
