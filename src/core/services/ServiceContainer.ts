@@ -1,12 +1,14 @@
 import { AuthService } from './AuthService';
 import { TeamService } from './TeamService';
 import { MessageService } from './MessageService';
+import { SnippetService } from './SnippetService';
 import { logger } from "../utils/logger";
 
 interface Services {
     AuthService: AuthService;
     TeamService: TeamService;
     MessageService: MessageService;
+    SnippetService: SnippetService;
 }
 
 export class ServiceContainer {

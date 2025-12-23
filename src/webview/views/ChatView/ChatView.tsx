@@ -113,7 +113,7 @@ export const ChatView = () => {
 
                 case 'stageSnippet':
                     const snippet = message.snippet;
-                    console.log('Staged Snippt', snippet);
+                    console.log('Staged Snippet', snippet);
                     break;
             }
         };

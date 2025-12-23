@@ -21,16 +21,24 @@ export class ChatPanelProvider extends BaseWebviewProvider {
 
         const authService = Container.get('AuthService');
         const teamService = Container.get('TeamService');
-        const messageService = Container.get('MessageService');
+        const snippetService = Container.get('SnippetService');
 
         const authSub = authService.onDidChangeSession(() => this.updateIdentityState());
         const teamSub = teamService.onDidChangeTeam(() => this.updateIdentityState());
-        const snippetSub = messageService.onDidCaptureSnippet((snippet) => {
+        const snippetSub = snippetService.onDidCaptureSnippet((snippet) => {
             this._view?.webview.postMessage({
                 command: 'stageSnippet',
                 snippet: snippet
             });
         });
+
+        const stagedSnippet = snippetService.getStagedSnippet();
+        if (stagedSnippet) {
+            this._view?.webview.postMessage({
+                command: 'stageSnippet',
+                snippet: stagedSnippet
+            });
+        }
 
         webviewView.onDidDispose(() => {
             if (this._subscription) {

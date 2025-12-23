@@ -16,6 +16,7 @@ import { leaveTeamCommand } from "./core/commands/LeaveTeamCommand";
 import { captureSnippetCommand } from "./core/commands/CaptureSnippetCommand";
 import { TeamFeedProvider } from "./core/providers/TeamFeedProvider";
 import { ChatPanelProvider } from "./core/providers/ChatPanelProvider";
+import { SnippetService } from "./core/services/SnippetService";
 
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -36,6 +37,9 @@ export async function activate(context: vscode.ExtensionContext) {
         const supabaseMessageRepository = new SupabaseMessageRepository();
         const messageService = new MessageService(supabaseMessageRepository);
         Container.register('MessageService', messageService);
+
+        const snippetService = new SnippetService();
+        Container.register('SnippetService', snippetService);
 
         const teamFeedPanelProvider = new TeamFeedProvider();
         vscode.window.registerTreeDataProvider(TeamFeedProvider.viewId, teamFeedPanelProvider);

@@ -7,8 +7,6 @@ import { Snippet } from "../types/ISnippet";
 
 export class MessageService {
     constructor(private messageRepo: IMessageRepository) { }
-    private _onDidCaptureSnippet = new vscode.EventEmitter<Snippet | null>();
-    public readonly onDidCaptureSnippet = this._onDidCaptureSnippet.event;
 
     public async sendMessage(message: string): Promise<MessageInfo | void> {
         try {
@@ -93,7 +91,4 @@ export class MessageService {
         }
     }
 
-    public stageSnippet(snippet: Snippet) {
-        this._onDidCaptureSnippet.fire(snippet);
-    }
 }
