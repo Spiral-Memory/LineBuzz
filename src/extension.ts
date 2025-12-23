@@ -13,6 +13,7 @@ import { createTeamCommand } from "./core/commands/CreateTeamCommand";
 import { sendMessageCommand } from "./core/commands/SendMessageCommand";
 import { joinTeamCommand } from "./core/commands/JoinTeamCommand";
 import { leaveTeamCommand } from "./core/commands/LeaveTeamCommand";
+import { captureSnippetCommand } from "./core/commands/CaptureSnippetCommand";
 import { TeamFeedProvider } from "./core/providers/TeamFeedProvider";
 import { ChatPanelProvider } from "./core/providers/ChatPanelProvider";
 
@@ -49,7 +50,8 @@ export async function activate(context: vscode.ExtensionContext) {
             vscode.commands.registerCommand('linebuzz.createTeam', createTeamCommand),
             vscode.commands.registerCommand('linebuzz.joinTeam', joinTeamCommand),
             vscode.commands.registerCommand('linebuzz.leaveTeam', leaveTeamCommand),
-            vscode.commands.registerCommand('linebuzz.sendMessage', sendMessageCommand)
+            vscode.commands.registerCommand('linebuzz.sendMessage', sendMessageCommand),
+            vscode.commands.registerCommand('linebuzz.captureSnippet', captureSnippetCommand)
         );
 
     } catch (e) {

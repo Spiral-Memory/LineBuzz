@@ -118,5 +118,7 @@ export class ChatPanelProvider extends BaseWebviewProvider {
             }
         });
     }
+
+    
 }
 

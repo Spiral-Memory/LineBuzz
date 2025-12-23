@@ -41,6 +41,19 @@
         "command": "linebuzz.sendMessage",
         "title": "Send Message",
         "category": "LineBuzz"
+      },
+      {
+        "command": "linebuzz.captureSnippet",
+        "title": "Capture Snippet",
+        "category": "LineBuzz"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "linebuzz.captureSnippet",
+        "key": "alt+b",
+        "mac": "alt+b",
+        "when": "editorTextFocus"
       }
     ],
     "menus": {

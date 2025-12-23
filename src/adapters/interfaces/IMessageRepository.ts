@@ -2,7 +2,6 @@ export interface MessageInfo {
     message_id: string;
     thread_id: string;
     parent_id: string | null;
-    is_code_thread: boolean;
     content: string;
     created_at: string;
     u: {

@@ -29,6 +29,7 @@ export class MessageService {
         }
     }
 
+
     public async getMessages(limit?: number, offset?: number): Promise<MessageInfo[]> {
         try {
             const teamService = Container.get("TeamService");

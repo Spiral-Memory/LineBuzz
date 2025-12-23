@@ -11,7 +11,6 @@ export class SupabaseMessageRepository implements IMessageRepository {
             p_team_id: teamId,
             p_parent_id: null,
             p_content: message,
-            p_is_code_thread: false
         });
         if (error) {
             logger.error("SupabaseMessageRepository", "RPC call failed", error);
