@@ -110,6 +110,11 @@ export const ChatView = () => {
                         setUnreadCount(prev => prev + 1);
                     }
                     break;
+
+                case 'stageSnippet':
+                    const snippet = message.snippet;
+                    console.log('Staged Snippt', snippet);
+                    break;
             }
         };
 

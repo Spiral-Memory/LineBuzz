@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import { logger } from '../utils/logger';
+import { Container } from '../services/ServiceContainer';
 
 export const captureSnippetCommand = async () => {
     const editor = vscode.window.activeTextEditor;
@@ -56,5 +57,7 @@ export const captureSnippetCommand = async () => {
     };
 
     logger.info('CaptureSnippetCommand', 'Captured snippet:', snippetData);
-    vscode.window.showInformationMessage(`Captured: ${snippetData.filePath} (${snippetData.startLine}-${snippetData.endLine})`);
+    const messageService = Container.get("MessageService");
+    await messageService.stageSnippet(snippetData);
+    logger.info('CaptureSnippetCommand', 'Snippet shared to service', snippetData);
 };

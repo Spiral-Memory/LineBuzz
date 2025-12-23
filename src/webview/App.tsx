@@ -24,7 +24,7 @@ export function App() {
     const handleMessage = (event: MessageEvent) => {
       const message = event.data;
       switch (message.command) {
-        case 'updateState':
+        case 'updateIdentityState':
           setState({
             isLoggedIn: message.state.isLoggedIn,
             hasTeam: message.state.hasTeam,

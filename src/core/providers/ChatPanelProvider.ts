@@ -21,9 +21,16 @@ export class ChatPanelProvider extends BaseWebviewProvider {
 
         const authService = Container.get('AuthService');
         const teamService = Container.get('TeamService');
+        const messageService = Container.get('MessageService');
 
         const authSub = authService.onDidChangeSession(() => this.updateIdentityState());
         const teamSub = teamService.onDidChangeTeam(() => this.updateIdentityState());
+        const snippetSub = messageService.onDidCaptureSnippet((snippet) => {
+            this._view?.webview.postMessage({
+                command: 'stageSnippet',
+                snippet: snippet
+            });
+        });
 
         webviewView.onDidDispose(() => {
             if (this._subscription) {
@@ -32,6 +39,7 @@ export class ChatPanelProvider extends BaseWebviewProvider {
             }
             authSub.dispose();
             teamSub.dispose();
+            snippetSub.dispose();
         });
     }
 
@@ -111,14 +119,12 @@ export class ChatPanelProvider extends BaseWebviewProvider {
         const team = teamService.getTeam();
 
         this._view.webview.postMessage({
-            command: 'updateState',
+            command: 'updateIdentityState',
             state: {
                 isLoggedIn: !!session,
                 hasTeam: !!team
             }
         });
     }
-
-    
 }
 
