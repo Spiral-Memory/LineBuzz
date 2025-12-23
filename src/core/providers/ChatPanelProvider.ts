@@ -22,8 +22,8 @@ export class ChatPanelProvider extends BaseWebviewProvider {
         const authService = Container.get('AuthService');
         const teamService = Container.get('TeamService');
 
-        const authSub = authService.onDidChangeSession(() => this.updateWebviewState());
-        const teamSub = teamService.onDidChangeTeam(() => this.updateWebviewState());
+        const authSub = authService.onDidChangeSession(() => this.updateIdentityState());
+        const teamSub = teamService.onDidChangeTeam(() => this.updateIdentityState());
 
         webviewView.onDidDispose(() => {
             if (this._subscription) {
@@ -37,8 +37,8 @@ export class ChatPanelProvider extends BaseWebviewProvider {
 
     protected async _onDidReceiveMessage(data: any): Promise<void> {
         switch (data.command) {
-            case 'getState':
-                await this.updateWebviewState();
+            case 'getIdentityState':
+                await this.updateIdentityState();
                 break;
             case 'signIn':
                 await vscode.commands.executeCommand('linebuzz.login');
@@ -101,7 +101,7 @@ export class ChatPanelProvider extends BaseWebviewProvider {
         }
     }
 
-    private async updateWebviewState() {
+    private async updateIdentityState() {
         if (!this._view) { return; }
 
         const authService = Container.get('AuthService');

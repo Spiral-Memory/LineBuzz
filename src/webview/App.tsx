@@ -35,7 +35,7 @@ export function App() {
     };
 
     window.addEventListener('message', handleMessage);
-    vscode.postMessage({ command: 'getState' });
+    vscode.postMessage({ command: 'getIdentityState' });
 
     return () => {
       window.removeEventListener('message', handleMessage);
