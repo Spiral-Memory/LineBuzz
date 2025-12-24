@@ -7,6 +7,10 @@ export class ChatPanelProvider extends BaseWebviewProvider {
     public static readonly viewId = 'linebuzz.chatpanel';
 
     private _subscription: { unsubscribe: () => void } | undefined;
+    private authService = Container.get('AuthService');
+    private teamService = Container.get('TeamService');
+    private snippetService = Container.get('SnippetService');
+    private messageService = Container.get('MessageService');
 
     constructor(extensionUri: vscode.Uri) {
         super(extensionUri);
@@ -19,26 +23,9 @@ export class ChatPanelProvider extends BaseWebviewProvider {
     ) {
         super.resolveWebviewView(webviewView, context, _token);
 
-        const authService = Container.get('AuthService');
-        const teamService = Container.get('TeamService');
-        const snippetService = Container.get('SnippetService');
-
-        const authSub = authService.onDidChangeSession(() => this.updateIdentityState());
-        const teamSub = teamService.onDidChangeTeam(() => this.updateIdentityState());
-        const snippetSub = snippetService.onDidCaptureSnippet((snippet) => {
-            this._view?.webview.postMessage({
-                command: 'stageSnippet',
-                snippet: snippet
-            });
-        });
-
-        const stagedSnippet = snippetService.getStagedSnippet();
-        if (stagedSnippet) {
-            this._view?.webview.postMessage({
-                command: 'stageSnippet',
-                snippet: stagedSnippet
-            });
-        }
+        const authSub = this.authService.onDidChangeSession(() => this.updateIdentity());
+        const teamSub = this.teamService.onDidChangeTeam(() => this.updateIdentity());
+        const snippetSub = this.snippetService.onDidCaptureSnippet(() => this.updateSnippet());
 
         webviewView.onDidDispose(() => {
             if (this._subscription) {
@@ -53,8 +40,9 @@ export class ChatPanelProvider extends BaseWebviewProvider {
 
     protected async _onDidReceiveMessage(data: any): Promise<void> {
         switch (data.command) {
-            case 'getIdentityState':
-                await this.updateIdentityState();
+            case 'getWebviewState':
+                await this.updateIdentity();
+                await this.updateSnippet();
                 break;
             case 'signIn':
                 await vscode.commands.executeCommand('linebuzz.login');
@@ -67,8 +55,7 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                 break;
             case 'sendMessage': {
                 try {
-                    const messageService = Container.get("MessageService");
-                    const messageInfo = await messageService.sendMessage(data.text);
+                    const messageInfo = await this.messageService.sendMessage(data.text);
                     if (messageInfo) {
                         this._view?.webview.postMessage({
                             command: 'appendMessage',
@@ -84,9 +71,8 @@ export class ChatPanelProvider extends BaseWebviewProvider {
 
             case 'getMessages': {
                 try {
-                    const messageService = Container.get("MessageService");
                     const { limit, offset } = data;
-                    const messages = await messageService.getMessages(limit, offset);
+                    const messages = await this.messageService.getMessages(limit, offset);
 
                     this._view?.webview.postMessage({
                         command: offset && offset > 0 ? 'prependMessages' : 'loadInitialMessages',
@@ -97,7 +83,8 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                         this._subscription.unsubscribe();
                     }
 
-                    const sub = await messageService.subscribeToMessages((message) => {
+
+                    const sub = await this.messageService.subscribeToMessages((message) => {
                         this._view?.webview.postMessage({
                             command: 'appendMessage',
                             message: message,
@@ -117,14 +104,11 @@ export class ChatPanelProvider extends BaseWebviewProvider {
         }
     }
 
-    private async updateIdentityState() {
+    private async updateIdentity() {
         if (!this._view) { return; }
 
-        const authService = Container.get('AuthService');
-        const teamService = Container.get('TeamService');
-
-        const session = await authService.getSession();
-        const team = teamService.getTeam();
+        const session = await this.authService.getSession();
+        const team = this.teamService.getTeam();
 
         this._view.webview.postMessage({
             command: 'updateIdentityState',
@@ -133,12 +117,15 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                 hasTeam: !!team
             }
         });
+    }
 
-        const snippetService = Container.get('SnippetService');
-        const stagedSnippet = snippetService.getStagedSnippet();
+    private async updateSnippet() {
+        if (!this._view) { return; }
+
+        const stagedSnippet = this.snippetService.getStagedSnippet();
         if (stagedSnippet) {
             this._view.webview.postMessage({
-                command: 'stageSnippet',
+                command: 'updateSnippet',
                 snippet: stagedSnippet
             });
         }

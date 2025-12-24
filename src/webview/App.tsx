@@ -35,7 +35,7 @@ export function App() {
             isLoading: false
           }));
           break;
-        case 'stageSnippet':
+        case 'updateSnippet':
           setState(prev => ({
             ...prev,
             stagedSnippet: message.snippet
@@ -45,7 +45,7 @@ export function App() {
     };
 
     window.addEventListener('message', handleMessage);
-    vscode.postMessage({ command: 'getIdentityState' });
+    vscode.postMessage({ command: 'getWebviewState' });
 
     return () => {
       window.removeEventListener('message', handleMessage);
