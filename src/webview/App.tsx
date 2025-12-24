@@ -5,11 +5,13 @@ import { ConnectView } from './views/ConnectView/ConnectView';
 import { vscode } from './utils/vscode';
 import { useThemeDetector } from './hooks/useThemeDetector';
 import { atomOneDark, atomOneLight } from './constants/highlightThemes';
+import { Snippet } from '../core/types/ISnippet';
 
 interface AppState {
   isLoggedIn: boolean;
   hasTeam: boolean;
   isLoading: boolean;
+  stagedSnippet?: Snippet | null;
 }
 
 export function App() {
@@ -17,7 +19,8 @@ export function App() {
   const [state, setState] = useState<AppState>({
     isLoggedIn: false,
     hasTeam: false,
-    isLoading: true
+    isLoading: true,
+    stagedSnippet: null
   });
 
   useEffect(() => {
@@ -25,11 +28,18 @@ export function App() {
       const message = event.data;
       switch (message.command) {
         case 'updateIdentityState':
-          setState({
+          setState(prev => ({
+            ...prev,
             isLoggedIn: message.state.isLoggedIn,
             hasTeam: message.state.hasTeam,
             isLoading: false
-          });
+          }));
+          break;
+        case 'stageSnippet':
+          setState(prev => ({
+            ...prev,
+            stagedSnippet: message.snippet
+          }));
           break;
       }
     };
@@ -53,7 +63,10 @@ export function App() {
   return (
     <Fragment>
       <style>{theme === 'light' ? atomOneLight : atomOneDark}</style>
-      <ChatView />
+      <ChatView
+        stagedSnippet={state.stagedSnippet}
+        onClearSnippet={() => setState(prev => ({ ...prev, stagedSnippet: null }))}
+      />
     </Fragment>
   );
 }

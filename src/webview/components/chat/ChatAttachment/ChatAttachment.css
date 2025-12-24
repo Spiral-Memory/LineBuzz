@@ -1,0 +1,60 @@
+.chat-attachment {
+    display: flex;
+    align-items: center;
+    background-color: var(--vscode-editor-background);
+    border: 1px solid var(--vscode-widget-border);
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--vscode-foreground);
+    max-width: 100%;
+}
+
+.attachment-icon {
+    display: flex;
+    align-items: center;
+    margin-right: 6px;
+    color: var(--vscode-textLink-foreground);
+}
+
+.attachment-info {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 6px;
+}
+
+.file-name {
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.line-range {
+    opacity: 0.8;
+    margin-left: 2px;
+}
+
+.remove-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--vscode-icon-foreground);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px;
+    border-radius: 50%;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+}
+
+.remove-button:hover {
+    background-color: var(--vscode-toolbar-hoverBackground);
+    color: var(--vscode-foreground);
+    opacity: 1;
+}

@@ -9,9 +9,16 @@ import { formatTime } from '../../utils/formatTime';
 import { getAvatarColor } from '../../utils/getAvatarColor';
 import { WelcomeSplash } from '../../components/chat/WelcomeSplash/WelcomeSplash';
 import { LoadingSpinner } from '../../components/ui/LoadingSpinner/LoadingSpinner';
+import { ChatAttachment } from '../../components/chat/ChatAttachment/ChatAttachment';
+import { Snippet } from '../../../core/types/ISnippet';
 import './ChatView.css';
 
-export const ChatView = () => {
+interface ChatViewProps {
+    stagedSnippet?: Snippet | null;
+    onClearSnippet?: () => void;
+}
+
+export const ChatView = ({ stagedSnippet, onClearSnippet }: ChatViewProps) => {
     const [messages, setMessages] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
@@ -110,11 +117,6 @@ export const ChatView = () => {
                         setUnreadCount(prev => prev + 1);
                     }
                     break;
-
-                case 'stageSnippet':
-                    const snippet = message.snippet;
-                    console.log('Staged Snippet', snippet);
-                    break;
             }
         };
 
@@ -177,7 +179,10 @@ export const ChatView = () => {
                 </div>
             )}
             <div class="chat-input-container">
-                <ChatInput />
+                <ChatInput
+                    stagedSnippet={stagedSnippet}
+                    onClearSnippet={onClearSnippet}
+                />
             </div>
         </div >
     );

@@ -133,6 +133,15 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                 hasTeam: !!team
             }
         });
+
+        const snippetService = Container.get('SnippetService');
+        const stagedSnippet = snippetService.getStagedSnippet();
+        if (stagedSnippet) {
+            this._view.webview.postMessage({
+                command: 'stageSnippet',
+                snippet: stagedSnippet
+            });
+        }
     }
 }
 

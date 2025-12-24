@@ -13,6 +13,7 @@ export const captureSnippetCommand = async () => {
 
         if (snippet) {
             snippetService.stageSnippet(snippet);
+            await vscode.commands.executeCommand('linebuzz.chatpanel.focus');
         }
     } catch (error) {
         logger.error('CaptureSnippetCommand', 'Failed to capture snippet:', error);
