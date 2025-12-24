@@ -1,9 +1,8 @@
 .input-container {
-    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 4px;
-    background:  var(--input-background);
+    background: var(--input-background);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 1px 2px;
@@ -15,7 +14,7 @@
     background: transparent;
     border: none;
     padding: 12px 10px 0px 10px;
-    color:  var(--input-foreground);
+    color: var(--input-foreground);
     font-family: var(--font-family);
     font-size: 13px;
     line-height: 1.5;
@@ -34,11 +33,13 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 4px 4px 4px;
+    gap: 6px;
 }
 
 .left-actions {
     display: flex;
-    gap: 2px;
+    flex: 1;
+    min-width: 0;
 }
 
 .send-button-icon {
@@ -53,6 +54,7 @@
     width: 24px;
     height: 24px;
     transition: all 0.2s ease;
+    flex-shrink: 0;
 }
 
 .send-button-icon.has-text {
