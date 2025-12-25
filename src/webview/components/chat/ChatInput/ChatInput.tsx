@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { useState, useRef } from 'preact/hooks';
 import { vscode } from '../../../utils/vscode';
 import { Snippet } from '../../../../core/types/ISnippet';
@@ -78,8 +77,8 @@ export const ChatInput = ({ stagedSnippet, onClearSnippet, onRemoveSnippet }: Ch
                 rows={1}
             />
 
-            <div class={styles['input-actions']}>
-                <div class={styles['left-actions']}>
+            <div class={styles['composer-tools']}>
+                <div class={styles['input-attachments']}>
                     {hasAttachments && onRemoveSnippet && stagedSnippet.map((snippet, index) => (
                         <CodeAttachment
                             key={`${snippet.filePath}-${index}`}

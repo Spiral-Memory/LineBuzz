@@ -28,7 +28,7 @@
     outline: none;
 }
 
-.input-actions {
+.composer-tools {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -36,7 +36,7 @@
     gap: 6px;
 }
 
-.left-actions {
+.input-attachments {
     flex-wrap: wrap;
     gap: 4px;
     display: flex;
