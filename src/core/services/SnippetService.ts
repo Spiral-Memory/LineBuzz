@@ -3,11 +3,23 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { Snippet } from "../types/ISnippet";
 import { logger } from '../utils/logger';
+import dedent from 'dedent';
 
 export class SnippetService {
     private _currentSnippets: Snippet[] = [];
     private _onDidCaptureSnippet = new vscode.EventEmitter<Snippet[] | []>();
     public readonly onDidCaptureSnippet = this._onDidCaptureSnippet.event;
+
+    private _dedent(text: string): string {
+        if (!text) return '';
+
+        try {
+            return dedent(text);
+        } catch (error) {
+            logger.warn('SnippetService', 'Dedent failed, falling back to raw text', error);
+            return text;
+        }
+    }
 
     public async captureFromEditor(editor: vscode.TextEditor): Promise<Snippet | void> {
         if (!editor) return;
@@ -57,7 +69,7 @@ export class SnippetService {
             filePath: relativePath,
             startLine: selection.start.line + 1,
             endLine: selection.end.line + 1,
-            content: editor.document.getText(selection),
+            content: this._dedent(editor.document.getText(selection)),
             repoUrl: chosenRemote.fetchUrl
         };
 
