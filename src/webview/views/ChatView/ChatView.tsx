@@ -7,7 +7,7 @@ import { vscode } from '../../utils/vscode';
 import { WelcomeSplash } from '../../components/chat/WelcomeSplash/WelcomeSplash';
 import { LoadingSpinner } from '../../components/ui/LoadingSpinner/LoadingSpinner';
 import { Snippet } from '../../../core/types/ISnippet';
-import './ChatView.css';
+import styles from './ChatView.module.css';
 
 interface ChatViewProps {
     stagedSnippet?: Snippet | null;
@@ -126,13 +126,13 @@ export const ChatView = ({ stagedSnippet, onClearSnippet }: ChatViewProps) => {
     }, []);
 
     return (
-        <div class="chat-view-container" ref={chatContainerRef}>
+        <div class={styles['chat-view-container']} ref={chatContainerRef}>
             {messages.length === 0 ? (
-                <div class="splash-container">
+                <div class={styles['splash-container']}>
                     <WelcomeSplash />
                 </div>
             ) : (
-                <div class="message-list" ref={messageListRef} onScroll={handleScroll}>
+                <div class={styles['message-list']} ref={messageListRef} onScroll={handleScroll}>
                     {isLoading && <LoadingSpinner />}
                     {messages.map((msg) => {
                         return (
@@ -141,16 +141,16 @@ export const ChatView = ({ stagedSnippet, onClearSnippet }: ChatViewProps) => {
                     })}
                     <div ref={messagesEndRef} />
                     {unreadCount > 0 && (
-                        <div class="new-messages-indicator" onClick={scrollToBottom}>
+                        <div class={styles['new-messages-indicator']} onClick={scrollToBottom}>
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M7 13L12 18L17 13M7 6L12 11L17 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <span class="indicator-count">{unreadCount}</span>
+                            <span class={styles['indicator-count']}>{unreadCount}</span>
                         </div>
                     )}
                 </div>
             )}
-            <div class="chat-input-container">
+            <div class={styles['chat-input-container']}>
                 <ChatInput
                     stagedSnippet={stagedSnippet}
                     onClearSnippet={onClearSnippet}

@@ -1,7 +1,7 @@
-import './LoadingSpinner.css';
+import styles from './LoadingSpinner.module.css';
 
 export const LoadingSpinner = () => (
-    <div class="loading-spinner-container">
-        <div class="loading-spinner"></div>
+    <div class={styles['loading-spinner-container']}>
+        <div class={styles['loading-spinner']}></div>
     </div>
 );

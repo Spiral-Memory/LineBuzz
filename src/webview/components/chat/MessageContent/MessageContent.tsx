@@ -3,11 +3,12 @@ import { marked } from 'marked';
 import { encode as htmlEncode } from 'he';
 import DOMPurify from 'dompurify';
 import hljs from 'highlight.js';
-import './MessageContent.css'
+import styles from './MessageContent.module.css';
 
 interface MessageContentProps {
     content: string;
     className?: string;
+    isMe?: boolean;
 }
 
 const renderer = new marked.Renderer();
@@ -60,7 +61,8 @@ marked.use({
     gfm: true
 });
 
-export const MessageContent = ({ content, className = '' }: MessageContentProps) => {
+
+export const MessageContent = ({ content, className = '', isMe = false }: MessageContentProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const htmlContent = useMemo(() => {
         try {
@@ -117,7 +119,7 @@ export const MessageContent = ({ content, className = '' }: MessageContentProps)
     return (
         <div
             ref={containerRef}
-            class={`message-content markdown-body ${className}`}
+            class={`${styles['message-content']} ${isMe ? styles['is-me'] : ''} ${styles['markdown-body']} ${className}`}
             dangerouslySetInnerHTML={{ __html: htmlContent }}
         />
     );

@@ -1,10 +1,10 @@
 import { h } from 'preact';
-import './WelcomeSplash.css';
+import styles from './WelcomeSplash.module.css';
 
 export const WelcomeSplash = () => {
     return (
-        <div class="welcome-splash-container">
-            <div class="art-decoration">
+        <div class={styles['welcome-splash-container']}>
+            <div class={styles['art-decoration']}>
                 <svg width="200" height="200" viewBox="40 40 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M70 60 C50 60 50 80 50 100 C50 120 50 140 70 140"
                         stroke="currentColor"
@@ -20,8 +20,8 @@ export const WelcomeSplash = () => {
                     <line x1="75" y1="110" x2="105" y2="110" stroke="currentColor" stroke-width="8" stroke-linecap="round" />
                 </svg>
             </div>
-            <h1 class="welcome-title">LineBuzz</h1>
-            <p class="welcome-desc">Discuss efforts, define logic, and stay in sync.</p>
+            <h1 class={styles['welcome-title']}>LineBuzz</h1>
+            <p class={styles['welcome-desc']}>Discuss efforts, define logic, and stay in sync.</p>
         </div>
     );
 };

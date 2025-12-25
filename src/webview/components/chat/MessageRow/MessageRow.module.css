@@ -60,16 +60,6 @@
     opacity: 0.7;
 }
 
-.message-content {
-    color: var(--vscode-editor-foreground);
-    font-size: 0.9rem;
-    line-height: 1.4;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    width: fit-content;
-    max-width: 100%;
-}
-
 .message-row-me {
     flex-direction: row-reverse;
 }
@@ -81,8 +71,4 @@
 
 .message-row-me .message-body {
     align-items: flex-end;
-}
-
-.message-row-me .message-content {
-    text-align: left;
 }

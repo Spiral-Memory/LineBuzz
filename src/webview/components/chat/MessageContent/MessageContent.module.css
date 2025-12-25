@@ -1,4 +1,18 @@
-.code-block-wrapper {
+.message-content {
+    color: var(--vscode-editor-foreground);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.message-content.is-me {
+    text-align: left;
+}
+
+.message-content :global(.code-block-wrapper) {
     margin-top: 4px;
     border-radius: 6px;
     border: 1px solid var(--border-color);
@@ -10,14 +24,14 @@
     font-size: 10px;
 }
 
-.code-block-header {
+.message-content :global(.code-block-header) {
     padding: 4px 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.code-language {
+.message-content :global(.code-language) {
     font-family: var(--vscode-font-family);
     font-size: 12px;
     font-weight: 600;
@@ -26,7 +40,7 @@
     letter-spacing: 0.05em;
 }
 
-.copy-code-btn {
+.message-content :global(.copy-code-btn) {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -41,17 +55,17 @@
     width: 24px;
 }
 
-.copy-code-btn:hover {
+.message-content :global(.copy-code-btn:hover) {
     background-color: var(--vscode-toolbar-hoverBackground);
     color: var(--vscode-foreground);
 }
 
-.copy-code-btn svg {
+.message-content :global(.copy-code-btn svg) {
     width: 14px;
     height: 14px;
 }
 
-.code-block-content {
+.message-content :global(.code-block-content) {
     padding: 8px;
     background-color: var(--vscode-editor-background);
     max-height: 300px;
@@ -59,7 +73,7 @@
     overflow-x: hidden;
 }
 
-.code-block-content pre {
+.message-content :global(.code-block-content pre) {
     margin: 0;
     padding: 0;
     background: transparent;
@@ -69,7 +83,7 @@
     overflow-wrap: break-word;
 }
 
-.code-block-content code {
+.message-content :global(.code-block-content code) {
     font-family: var(--vscode-editor-font-family, 'Courier New', monospace);
     font-size: 12px;
     background: none;
@@ -144,8 +158,7 @@
     background-color: rgba(127, 127, 127, 0.05);
 }
 
-
-.markdown-body code:not(.hljs) {
+.markdown-body code:not(:global(.hljs)) {
     background-color: var(--vscode-textBlockQuote-background);
     color: var(--vscode-textPreformat-foreground);
     border-radius: 4px;
@@ -153,38 +166,23 @@
     font-size: 0.9em;
 }
 
-.message-row-me .code-block-wrapper {
+.message-content.is-me :global(.code-block-wrapper) {
     text-align: left;
 }
 
-.message-row-me .markdown-body {
+.message-content.is-me .markdown-body {
     text-align: right;
 }
 
-.message-row-me .markdown-body ul,
-.message-row-me .markdown-body ol {
+.message-content.is-me .markdown-body ul,
+.message-content.is-me .markdown-body ol {
     text-align: right;
     direction: rtl;
     margin-right: 20px;
     margin-left: 0;
 }
 
-
-
-.markdown-body ul,
-.markdown-body ol {
-    margin: 8px 0 8px 20px;
-    padding: 0;
-    text-align: left;
-}
-
-.markdown-body li {
-    margin-bottom: 4px;
-}
-
-
-
-.message-row-me .markdown-body blockquote {
+.message-content.is-me .markdown-body blockquote {
     text-align: left;
     background-color: rgba(255, 255, 255, 0.1);
     color: var(--vscode-editor-foreground);

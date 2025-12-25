@@ -1,6 +1,6 @@
 import { vscode } from '../../utils/vscode';
 import { WelcomeSplash } from '../../components/chat/WelcomeSplash/WelcomeSplash';
-import './ConnectView.css';
+import styles from './ConnectView.module.css';
 
 interface ConnectViewProps {
     isLoggedIn: boolean;
@@ -22,27 +22,27 @@ export const ConnectView = ({ isLoggedIn, hasTeam }: ConnectViewProps) => {
     };
 
     return (
-        <div class="connect-view-container">
+        <div class={styles['connect-view-container']}>
             <WelcomeSplash />
-            <div class="action-section">
+            <div class={styles['action-section']}>
                 {!isLoggedIn ? (
                     <button
-                        class="connect-btn primary"
+                        class={`${styles['connect-btn']} ${styles['primary']}`}
                         onClick={handleSignIn}
                     >
                         Sign in with GitHub
                     </button>
                 ) : !hasTeam ? (
                     <>
-                        <button class="connect-btn primary" onClick={handleCreateTeam}>
+                        <button class={`${styles['connect-btn']} ${styles['primary']}`} onClick={handleCreateTeam}>
                             Create New Team
                         </button>
-                        <button class="connect-btn secondary" onClick={handleJoinTeam}>
+                        <button class={`${styles['connect-btn']} ${styles['secondary']}`} onClick={handleJoinTeam}>
                             Join Existing Team
                         </button>
                     </>
                 ) : (
-                    <div class="success-message">
+                    <div class={styles['success-message']}>
                         <p>You are all set!</p>
                     </div>
                 )}
