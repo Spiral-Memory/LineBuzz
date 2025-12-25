@@ -1,4 +1,4 @@
-import { useState, useRef } from 'preact/hooks';
+import { useState, useRef, useEffect } from 'preact/hooks';
 import { vscode } from '../../../utils/vscode';
 import { Snippet } from '../../../../core/types/ISnippet';
 import { CodeAttachment } from '../ChatAttachment/CodeAttachment';
@@ -13,6 +13,20 @@ interface ChatInputProps {
 export const ChatInput = ({ stagedSnippet, onClearSnippet, onRemoveSnippet }: ChatInputProps) => {
     const [value, setValue] = useState('');
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    useEffect(() => {
+        const handleFocus = () => {
+            if (textareaRef.current) {
+                textareaRef.current.focus();
+            }
+        };
+
+        window.addEventListener('focus', handleFocus);
+
+        return () => {
+            window.removeEventListener('focus', handleFocus);
+        };
+    }, []);
 
     const handleInput = (e: any) => {
         setValue(e.target.value);
