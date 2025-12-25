@@ -2,6 +2,7 @@ import { AuthService } from './AuthService';
 import { TeamService } from './TeamService';
 import { MessageService } from './MessageService';
 import { SnippetService } from './SnippetService';
+import {NavigatorService} from './NavigatorService';
 import { logger } from "../utils/logger";
 
 interface Services {
@@ -9,6 +10,7 @@ interface Services {
     TeamService: TeamService;
     MessageService: MessageService;
     SnippetService: SnippetService;
+    NavigatorService: NavigatorService;
 }
 
 export class ServiceContainer {

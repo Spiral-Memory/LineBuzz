@@ -41,7 +41,6 @@ export class SnippetService {
             return;
         }
 
-        const uri = editor.document.uri;
         const gitExtension = vscode.extensions.getExtension('vscode.git');
         if (!gitExtension) {
             logger.error('SnippetService', 'Git extension not found.');
@@ -62,6 +61,7 @@ export class SnippetService {
         }
 
         const api = gitExtension.exports.getAPI(1);
+        const uri = editor.document.uri;
         const repo = api.repositories.find((r: any) =>
             uri.fsPath.toLowerCase().startsWith(r.rootUri.fsPath.toLowerCase())
         );
@@ -72,9 +72,9 @@ export class SnippetService {
             return;
         }
 
-        const chosenRemote = remotes.find((r: any) => r.name === 'origin') || remotes[0]
         const realPath = fs.existsSync(uri.fsPath) ? fs.realpathSync.native(uri.fsPath) : uri.fsPath;
         const relativePath = path.relative(repo.rootUri.fsPath, realPath).split(path.sep).join('/');
+        const chosenRemote = remotes.find((r: any) => r.name === 'origin') || remotes[0]
         const selection = editor.selection;
 
         const snippetData: Snippet = {

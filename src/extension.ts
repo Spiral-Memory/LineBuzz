@@ -17,7 +17,7 @@ import { captureSnippetCommand } from "./core/commands/CaptureSnippetCommand";
 import { TeamFeedProvider } from "./core/providers/TeamFeedProvider";
 import { ChatPanelProvider } from "./core/providers/ChatPanelProvider";
 import { SnippetService } from "./core/services/SnippetService";
-
+import { NavigatorService } from "./core/services/NavigatorService";
 
 export async function activate(context: vscode.ExtensionContext) {
     let authService: AuthService | undefined;
@@ -40,6 +40,10 @@ export async function activate(context: vscode.ExtensionContext) {
 
         const snippetService = new SnippetService();
         Container.register('SnippetService', snippetService);
+        
+        const navigatorService = new NavigatorService();
+        Container.register('NavigatorService', navigatorService);
+
 
         const teamFeedPanelProvider = new TeamFeedProvider();
         vscode.window.registerTreeDataProvider(TeamFeedProvider.viewId, teamFeedPanelProvider);
