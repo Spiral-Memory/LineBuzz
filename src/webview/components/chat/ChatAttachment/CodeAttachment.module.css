@@ -1,5 +1,7 @@
 .chat-attachment {
     display: flex;
+    justify-content: space-between;
+    flex: 1;
     align-items: center;
     background-color: var(--vscode-editor-background);
     border: 1px solid var(--vscode-widget-border);
@@ -8,24 +10,20 @@
     margin-top: 8px;
     font-size: 12px;
     color: var(--vscode-foreground);
-    max-width: 100%;
 }
 
 .attachment-icon {
     display: flex;
     align-items: center;
-    margin-right: 6px;
     color: var(--vscode-textLink-foreground);
 }
 
 .attachment-info {
     display: flex;
     align-items: center;
-    flex: 1;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    margin-right: 6px;
 }
 
 .file-name {

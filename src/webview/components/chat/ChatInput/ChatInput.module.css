@@ -31,14 +31,23 @@
 .input-actions {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
     padding: 0 4px 4px 4px;
     gap: 6px;
 }
 
 .left-actions {
+    flex-wrap: wrap;
+    gap: 4px;
     display: flex;
     min-width: 0;
+    max-height: 120px;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .send-button-icon {
