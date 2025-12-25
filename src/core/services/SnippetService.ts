@@ -5,8 +5,8 @@ import { Snippet } from "../types/ISnippet";
 import { logger } from '../utils/logger';
 
 export class SnippetService {
-    private _currentSnippet: Snippet | null = null;
-    private _onDidCaptureSnippet = new vscode.EventEmitter<Snippet | null>();
+    private _currentSnippet: Snippet[] = [];
+    private _onDidCaptureSnippet = new vscode.EventEmitter<Snippet[] | []>();
     public readonly onDidCaptureSnippet = this._onDidCaptureSnippet.event;
 
     public async captureFromEditor(editor: vscode.TextEditor): Promise<Snippet | void> {
@@ -65,17 +65,25 @@ export class SnippetService {
     }
 
     public stageSnippet(snippet: Snippet) {
-        this._currentSnippet = snippet;
-        this._onDidCaptureSnippet.fire(snippet);
+        this._currentSnippet.push(snippet);
+        this._onDidCaptureSnippet.fire(this._currentSnippet);
         logger.info('SnippetService', 'Snippet staged', snippet);
     }
 
-    public getStagedSnippet(): Snippet | null {
+    public getStagedSnippet(): Snippet[] {
         return this._currentSnippet;
     }
 
+    public removeSnippet(index: number) {
+        if (index >= 0 && index < this._currentSnippet.length) {
+            const removed = this._currentSnippet.splice(index, 1);
+            this._onDidCaptureSnippet.fire(this._currentSnippet);
+            logger.info('SnippetService', 'Snippet removed', removed[0]);
+        }
+    }
+
     public clearStagedSnippet() {
-        this._currentSnippet = null;
-        this._onDidCaptureSnippet.fire(null);
+        this._currentSnippet = [];
+        this._onDidCaptureSnippet.fire([]);
     }
 }

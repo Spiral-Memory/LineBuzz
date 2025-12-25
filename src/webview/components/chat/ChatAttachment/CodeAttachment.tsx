@@ -7,7 +7,7 @@ interface ChatAttachmentProps {
     onRemove: () => void;
 }
 
-export const ChatAttachment = ({ snippet, onRemove }: ChatAttachmentProps) => {
+export const CodeAttachment = ({ snippet, onRemove }: ChatAttachmentProps) => {
     const fileName = snippet.filePath.split('/').pop() || '';
     return (
         <div class={styles['chat-attachment']}>

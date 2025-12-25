@@ -10,11 +10,12 @@ import { Snippet } from '../../../core/types/ISnippet';
 import styles from './ChatView.module.css';
 
 interface ChatViewProps {
-    stagedSnippet?: Snippet | null;
+    stagedSnippet?: Snippet[] | [];
     onClearSnippet?: () => void;
+    onRemoveSnippet?: (index: number) => void;
 }
 
-export const ChatView = ({ stagedSnippet, onClearSnippet }: ChatViewProps) => {
+export const ChatView = ({ stagedSnippet, onClearSnippet, onRemoveSnippet }: ChatViewProps) => {
     const [messages, setMessages] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
@@ -154,8 +155,9 @@ export const ChatView = ({ stagedSnippet, onClearSnippet }: ChatViewProps) => {
                 <ChatInput
                     stagedSnippet={stagedSnippet}
                     onClearSnippet={onClearSnippet}
+                    onRemoveSnippet={onRemoveSnippet}
                 />
             </div>
-        </div >
+        </div>
     );
 };

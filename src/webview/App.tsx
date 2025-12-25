@@ -11,7 +11,7 @@ interface AppState {
   isLoggedIn: boolean;
   hasTeam: boolean;
   isLoading: boolean;
-  stagedSnippet?: Snippet | null;
+  stagedSnippet?: Snippet[] | [];
 }
 
 export function App() {
@@ -20,7 +20,7 @@ export function App() {
     isLoggedIn: false,
     hasTeam: false,
     isLoading: true,
-    stagedSnippet: null
+    stagedSnippet: []
   });
 
   useEffect(() => {
@@ -52,6 +52,19 @@ export function App() {
     };
   }, []);
 
+  const handleRemoveSnippet = (index: number) => {
+    vscode.postMessage({
+      command: 'removeSnippet',
+      index
+    });
+  };
+
+  const handleClearSnippet = () => {
+    vscode.postMessage({
+      command: 'clearSnippet'
+    });
+  };
+
   if (state.isLoading) {
     return <div style={{ padding: '20px', color: 'var(--vscode-descriptionForeground)' }}>Loading...</div>;
   }
@@ -65,7 +78,8 @@ export function App() {
       <style>{theme === 'light' ? atomOneLight : atomOneDark}</style>
       <ChatView
         stagedSnippet={state.stagedSnippet}
-        onClearSnippet={() => setState(prev => ({ ...prev, stagedSnippet: null }))}
+        onClearSnippet={handleClearSnippet}
+        onRemoveSnippet={handleRemoveSnippet}
       />
     </Fragment>
   );

@@ -2,15 +2,16 @@ import { h } from 'preact';
 import { useState, useRef } from 'preact/hooks';
 import { vscode } from '../../../utils/vscode';
 import { Snippet } from '../../../../core/types/ISnippet';
-import { ChatAttachment } from '../ChatAttachment/CodeAttachment';
+import { CodeAttachment } from '../ChatAttachment/CodeAttachment';
 import styles from './ChatInput.module.css';
 
 interface ChatInputProps {
-    stagedSnippet?: Snippet | null;
+    stagedSnippet?: Snippet[] | [];
     onClearSnippet?: () => void;
+    onRemoveSnippet?: (index: number) => void;
 }
 
-export const ChatInput = ({ stagedSnippet, onClearSnippet }: ChatInputProps) => {
+export const ChatInput = ({ stagedSnippet, onClearSnippet, onRemoveSnippet }: ChatInputProps) => {
     const [value, setValue] = useState('');
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -29,12 +30,14 @@ export const ChatInput = ({ stagedSnippet, onClearSnippet }: ChatInputProps) => 
     };
 
     const handleSend = () => {
-        if (!value.trim() && !stagedSnippet) return;
+        if (!value.trim() && (!stagedSnippet || stagedSnippet.length === 0)) return;
         let messageText = value;
-        if (stagedSnippet) {
-            const fileExtension = stagedSnippet.filePath.split('.').pop() || '';
-            const snippetMarkdown = `\n\n\`\`\`${fileExtension}\n${stagedSnippet.content}\n\`\`\`\n`;
-            messageText += snippetMarkdown;
+        if (stagedSnippet && stagedSnippet.length > 0) {
+            stagedSnippet.forEach(snippet => {
+                const fileExtension = snippet.filePath.split('.').pop() || '';
+                const snippetMarkdown = `\n\n\`\`\`${fileExtension}\n${snippet.content}\n\`\`\`\n`;
+                messageText += snippetMarkdown;
+            });
         }
 
         vscode.postMessage({
@@ -61,6 +64,8 @@ export const ChatInput = ({ stagedSnippet, onClearSnippet }: ChatInputProps) => 
         }
     };
 
+    const hasAttachments = stagedSnippet && stagedSnippet.length > 0;
+
     return (
         <div class={styles['input-container']}>
             <textarea
@@ -75,11 +80,15 @@ export const ChatInput = ({ stagedSnippet, onClearSnippet }: ChatInputProps) => 
 
             <div class={styles['input-actions']}>
                 <div class={styles['left-actions']}>
-                    {stagedSnippet && onClearSnippet && (
-                        <ChatAttachment snippet={stagedSnippet} onRemove={onClearSnippet} />
-                    )}
+                    {hasAttachments && onRemoveSnippet && stagedSnippet.map((snippet, index) => (
+                        <CodeAttachment
+                            key={`${snippet.filePath}-${index}`}
+                            snippet={snippet}
+                            onRemove={() => onRemoveSnippet(index)}
+                        />
+                    ))}
                 </div>
-                <button class={`${styles['send-button-icon']} ${value.trim() || stagedSnippet ? styles['has-text'] : ''}`} onClick={handleSend} aria-label="Send">
+                <button class={`${styles['send-button-icon']} ${value.trim() || hasAttachments ? styles['has-text'] : ''}`} onClick={handleSend} aria-label="Send">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
                         <path
                             d="m18.6357 15.6701 1.7164 -5.1493c1.4995 -4.49838 2.2492 -6.74758 1.0619 -7.93485 -1.1872 -1.18726 -3.4364 -0.43753 -7.9348 1.06193L8.32987 5.36432C4.69923 6.57453 2.88392 7.17964 2.36806 8.06698c-0.49075 0.84414 -0.49075 1.88671 0 2.73082 0.51586 0.8874 2.33117 1.4925 5.96181 2.7027 0.58295 0.1943 0.87443 0.2915 1.11806 0.4546 0.23611 0.158 0.43894 0.3609 0.59697 0.597 0.1631 0.2436 0.2603 0.5351 0.4546 1.118 1.2102 3.6307 1.8153 5.446 2.7027 5.9618 0.8441 0.4908 1.8867 0.4908 2.7308 0 0.8874 -0.5158 1.4925 -2.3311 2.7027 -5.9618Z"

@@ -53,6 +53,12 @@ export class ChatPanelProvider extends BaseWebviewProvider {
             case 'joinTeam':
                 await vscode.commands.executeCommand('linebuzz.joinTeam');
                 break;
+            case 'removeSnippet':
+                this.snippetService.removeSnippet(data.index);
+                break;
+            case 'clearSnippet':
+                this.snippetService.clearStagedSnippet();
+                break;
             case 'sendMessage': {
                 try {
                     const messageInfo = await this.messageService.sendMessage(data.text);
