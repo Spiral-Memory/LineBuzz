@@ -21,6 +21,18 @@ export class SnippetService {
         }
     }
 
+    private _isDuplicate(snippet: Snippet): boolean {
+        const isDuplicate = this._currentSnippets.some(s =>
+            s.filePath === snippet.filePath &&
+            s.startLine === snippet.startLine &&
+            s.endLine === snippet.endLine
+        );
+        if (isDuplicate) {
+            logger.info('SnippetService', 'Duplicate Snippet', snippet);
+        }
+        return isDuplicate;
+    }
+
     public async captureFromEditor(editor: vscode.TextEditor): Promise<Snippet | void> {
         if (!editor) return;
 
@@ -77,6 +89,7 @@ export class SnippetService {
     }
 
     public stageSnippet(snippet: Snippet) {
+        if (this._isDuplicate(snippet)) return;
         this._currentSnippets.unshift(snippet);
         this._onDidCaptureSnippet.fire(this._currentSnippets);
         logger.info('SnippetService', 'Snippet staged', snippet);
