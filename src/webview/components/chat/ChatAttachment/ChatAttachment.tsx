@@ -1,6 +1,6 @@
-import { h } from 'preact';
 import { Snippet } from '../../../../core/types/ISnippet';
 import './ChatAttachment.css';
+import FileIcon from '../../ui/FileIcon/FileIcon';
 
 interface ChatAttachmentProps {
     snippet: Snippet;
@@ -8,15 +8,14 @@ interface ChatAttachmentProps {
 }
 
 export const ChatAttachment = ({ snippet, onRemove }: ChatAttachmentProps) => {
+    const fileName = snippet.filePath.split('/').pop() || '';
     return (
         <div class="chat-attachment">
             <div class="attachment-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
-                </svg>
+                <FileIcon filename={fileName} height="16px" width="16px" />
             </div>
             <div class="attachment-info">
-                <span class="file-name">{snippet.filePath.split('/').pop()}</span>
+                <span class="file-name">{fileName}</span>
                 <span class="line-range">:{snippet.startLine}-{snippet.endLine}</span>
             </div>
             <button class="remove-button" onClick={onRemove} aria-label="Remove attachment">

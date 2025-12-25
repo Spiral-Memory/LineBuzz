@@ -1,4 +1,3 @@
-import { h, Fragment } from 'preact';
 import { vscode } from '../../utils/vscode';
 import { WelcomeSplash } from '../../components/chat/WelcomeSplash/WelcomeSplash';
 import './ConnectView.css';

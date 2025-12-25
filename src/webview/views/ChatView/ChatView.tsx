@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { useEffect, useLayoutEffect, useState, useRef } from 'preact/hooks';
 
 import { ChatInput } from '../../components/chat/ChatInput/ChatInput';

@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import './LoadingSpinner.css';
 
 export const LoadingSpinner = () => (

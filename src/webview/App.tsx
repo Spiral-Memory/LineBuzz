@@ -1,4 +1,4 @@
-import { h, Fragment } from 'preact';
+import { Fragment } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { ChatView } from './views/ChatView/ChatView';
 import { ConnectView } from './views/ConnectView/ConnectView';
