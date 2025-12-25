@@ -65,6 +65,13 @@ export function App() {
     });
   };
 
+  const handleOpenSnippet = (snippet: Snippet) => {
+    vscode.postMessage({
+      command: 'openSnippet',
+      snippet
+    });
+  };
+
   if (state.isLoading) {
     return <div style={{ padding: '20px', color: 'var(--vscode-descriptionForeground)' }}>Loading...</div>;
   }
@@ -80,6 +87,7 @@ export function App() {
         stagedSnippet={state.stagedSnippet}
         onClearSnippet={handleClearSnippet}
         onRemoveSnippet={handleRemoveSnippet}
+        onOpenSnippet={handleOpenSnippet}
       />
     </Fragment>
   );

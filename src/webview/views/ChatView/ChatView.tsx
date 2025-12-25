@@ -13,9 +13,10 @@ interface ChatViewProps {
     stagedSnippet?: Snippet[] | [];
     onClearSnippet?: () => void;
     onRemoveSnippet?: (index: number) => void;
+    onOpenSnippet?: (snippet: Snippet) => void;
 }
 
-export const ChatView = ({ stagedSnippet, onClearSnippet, onRemoveSnippet }: ChatViewProps) => {
+export const ChatView = ({ stagedSnippet, onClearSnippet, onRemoveSnippet, onOpenSnippet }: ChatViewProps) => {
     const [messages, setMessages] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
@@ -156,6 +157,7 @@ export const ChatView = ({ stagedSnippet, onClearSnippet, onRemoveSnippet }: Cha
                     stagedSnippet={stagedSnippet}
                     onClearSnippet={onClearSnippet}
                     onRemoveSnippet={onRemoveSnippet}
+                    onOpenSnippet={onOpenSnippet}
                 />
             </div>
         </div>

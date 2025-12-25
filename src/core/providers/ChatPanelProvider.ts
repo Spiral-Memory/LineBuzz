@@ -11,6 +11,7 @@ export class ChatPanelProvider extends BaseWebviewProvider {
     private teamService = Container.get('TeamService');
     private snippetService = Container.get('SnippetService');
     private messageService = Container.get('MessageService');
+    private navigatorService = Container.get('NavigatorService');
 
     constructor(extensionUri: vscode.Uri) {
         super(extensionUri);
@@ -59,6 +60,10 @@ export class ChatPanelProvider extends BaseWebviewProvider {
             case 'clearSnippet':
                 this.snippetService.clearStagedSnippet();
                 break;
+            case 'openSnippet': {
+                this.navigatorService.openSnippet(data.snippet);
+                break;
+            }
             case 'sendMessage': {
                 try {
                     const messageInfo = await this.messageService.sendMessage(data.text);

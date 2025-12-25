@@ -8,9 +8,10 @@ interface ChatInputProps {
     stagedSnippet?: Snippet[] | [];
     onClearSnippet?: () => void;
     onRemoveSnippet?: (index: number) => void;
+    onOpenSnippet?: (snippet: Snippet) => void;
 }
 
-export const ChatInput = ({ stagedSnippet, onClearSnippet, onRemoveSnippet }: ChatInputProps) => {
+export const ChatInput = ({ stagedSnippet, onClearSnippet, onRemoveSnippet, onOpenSnippet }: ChatInputProps) => {
     const [value, setValue] = useState('');
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -98,6 +99,7 @@ export const ChatInput = ({ stagedSnippet, onClearSnippet, onRemoveSnippet }: Ch
                             key={`${snippet.filePath}-${index}`}
                             snippet={snippet}
                             onRemove={() => onRemoveSnippet(index)}
+                            onOpen={() => onOpenSnippet && onOpenSnippet(snippet)}
                         />
                     ))}
                 </div>

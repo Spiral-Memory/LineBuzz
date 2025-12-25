@@ -5,12 +5,13 @@ import FileIcon from '../../ui/FileIcon/FileIcon';
 interface ChatAttachmentProps {
     snippet: Snippet;
     onRemove: () => void;
+    onOpen: () => void;
 }
 
-export const CodeAttachment = ({ snippet, onRemove }: ChatAttachmentProps) => {
+export const CodeAttachment = ({ snippet, onRemove, onOpen }: ChatAttachmentProps) => {
     const fileName = snippet.filePath.split('/').pop() || '';
     return (
-        <div class={styles['chat-attachment']}>
+        <div class={styles['code-attachment']} onClick={onOpen}>
             <div class={styles['attachment-icon']}>
                 <FileIcon filename={fileName} height="16px" width="16px" />
             </div>

@@ -70,7 +70,6 @@ export class NavigatorService {
             );
             editor.selection = selection;
             editor.revealRange(selection);
-
             logger.info('NavigatorService', 'Navigated to snippet', snippet);
         }
     }

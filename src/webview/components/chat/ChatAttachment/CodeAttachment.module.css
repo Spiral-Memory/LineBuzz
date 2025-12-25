@@ -1,4 +1,4 @@
-.chat-attachment {
+.code-attachment {
     display: flex;
     justify-content: space-between;
     flex: 1;
@@ -10,6 +10,7 @@
     margin-top: 8px;
     font-size: 12px;
     color: var(--vscode-foreground);
+    cursor: pointer;
 }
 
 .attachment-icon {
