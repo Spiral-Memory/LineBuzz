@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { useMemo, useRef, useEffect } from 'preact/hooks';
 import { marked } from 'marked';
 import { encode as htmlEncode } from 'he';

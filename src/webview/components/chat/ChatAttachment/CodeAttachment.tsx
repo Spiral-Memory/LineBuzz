@@ -1,5 +1,5 @@
 import { Snippet } from '../../../../core/types/ISnippet';
-import './ChatAttachment.css';
+import './CodeAttachment.css';
 import FileIcon from '../../ui/FileIcon/FileIcon';
 
 interface ChatAttachmentProps {

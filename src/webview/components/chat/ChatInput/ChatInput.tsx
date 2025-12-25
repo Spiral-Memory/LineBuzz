@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { useState, useRef } from 'preact/hooks';
 import { vscode } from '../../../utils/vscode';
 import { Snippet } from '../../../../core/types/ISnippet';
-import { ChatAttachment } from '../ChatAttachment/ChatAttachment';
+import { ChatAttachment } from '../ChatAttachment/CodeAttachment';
 import './ChatInput.css';
 
 interface ChatInputProps {

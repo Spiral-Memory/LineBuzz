@@ -1,14 +1,11 @@
 import { useEffect, useLayoutEffect, useState, useRef } from 'preact/hooks';
 
 import { ChatInput } from '../../components/chat/ChatInput/ChatInput';
-import { MessageContent } from '../../components/chat/MessageContent/MessageContent';
+import { MessageRow } from '../../components/chat/MessageRow/MessageRow';
 import { vscode } from '../../utils/vscode';
-import { getInitials } from '../../utils/getInitials';
-import { formatTime } from '../../utils/formatTime';
-import { getAvatarColor } from '../../utils/getAvatarColor';
+
 import { WelcomeSplash } from '../../components/chat/WelcomeSplash/WelcomeSplash';
 import { LoadingSpinner } from '../../components/ui/LoadingSpinner/LoadingSpinner';
-import { ChatAttachment } from '../../components/chat/ChatAttachment/ChatAttachment';
 import { Snippet } from '../../../core/types/ISnippet';
 import './ChatView.css';
 
@@ -138,32 +135,8 @@ export const ChatView = ({ stagedSnippet, onClearSnippet }: ChatViewProps) => {
                 <div class="message-list" ref={messageListRef} onScroll={handleScroll}>
                     {isLoading && <LoadingSpinner />}
                     {messages.map((msg) => {
-                        const displayName = msg.u?.display_name || msg.u?.username || 'Unknown';
-                        const avatarUrl = msg.u?.avatar_url;
-                        const initials = getInitials(displayName);
-                        const avatarColor = getAvatarColor(displayName);
-
                         return (
-                            <div class={`message-row ${msg.userType === 'me' ? 'message-row-me' : ''}`} key={msg.message_id}>
-                                <div class="avatar-container">
-                                    {avatarUrl ? (
-                                        <img src={avatarUrl} alt={displayName} class="avatar-image" onError={(e) => {
-                                            (e.target as HTMLImageElement).style.display = 'none';
-                                            ((e.target as HTMLImageElement).nextElementSibling as HTMLElement).style.display = 'flex';
-                                        }} />
-                                    ) : null}
-                                    <div class="avatar-fallback" style={{ display: avatarUrl ? 'none' : 'flex', backgroundColor: avatarColor, color: '#fff' }}>
-                                        {initials}
-                                    </div>
-                                </div>
-                                <div class="message-body">
-                                    <div class="message-header">
-                                        {msg.userType !== 'me' && <span class="user-name">{displayName}</span>}
-                                        <span class="message-time">{formatTime(msg.created_at)}</span>
-                                    </div>
-                                    <MessageContent content={msg.content} />
-                                </div>
-                            </div>
+                            <MessageRow message={msg} key={msg.message_id} />
                         );
                     })}
                     <div ref={messagesEndRef} />
