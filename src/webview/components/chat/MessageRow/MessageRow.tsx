@@ -6,7 +6,7 @@ import { getAvatarColor } from '../../../utils/getAvatarColor';
 import styles from './MessageRow.module.css';
 
 interface MessageRowProps {
-    message: any; // We'll keep 'any' for now to match ChatView state
+    message: any;
 }
 
 export const MessageRow = ({ message }: MessageRowProps) => {

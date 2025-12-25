@@ -8,10 +8,6 @@
     max-width: 100%;
 }
 
-.message-content.is-me {
-    text-align: left;
-}
-
 .message-content :global(.code-block-wrapper) {
     margin-top: 4px;
     border-radius: 6px;
@@ -166,25 +162,25 @@
     font-size: 0.9em;
 }
 
-.message-content.is-me :global(.code-block-wrapper) {
-    text-align: left;
-}
-
-.message-content.is-me .markdown-body {
+.message-content.is-me {
     text-align: right;
 }
 
-.message-content.is-me .markdown-body ul,
-.message-content.is-me .markdown-body ol {
+.message-content.is-me ul,
+.message-content.is-me ol {
     text-align: right;
+    margin-left: 20px;
+    margin-right: 0;
     direction: rtl;
-    margin-right: 20px;
-    margin-left: 0;
 }
 
-.message-content.is-me .markdown-body blockquote {
+.message-content.is-me blockquote {
     text-align: left;
     background-color: rgba(255, 255, 255, 0.1);
     color: var(--vscode-editor-foreground);
     border-left: 4px solid var(--vscode-textBlockQuote-border);
+}
+
+.message-content.is-me :global(.code-block-wrapper) {
+    text-align: left;
 }
