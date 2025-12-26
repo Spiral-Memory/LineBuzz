@@ -65,11 +65,11 @@ export class ChatPanelProvider extends BaseWebviewProvider {
             }
             case 'sendMessage': {
                 try {
-                    const messageInfo = await this.messageService.sendMessage(data.text);
-                    if (messageInfo) {
+                    const MessageResponse = await this.messageService.sendMessage(data.text);
+                    if (MessageResponse) {
                         this._view?.webview.postMessage({
                             command: 'appendMessage',
-                            message: messageInfo,
+                            message: MessageResponse,
                         });
                     }
                 } catch (error) {

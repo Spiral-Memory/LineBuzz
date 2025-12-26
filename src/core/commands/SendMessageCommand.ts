@@ -12,7 +12,7 @@ export async function sendMessageCommand() {
     }
 
     const messageService = Container.get("MessageService");
-    messageService.sendMessage(message);
+    messageService.sendMessage({ content: message });
 
 
 

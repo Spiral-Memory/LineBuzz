@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'preact/hooks';
 import { vscode } from '../../../utils/vscode';
 import { Snippet } from '../../../../shared/interfaces/ISnippet';
 import { CodeInput } from './CodeInput';
+import { MessageRequest } from '../../../../shared/interfaces/IMessage';
 import styles from './ChatInput.module.css';
 
 interface ChatInputProps {
@@ -56,7 +57,7 @@ export const ChatInput = ({ stagedSnippet, onClearSnippet, onRemoveSnippet, onOp
 
         vscode.postMessage({
             command: 'sendMessage',
-            text: messageText
+            text: { content: messageText } as MessageRequest
         });
 
         setValue('');

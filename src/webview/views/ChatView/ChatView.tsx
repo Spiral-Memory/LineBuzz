@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useState, useRef } from 'preact/hooks';
 import { ChatInput } from '../../components/chat/ChatInput/ChatInput';
 import { MessageRow } from '../../components/chat/MessageRow/MessageRow';
-import { MessageInfo } from '../../../shared/interfaces/IMessageInfo';
+import { MessageInfo } from '../../../shared/interfaces/IMessage';
 import { WelcomeSplash } from '../../components/chat/WelcomeSplash/WelcomeSplash';
 import { LoadingSpinner } from '../../components/ui/Loaders/LoadingSpinner';
 import { Snippet } from '../../../shared/interfaces/ISnippet';

@@ -1,4 +1,4 @@
-export interface MessageInfo {
+export interface MessageResponse {
     message_id: string;
     thread_id: string;
     parent_id: string | null;
@@ -11,4 +11,8 @@ export interface MessageInfo {
         avatar_url: string;
     };
     userType?: 'me' | 'other';
+}
+
+export interface MessageRequest {
+    content: string;
 }

@@ -2,12 +2,13 @@ import * as vscode from "vscode";
 import { IMessageRepository } from "../../adapters/interfaces/IMessageRepository";
 import { logger } from "../utils/logger";
 import { Container } from "./ServiceContainer";
-import { MessageInfo } from "../../shared/interfaces/IMessageInfo";
+import { MessageResponse } from "../../shared/interfaces/IMessage";
+import { MessageRequest } from "../../shared/interfaces/IMessage";
 
 export class MessageService {
     constructor(private messageRepo: IMessageRepository) { }
 
-    public async sendMessage(message: string): Promise<MessageInfo | void> {
+    public async sendMessage(message: MessageRequest): Promise<MessageResponse | void> {
         try {
             const teamService = Container.get("TeamService");
             const currentTeam = teamService.getTeam();
@@ -30,7 +31,7 @@ export class MessageService {
     }
 
 
-    public async getMessages(limit?: number, offset?: number): Promise<MessageInfo[]> {
+    public async getMessages(limit?: number, offset?: number): Promise<MessageResponse[]> {
         try {
             const teamService = Container.get("TeamService");
             const currentTeam = teamService.getTeam();
@@ -58,7 +59,7 @@ export class MessageService {
             return [];
         }
     }
-    public async subscribeToMessages(postMessage: (message: MessageInfo) => void): Promise<{ unsubscribe: () => void } | void> {
+    public async subscribeToMessages(postMessage: (message: MessageResponse) => void): Promise<{ unsubscribe: () => void } | void> {
         try {
             const teamService = Container.get("TeamService");
             const currentTeam = teamService.getTeam();
@@ -78,7 +79,7 @@ export class MessageService {
                 const enrichedMessage = {
                     ...message,
                     userType: message.u.user_id === session?.user_id ? 'me' : 'other'
-                } as MessageInfo;
+                } as MessageResponse;
                 postMessage(enrichedMessage);
             });
 
