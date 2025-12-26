@@ -17,6 +17,12 @@
     align-items: center;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
 .code-language {
     font-family: var(--vscode-font-family);
     font-size: 12px;
@@ -26,27 +32,30 @@
     letter-spacing: 0.05em;
 }
 
-.copy-code-btn {
+.copy-code-btn,
+.toggle-code-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     background: transparent;
     border: none;
-    padding: 4px;
+    padding: 2px;
     cursor: pointer;
     color: var(--vscode-descriptionForeground);
     border-radius: 4px;
     transition: background-color 0.2s, color 0.2s;
-    height: 24px;
-    width: 24px;
+    height: 18px;
+    width: 18px;
 }
 
-.copy-code-btn:hover {
+.copy-code-btn:hover,
+.toggle-code-btn:hover {
     background-color: var(--vscode-toolbar-hoverBackground);
     color: var(--vscode-foreground);
 }
 
-.copy-code-btn svg {
+.copy-code-btn svg,
+.toggle-code-btn svg {
     width: 14px;
     height: 14px;
 }
@@ -57,6 +66,16 @@
     max-height: 300px;
     overflow-y: auto;
     overflow-x: hidden;
+    transition: max-height 0.1s ease, opacity 0.1s ease, padding 0.1s ease;
+    opacity: 1;
+}
+
+.code-block-wrapper:global(.collapsed) .code-block-content {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
 }
 
 .code-block-content pre {

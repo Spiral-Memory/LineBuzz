@@ -6,6 +6,7 @@ import { vscode } from './utils/vscode';
 import { useThemeDetector } from './hooks/useThemeDetector';
 import { atomOneDark, atomOneLight } from './constants/highlightThemes';
 import { Snippet } from '../core/types/ISnippet';
+import { LoadingBar } from './components/ui/Loaders/LoadingBar';
 
 interface AppState {
   isLoggedIn: boolean;
@@ -73,7 +74,7 @@ export function App() {
   };
 
   if (state.isLoading) {
-    return <div style={{ padding: '20px', color: 'var(--vscode-descriptionForeground)' }}>Loading...</div>;
+    return <LoadingBar />;
   }
 
   if (!state.isLoggedIn || !state.hasTeam) {

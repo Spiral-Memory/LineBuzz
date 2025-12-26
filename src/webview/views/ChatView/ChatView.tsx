@@ -5,7 +5,7 @@ import { MessageRow } from '../../components/chat/MessageRow/MessageRow';
 import { vscode } from '../../utils/vscode';
 
 import { WelcomeSplash } from '../../components/chat/WelcomeSplash/WelcomeSplash';
-import { LoadingSpinner } from '../../components/ui/LoadingSpinner/LoadingSpinner';
+import { LoadingSpinner } from '../../components/ui/Loaders/LoadingSpinner';
 import { Snippet } from '../../../core/types/ISnippet';
 import styles from './ChatView.module.css';
 

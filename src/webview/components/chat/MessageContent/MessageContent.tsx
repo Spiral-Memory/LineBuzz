@@ -67,39 +67,64 @@ export const MessageContent = ({ content, className = '', isMe = false }: Messag
         const container = containerRef.current;
         if (!container) return;
 
-        const handleCopy = async (e: Event) => {
-            const target = (e.target as Element).closest('.copy-code-btn');
-            if (!target) return;
+        const handleClick = async (e: Event) => {
+            const target = e.target as Element;
+            const copyBtn = target.closest('.copy-code-btn');
+            const toggleBtn = target.closest('.toggle-code-btn');
 
-            const button = target as HTMLButtonElement;
-            const wrapper = button.closest('.code-block-wrapper');
-            const codeElement = wrapper?.querySelector('code');
+            if (copyBtn) {
+                const button = copyBtn as HTMLButtonElement;
+                const wrapper = button.closest('.code-block-wrapper');
+                const codeElement = wrapper?.querySelector('code');
 
-            if (codeElement) {
-                const text = codeElement.innerText;
-                try {
-                    await navigator.clipboard.writeText(text);
+                if (codeElement) {
+                    const text = codeElement.innerText;
+                    try {
+                        await navigator.clipboard.writeText(text);
 
-                    const originalHTML = button.innerHTML;
-                    button.innerHTML = `
-                        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13.2929 4.29289C13.6834 4.68342 13.6834 5.31658 13.2929 5.70711L7.29289 11.7071C6.90237 12.0976 6.2692 12.0976 5.87868 11.7071L2.70711 8.53553C2.31658 8.14501 2.31658 7.51184 2.70711 7.12132C3.09763 6.7308 3.7308 6.7308 4.12132 7.12132L6.58579 9.58579L11.8787 4.29289C12.2692 3.90237 12.9024 3.90237 13.2929 4.29289Z" fill="currentColor"></path>
-                        </svg>
-                    `;
-                    button.classList.add('copied');
+                        const originalCopyHTML = button.innerHTML;
+                        button.innerHTML = `
+                            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.2929 4.29289C13.6834 4.68342 13.6834 5.31658 13.2929 5.70711L7.29289 11.7071C6.90237 12.0976 6.2692 12.0976 5.87868 11.7071L2.70711 8.53553C2.31658 8.14501 2.31658 7.51184 2.70711 7.12132C3.09763 6.7308 3.7308 6.7308 4.12132 7.12132L6.58579 9.58579L11.8787 4.29289C12.2692 3.90237 12.9024 3.90237 13.2929 4.29289Z" fill="currentColor"></path>
+                            </svg>
+                        `;
+                        button.classList.add('copied');
 
-                    setTimeout(() => {
-                        button.innerHTML = originalHTML;
-                        button.classList.remove('copied');
-                    }, 2000);
-                } catch (err) {
-                    console.error('Failed to copy text: ', err);
+                        setTimeout(() => {
+                            button.innerHTML = originalCopyHTML;
+                            button.classList.remove('copied');
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                    }
+                }
+            } else if (toggleBtn) {
+                const button = toggleBtn as HTMLButtonElement;
+                const wrapper = button.closest('.code-block-wrapper') as HTMLElement;
+
+                if (wrapper) {
+                    wrapper.classList.toggle('collapsed');
+                    const isCollapsed = wrapper.classList.contains('collapsed');
+
+                    if (isCollapsed) {
+                        button.innerHTML = `
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        `;
+                    } else {
+                        button.innerHTML = `
+                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        `;
+                    }
                 }
             }
         };
 
-        container.addEventListener('click', handleCopy);
-        return () => container.removeEventListener('click', handleCopy);
+        container.addEventListener('click', handleClick);
+        return () => container.removeEventListener('click', handleClick);
     }, [htmlContent]);
 
     return (
