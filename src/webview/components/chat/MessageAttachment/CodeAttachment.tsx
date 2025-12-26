@@ -1,8 +1,9 @@
 import styles from './CodeAttachment.module.css';
-export const CodeAttachment = ({ validLanguage, highlighted }: { validLanguage: string, highlighted: string }) => {
+
+export const renderSnippet = ({ validLanguage, highlightedText }: { validLanguage: string, highlightedText: string }) => {
     return (
         `<div class="${styles['code-block-wrapper']}">
-        <div class="${styles['code-block-header']}">
+         <div class="${styles['code-block-header']}">
             <span class="${styles['code-language']}">${validLanguage}</span>
             <button class="${styles['copy-code-btn']}" aria-label="Copy code">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
@@ -12,8 +13,12 @@ export const CodeAttachment = ({ validLanguage, highlighted }: { validLanguage: 
             </button>
         </div>
         <div class="${styles['code-block-content']}">
-            <pre><code class="hljs language-${validLanguage}">${highlighted}</code></pre>
+            <pre><code class="hljs language-${validLanguage}">${highlightedText}</code></pre>
         </div>
     </div>`
     );
-};
+}
+
+export const CodeAttachment = ({ validLanguage, highlightedText }: { validLanguage: string, highlightedText: string }) => {
+    return <div dangerouslySetInnerHTML={{ __html: renderSnippet({ validLanguage, highlightedText }) }}> </div>
+}

@@ -4,7 +4,7 @@ import hljs from 'highlight.js';
 import { encode as htmlEncode } from 'he';
 import DOMPurify from 'dompurify';
 import styles from './MessageContent.module.css';
-import { CodeAttachment } from '../MessageAttachment/CodeAttachment';
+import { renderSnippet } from '../MessageAttachment/CodeAttachment';
 
 interface MessageContentProps {
     content: string;
@@ -15,22 +15,22 @@ interface MessageContentProps {
 const renderer = new marked.Renderer();
 
 renderer.code = ({ text, lang }: { text: string, lang?: string }) => {
-    let highlighted: string;
+    let highlightedText: string;
     let validLanguage: string;
 
     if (lang && hljs.getLanguage(lang)) {
         validLanguage = (lang);
         try {
-            highlighted = hljs.highlight(text, { language: validLanguage }).value;
+            highlightedText = hljs.highlight(text, { language: validLanguage }).value;
         } catch (e) {
-            highlighted = htmlEncode(text);
+            highlightedText = htmlEncode(text);
         }
     } else {
         validLanguage = 'text';
-        highlighted = htmlEncode(text);
+        highlightedText = htmlEncode(text);
     }
     validLanguage = htmlEncode(validLanguage);
-    return CodeAttachment({ validLanguage, highlighted });
+    return renderSnippet({ validLanguage, highlightedText });
 };
 
 renderer.html = ({ text }: { text: string }) => htmlEncode(text);
