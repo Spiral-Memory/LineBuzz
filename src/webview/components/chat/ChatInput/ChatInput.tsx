@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'preact/hooks';
 import { vscode } from '../../../utils/vscode';
 import { Snippet } from '../../../../core/types/ISnippet';
-import { CodeAttachment } from '../ChatAttachment/CodeAttachment';
+import { CodeInput } from './CodeInput';
 import styles from './ChatInput.module.css';
 
 interface ChatInputProps {
@@ -95,7 +95,7 @@ export const ChatInput = ({ stagedSnippet, onClearSnippet, onRemoveSnippet, onOp
             <div class={styles['composer-tools']}>
                 <div class={styles['input-attachments']}>
                     {hasAttachments && onRemoveSnippet && stagedSnippet.map((snippet, index) => (
-                        <CodeAttachment
+                        <CodeInput
                             key={`${snippet.filePath}-${index}`}
                             snippet={snippet}
                             onRemove={() => onRemoveSnippet(index)}

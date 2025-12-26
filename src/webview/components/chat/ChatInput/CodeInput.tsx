@@ -1,5 +1,5 @@
 import { Snippet } from '../../../../core/types/ISnippet';
-import styles from './CodeAttachment.module.css';
+import styles from './CodeInput.module.css';
 import FileIcon from '../../ui/FileIcon/FileIcon';
 
 interface ChatAttachmentProps {
@@ -8,7 +8,7 @@ interface ChatAttachmentProps {
     onOpen: () => void;
 }
 
-export const CodeAttachment = ({ snippet, onRemove, onOpen }: ChatAttachmentProps) => {
+export const CodeInput = ({ snippet, onRemove, onOpen }: ChatAttachmentProps) => {
     const fileName = snippet.filePath.split('/').pop() || '';
     return (
         <div class={styles['code-attachment']} onClick={onOpen}>
