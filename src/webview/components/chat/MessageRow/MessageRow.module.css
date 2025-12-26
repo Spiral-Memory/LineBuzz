@@ -36,6 +36,7 @@
 .message-body {
     flex: 1;
     min-width: 0;
+    max-width: 500px;   
     display: flex;
     flex-direction: column;
     align-items: flex-start;
