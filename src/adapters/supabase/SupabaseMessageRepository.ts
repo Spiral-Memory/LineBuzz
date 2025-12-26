@@ -1,4 +1,5 @@
-import { IMessageRepository, MessageInfo } from "../interfaces/IMessageRepository";
+import { IMessageRepository } from "../interfaces/IMessageRepository";
+import { MessageInfo } from "../../shared/interfaces/IMessageInfo";
 import { SupabaseClient } from "./SupabaseClient";
 import { logger } from "../../core/utils/logger";
 

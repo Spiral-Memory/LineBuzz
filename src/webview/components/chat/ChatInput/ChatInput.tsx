@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'preact/hooks';
 import { vscode } from '../../../utils/vscode';
-import { Snippet } from '../../../../core/types/ISnippet';
+import { Snippet } from '../../../../shared/interfaces/ISnippet';
 import { CodeInput } from './CodeInput';
 import styles from './ChatInput.module.css';
 

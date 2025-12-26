@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from 'path';
 import * as fs from 'fs';
-import { Snippet } from "../types/ISnippet";
+import { Snippet } from "../../shared/interfaces/ISnippet";
 import { logger } from '../utils/logger';
 import dedent from 'dedent';
 

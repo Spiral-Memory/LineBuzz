@@ -1,12 +1,11 @@
 import { useEffect, useLayoutEffect, useState, useRef } from 'preact/hooks';
-
 import { ChatInput } from '../../components/chat/ChatInput/ChatInput';
 import { MessageRow } from '../../components/chat/MessageRow/MessageRow';
-import { vscode } from '../../utils/vscode';
-
+import { MessageInfo } from '../../../shared/interfaces/IMessageInfo';
 import { WelcomeSplash } from '../../components/chat/WelcomeSplash/WelcomeSplash';
 import { LoadingSpinner } from '../../components/ui/Loaders/LoadingSpinner';
-import { Snippet } from '../../../core/types/ISnippet';
+import { Snippet } from '../../../shared/interfaces/ISnippet';
+import { vscode } from '../../utils/vscode';
 import styles from './ChatView.module.css';
 
 interface ChatViewProps {
@@ -17,7 +16,7 @@ interface ChatViewProps {
 }
 
 export const ChatView = ({ stagedSnippet, onClearSnippet, onRemoveSnippet, onOpenSnippet }: ChatViewProps) => {
-    const [messages, setMessages] = useState<any[]>([]);
+    const [messages, setMessages] = useState<MessageInfo[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [offset, setOffset] = useState(0);
@@ -119,7 +118,6 @@ export const ChatView = ({ stagedSnippet, onClearSnippet, onRemoveSnippet, onOpe
         };
 
         window.addEventListener('message', handleMessage);
-
         vscode.postMessage({ command: 'getMessages', limit: LIMIT, offset: 0 });
 
         return () => {

@@ -1,4 +1,4 @@
-import { Snippet } from '../../../../core/types/ISnippet';
+import { Snippet } from '../../../../shared/interfaces/ISnippet';
 import styles from './CodeInput.module.css';
 import FileIcon from '../../ui/FileIcon/FileIcon';
 

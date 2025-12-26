@@ -2,8 +2,7 @@ import * as vscode from "vscode";
 import { IMessageRepository } from "../../adapters/interfaces/IMessageRepository";
 import { logger } from "../utils/logger";
 import { Container } from "./ServiceContainer";
-import { MessageInfo } from "../../adapters/interfaces/IMessageRepository";
-import { Snippet } from "../types/ISnippet";
+import { MessageInfo } from "../../shared/interfaces/IMessageInfo";
 
 export class MessageService {
     constructor(private messageRepo: IMessageRepository) { }

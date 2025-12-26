@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { BaseWebviewProvider } from './BaseWebviewProvider';
-
 import { Container } from '../services/ServiceContainer';
 
 export class ChatPanelProvider extends BaseWebviewProvider {
