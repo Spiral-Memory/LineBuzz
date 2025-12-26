@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { MessageContent } from '../MessageContent/MessageContent';
 import { getInitials } from '../../../utils/getInitials';
 import { formatTime } from '../../../utils/formatTime';

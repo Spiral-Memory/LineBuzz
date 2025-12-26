@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'preact/hooks';
 import { vscode } from '../../../utils/vscode';
-import { Snippet } from '../../../../shared/interfaces/ISnippet';
+import { Snippet } from '../../../../types/IAttachment';
 import { CodeInput } from './CodeInput';
-import { MessageRequest } from '../../../../shared/interfaces/IMessage';
+import { MessageRequest } from '../../../../types/IMessage';
 import styles from './ChatInput.module.css';
 
 interface ChatInputProps {
@@ -46,18 +46,13 @@ export const ChatInput = ({ stagedSnippet, onClearSnippet, onRemoveSnippet, onOp
 
     const handleSend = () => {
         if (!value.trim() && (!stagedSnippet || stagedSnippet.length === 0)) return;
-        let messageText = value;
-        if (stagedSnippet && stagedSnippet.length > 0) {
-            stagedSnippet.forEach(snippet => {
-                const fileExtension = snippet.filePath.split('.').pop() || '';
-                const snippetMarkdown = `\n\n\`\`\`${fileExtension}\n${snippet.content}\n\`\`\`\n`;
-                messageText += snippetMarkdown;
-            });
-        }
-
+        const messageRequest: MessageRequest = {
+            content: value,
+            attachments: stagedSnippet || []
+        };
         vscode.postMessage({
             command: 'sendMessage',
-            text: { content: messageText } as MessageRequest
+            body: messageRequest
         });
 
         setValue('');

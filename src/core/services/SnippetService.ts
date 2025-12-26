@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from 'path';
 import * as fs from 'fs';
-import { Snippet } from "../../shared/interfaces/ISnippet";
+import { Snippet } from "../../types/IAttachment";
 import { logger } from '../utils/logger';
 import dedent from 'dedent';
 
@@ -78,6 +78,7 @@ export class SnippetService {
         const selection = editor.selection;
 
         const snippetData: Snippet = {
+            type: 'code',
             filePath: relativePath,
             startLine: selection.start.line + 1,
             endLine: selection.end.line + 1,

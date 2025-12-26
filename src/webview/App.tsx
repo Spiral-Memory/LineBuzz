@@ -5,7 +5,7 @@ import { ConnectView } from './views/ConnectView/ConnectView';
 import { vscode } from './utils/vscode';
 import { useThemeDetector } from './hooks/useThemeDetector';
 import { atomOneDark, atomOneLight } from './constants/highlightThemes';
-import { Snippet } from '../shared/interfaces/ISnippet';
+import { Snippet } from '../types/IAttachment';
 import { LoadingBar } from './components/ui/Loaders/LoadingBar';
 
 interface AppState {

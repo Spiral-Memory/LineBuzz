@@ -1,10 +1,10 @@
 import { useEffect, useLayoutEffect, useState, useRef } from 'preact/hooks';
 import { ChatInput } from '../../components/chat/ChatInput/ChatInput';
 import { MessageRow } from '../../components/chat/MessageRow/MessageRow';
-import { MessageInfo } from '../../../shared/interfaces/IMessage';
+import { MessageResponse } from '../../../types/IMessage';
 import { WelcomeSplash } from '../../components/chat/WelcomeSplash/WelcomeSplash';
 import { LoadingSpinner } from '../../components/ui/Loaders/LoadingSpinner';
-import { Snippet } from '../../../shared/interfaces/ISnippet';
+import { Snippet } from '../../../types/IAttachment';
 import { vscode } from '../../utils/vscode';
 import styles from './ChatView.module.css';
 
@@ -16,7 +16,7 @@ interface ChatViewProps {
 }
 
 export const ChatView = ({ stagedSnippet, onClearSnippet, onRemoveSnippet, onOpenSnippet }: ChatViewProps) => {
-    const [messages, setMessages] = useState<MessageInfo[]>([]);
+    const [messages, setMessages] = useState<MessageResponse[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [offset, setOffset] = useState(0);

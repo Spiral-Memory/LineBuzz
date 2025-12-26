@@ -2,8 +2,7 @@ import * as vscode from "vscode";
 import { IMessageRepository } from "../../adapters/interfaces/IMessageRepository";
 import { logger } from "../utils/logger";
 import { Container } from "./ServiceContainer";
-import { MessageResponse } from "../../shared/interfaces/IMessage";
-import { MessageRequest } from "../../shared/interfaces/IMessage";
+import { MessageResponse, MessageRequest} from "../../types/IMessage";
 
 export class MessageService {
     constructor(private messageRepo: IMessageRepository) { }
@@ -90,5 +89,4 @@ export class MessageService {
             logger.error("MessageService", "Error subscribing to messages", error);
         }
     }
-
 }

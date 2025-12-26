@@ -1,5 +1,8 @@
+import { Attachment } from "./IAttachment";
+
 export interface MessageResponse {
     message_id: string;
+    team_id: string;
     thread_id: string;
     parent_id: string | null;
     content: string;
@@ -15,4 +18,5 @@ export interface MessageResponse {
 
 export interface MessageRequest {
     content: string;
+    attachments: Attachment[];
 }

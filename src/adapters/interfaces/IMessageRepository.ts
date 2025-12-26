@@ -1,5 +1,5 @@
-import { MessageResponse } from "../../shared/interfaces/IMessage";
-import { MessageRequest } from "../../shared/interfaces/IMessage";
+import { MessageResponse } from "../../types/IMessage";
+import { MessageRequest } from "../../types/IMessage";
 
 
 export interface IMessageRepository {

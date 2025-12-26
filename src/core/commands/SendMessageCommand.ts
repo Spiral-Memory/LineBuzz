@@ -12,8 +12,5 @@ export async function sendMessageCommand() {
     }
 
     const messageService = Container.get("MessageService");
-    messageService.sendMessage({ content: message });
-
-
-
+    messageService.sendMessage({ content: message, attachments: [] });
 }

@@ -65,7 +65,7 @@ export class ChatPanelProvider extends BaseWebviewProvider {
             }
             case 'sendMessage': {
                 try {
-                    const MessageResponse = await this.messageService.sendMessage(data.text);
+                    const MessageResponse = await this.messageService.sendMessage(data.body);
                     if (MessageResponse) {
                         this._view?.webview.postMessage({
                             command: 'appendMessage',

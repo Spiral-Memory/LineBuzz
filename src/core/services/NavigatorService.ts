@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as path from 'path';
 import * as fs from 'fs';
 import gitUrlParse from 'git-url-parse';
-import { Snippet } from "../../shared/interfaces/ISnippet";
+import { Snippet } from "../../types/IAttachment";
 import { logger } from '../utils/logger';
 
 export class NavigatorService {

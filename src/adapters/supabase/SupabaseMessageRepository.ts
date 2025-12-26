@@ -1,17 +1,17 @@
 import { IMessageRepository } from "../interfaces/IMessageRepository";
-import { MessageRequest, MessageResponse } from "../../shared/interfaces/IMessage";
+import { MessageRequest, MessageResponse } from "../../types/IMessage";
 import { SupabaseClient } from "./SupabaseClient";
 import { logger } from "../../core/utils/logger";
 
 export class SupabaseMessageRepository implements IMessageRepository {
     async sendMessage(message: MessageRequest, teamId: string): Promise<MessageResponse> {
         const supabase = SupabaseClient.getInstance().client;
-        logger.info("SupabaseMessageRepository", `Sending message: ${message} in team: ${teamId}`);
+        logger.info("SupabaseMessageRepository", `Sending message: ${JSON.stringify(message)}} in team: ${teamId}`);
 
         const { data, error } = await supabase.rpc('create_message', {
             p_team_id: teamId,
             p_parent_id: null,
-            p_content: message.content,
+            p_content: message.content || '',
         });
         if (error) {
             logger.error("SupabaseMessageRepository", "RPC call failed", error);
