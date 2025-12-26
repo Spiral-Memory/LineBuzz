@@ -68,7 +68,7 @@
     scrollbar-gutter: stable;
     display: grid;
     grid-template-rows: 1fr;
-    transition: grid-template-rows 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+    transition: grid-template-rows 0.1s ease, opacity 0.1s ease, padding 0.1s ease;
     opacity: 1;
 }
 
@@ -77,6 +77,10 @@
     opacity: 0;
     padding-top: 0;
     padding-bottom: 0;
+}
+
+.code-block-wrapper:global(.collapsed) .code-block-content pre {
+    padding: 0;
 }
 
 .code-block-content pre {
@@ -88,6 +92,8 @@
     white-space: pre-wrap;
     overflow-wrap: break-word;
     min-height: 0;
+    box-sizing: border-box;
+    transition: padding 0.1s ease;
 }
 
 .code-block-content code {
