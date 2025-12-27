@@ -23,13 +23,16 @@
     gap: 4px;
 }
 
-.code-language {
+.code-metadata {
     font-family: var(--vscode-font-family);
     font-size: 12px;
     font-weight: 600;
     color: var(--vscode-descriptionForeground);
     text-transform: lowercase;
     letter-spacing: 0.05em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .copy-code-btn,
@@ -72,14 +75,14 @@
     opacity: 1;
 }
 
-.code-block-wrapper:global(.collapsed) .code-block-content {
+.code-block-wrapper.collapsed .code-block-content {
     grid-template-rows: 0fr;
     opacity: 0;
     padding-top: 0;
     padding-bottom: 0;
 }
 
-.code-block-wrapper:global(.collapsed) .code-block-content pre {
+.code-block-wrapper.collapsed .code-block-content pre {
     padding: 0;
 }
 

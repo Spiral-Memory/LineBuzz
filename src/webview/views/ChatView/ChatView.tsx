@@ -136,7 +136,11 @@ export const ChatView = ({ stagedSnippet, onClearSnippet, onRemoveSnippet, onOpe
                     {isLoading && <LoadingSpinner />}
                     {messages.map((msg) => {
                         return (
-                            <MessageRow message={msg} key={msg.message_id} />
+                            <MessageRow
+                                message={msg}
+                                key={msg.message_id}
+                                onOpenSnippet={onOpenSnippet}
+                            />
                         );
                     })}
                     <div ref={messagesEndRef} />

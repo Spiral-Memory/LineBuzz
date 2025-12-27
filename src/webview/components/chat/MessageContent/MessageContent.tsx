@@ -4,7 +4,7 @@ import hljs from 'highlight.js';
 import { encode as htmlEncode } from 'he';
 import DOMPurify from 'dompurify';
 import styles from './MessageContent.module.css';
-import { renderSnippet } from '../MessageAttachment/CodeAttachment';
+import { renderSnippet } from '../../../utils/renderer';
 
 interface MessageContentProps {
     content: string | null;

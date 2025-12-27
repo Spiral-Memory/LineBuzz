@@ -4,11 +4,15 @@ import { formatTime } from '../../../utils/formatTime';
 import { getAvatarColor } from '../../../utils/getAvatarColor';
 import styles from './MessageRow.module.css';
 
+import { SnippetAttachment } from '../MessageAttachment/SnippetAttachment';
+import { Snippet } from '../../../../types/IAttachment';
+
 interface MessageRowProps {
     message: any;
+    onOpenSnippet?: (snippet: Snippet) => void;
 }
 
-export const MessageRow = ({ message }: MessageRowProps) => {
+export const MessageRow = ({ message, onOpenSnippet }: MessageRowProps) => {
     const displayName = message.u?.display_name || message.u?.username || 'Unknown';
     const avatarUrl = message.u?.avatar_url;
     const initials = getInitials(displayName);
@@ -46,6 +50,22 @@ export const MessageRow = ({ message }: MessageRowProps) => {
                     <span class={styles['message-time']}>{formatTime(message.created_at)}</span>
                 </div>
                 <MessageContent content={message.content} isMe={isMe} />
+                {message.attachments && message.attachments.length > 0 && (
+                    <div class={styles['attachments-container']}>
+                        {message.attachments.map((attachment: any, index: number) => {
+                            if (attachment.type === 'code') {
+                                return (
+                                    <SnippetAttachment
+                                        key={index}
+                                        snippet={attachment as Snippet}
+                                        onNavigate={(s) => onOpenSnippet?.(s)}
+                                    />
+                                );
+                            }
+                            return null;
+                        })}
+                    </div>
+                )}
             </div>
         </div>
     );

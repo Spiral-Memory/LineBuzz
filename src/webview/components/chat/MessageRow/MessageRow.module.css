@@ -36,7 +36,7 @@
 .message-body {
     flex: 1;
     min-width: 0;
-    max-width: 500px;   
+    max-width: 500px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -72,4 +72,12 @@
 
 .message-row-me .message-body {
     align-items: flex-end;
+}
+
+.attachments-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+    width: 100%;
 }
