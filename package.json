@@ -56,6 +56,12 @@
         "when": "editorTextFocus"
       }
     ],
+    "submenus": [
+      {
+        "id": "linebuzz.menu",
+        "label": "LineBuzz"
+      }
+    ],
     "menus": {
       "commandPalette": [
         {
@@ -73,6 +79,19 @@
         {
           "command": "linebuzz.leaveTeam",
           "when": "extension.isLoggedIn && linebuzz.hasTeam"
+        }
+      ],
+      "editor/context": [
+        {
+          "submenu": "linebuzz.menu",
+          "group": "9_cutcopypaste@99",
+          "when": "editorHasSelection"
+        }
+      ],
+      "linebuzz.menu": [
+        {
+          "command": "linebuzz.captureSnippet",
+          "group": "9_cutcopypaste@99"
         }
       ]
     },
