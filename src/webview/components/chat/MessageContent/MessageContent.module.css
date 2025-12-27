@@ -92,8 +92,8 @@
 .message-content.is-me ul,
 .message-content.is-me ol {
     text-align: right;
-    margin-left: 20px;
-    margin-right: 0;
+    padding: 0 12px;
+    margin: 0;
     direction: rtl;
 }
 
