@@ -31,13 +31,8 @@ export const SnippetAttachment = ({ snippet, onNavigate }: SnippetAttachmentProp
 
     return (
         <div class="code-block-wrapper">
-            <div
-                class="code-block-header"
-                onClick={handleClick}
-                style={{ cursor: 'pointer' }}
-                title="Click to open file"
-            >
-                <span class="code-metadata">
+            <div class="code-block-header">
+                <span class="code-metadata" onClick={handleClick} style={{ cursor: 'pointer' }} title="Jump to Source">
                     {snippet.file_path.split('/').pop() || snippet.file_path}:{snippet.start_line}-{snippet.end_line}
                 </span>
                 <div class="header-actions">
