@@ -11,7 +11,8 @@ export class SupabaseMessageRepository implements IMessageRepository {
         const { data, error } = await supabase.rpc('create_message', {
             p_team_id: teamId,
             p_parent_id: null,
-            p_content: message.content || '',
+            p_content: message.content,
+            p_attachment: message.attachments,
         });
         if (error) {
             logger.error("SupabaseMessageRepository", "RPC call failed", error);

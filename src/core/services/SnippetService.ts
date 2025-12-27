@@ -74,7 +74,9 @@ export class SnippetService {
 
         const realPath = fs.existsSync(uri.fsPath) ? fs.realpathSync.native(uri.fsPath) : uri.fsPath;
         const relativePath = path.relative(repo.rootUri.fsPath, realPath).split(path.sep).join('/');
-        const chosenRemote = remotes.find((r: any) => r.name === 'origin') || remotes[0]
+        const chosenRemote = remotes.find((r: any) => r.name === 'origin') || remotes[0];
+        const currentRef = repo.state.HEAD?.name;
+        const currentSha = repo.state.HEAD?.commit?.id || repo.state.HEAD?.commit;
         const selection = editor.selection;
 
         const snippetData: Snippet = {
@@ -83,7 +85,9 @@ export class SnippetService {
             startLine: selection.start.line + 1,
             endLine: selection.end.line + 1,
             content: this._dedent(editor.document.getText(selection)),
-            repoUrl: chosenRemote.fetchUrl
+            commitSha: currentSha,
+            ref: currentRef,
+            remoteUrl: chosenRemote.fetchUrl,
         };
 
         return snippetData;

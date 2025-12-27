@@ -8,7 +8,9 @@ export interface Snippet extends BaseAttachment {
     startLine: number;
     endLine: number;
     content: string;
-    repoUrl: string;
+    commitSha: string;
+    ref: string;
+    remoteUrl: string;
 }
 
 export type Attachment = Snippet;

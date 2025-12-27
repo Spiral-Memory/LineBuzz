@@ -34,7 +34,7 @@ export class NavigatorService {
 
         let targetIdentity: string | null = null;
         try {
-            const snippetInfo = gitUrlParse(snippet.repoUrl);
+            const snippetInfo = gitUrlParse(snippet.remoteUrl);
             targetIdentity = snippetInfo.full_name;
         }
         catch (e) {
