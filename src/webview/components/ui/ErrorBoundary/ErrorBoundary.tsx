@@ -1,4 +1,5 @@
 import { Component, ComponentChildren } from 'preact';
+import { vscode } from '../../../utils/vscode';
 import styles from './ErrorBoundary.module.css';
 
 interface Props {
@@ -9,12 +10,13 @@ interface State {
     hasError: boolean;
     error: Error | null;
     feedback: string;
+    hasReported: boolean;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.state = { hasError: false, error: null, feedback: '' };
+        this.state = { hasError: false, error: null, feedback: '', hasReported: false };
     }
 
     static getDerivedStateFromError(error: Error) {
@@ -31,16 +33,16 @@ export class ErrorBoundary extends Component<Props, State> {
 
     handleReport = () => {
         const { error, feedback } = this.state;
-        const subject = encodeURIComponent("LineBuzz Error Report");
+        const title = encodeURIComponent("Bug Report: Error Boundary Caught Exception");
         const body = encodeURIComponent(
-            `User Feedback:\n${feedback}\n\nError Message:\n${error?.message}\n\nStack Trace:\n${error?.stack}`
+            `**User Feedback:**\n${feedback}\n\n**Error Message:**\n${error?.message}\n\n**Stack Trace:**\n\`\`\`\n${error?.stack}\n\`\`\``
         );
-
-        window.open(`mailto:zishan.barun@gmail.com?subject=${subject}&body=${body}`);
+        window.open(`mailto:zishan.barun@gmail.com?subject=${title}&body=${body}`);
+        this.setState({ hasReported: true });
     }
 
     handleReload = () => {
-        window.location.reload();
+        this.setState({ hasError: false, error: null, feedback: '', hasReported: false });
     }
 
     render() {
@@ -61,9 +63,11 @@ export class ErrorBoundary extends Component<Props, State> {
                     </div>
 
                     <div class={styles['actions']}>
-                        <button class={`${styles['btn']} ${styles['btn-secondary']}`} onClick={this.handleReport}>
-                            Report Issue
-                        </button>
+                        {!this.state.hasReported && (
+                            <button class={`${styles['btn']} ${styles['btn-secondary']}`} onClick={this.handleReport}>
+                                Report Issue
+                            </button>
+                        )}
                         <button class={`${styles['btn']} ${styles['btn-primary']}`} onClick={this.handleReload}>
                             Reload
                         </button>
