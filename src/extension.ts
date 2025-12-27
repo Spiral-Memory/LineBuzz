@@ -45,8 +45,8 @@ export async function activate(context: vscode.ExtensionContext) {
         Container.register('NavigatorService', navigatorService);
 
 
-        const teamFeedPanelProvider = new TeamFeedProvider();
-        vscode.window.registerTreeDataProvider(TeamFeedProvider.viewId, teamFeedPanelProvider);
+        // const teamFeedPanelProvider = new TeamFeedProvider();
+        // vscode.window.registerTreeDataProvider(TeamFeedProvider.viewId, teamFeedPanelProvider);
 
         const chatPanelProvider = new ChatPanelProvider(context.extensionUri);
         context.subscriptions.push(
@@ -81,3 +81,12 @@ export async function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(disposable);
 }
+
+// --- Hiding team feed for now ---
+
+// {
+//     "id": "linebuzz.teamfeed",
+//     "icon": "assets/logo.svg",
+//     "name": "Team Feed",
+//     "when": "extension.isLoggedIn && linebuzz.hasTeam"
+// },

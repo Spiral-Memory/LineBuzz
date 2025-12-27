@@ -107,12 +107,6 @@
     "views": {
       "linebuzz-view-container": [
         {
-          "id": "linebuzz.teamfeed",
-          "icon": "assets/logo.svg",
-          "name": "Team Feed",
-          "when": "extension.isLoggedIn && linebuzz.hasTeam"
-        },
-        {
           "id": "linebuzz.chatpanel",
           "icon": "assets/logo.svg",
           "name": "LineBuzz Huddle",
