@@ -5,7 +5,7 @@ export interface MessageResponse {
     team_id: string;
     thread_id: string;
     parent_id: string | null;
-    content: string;
+    content: string | null;
     created_at: string;
     u: {
         user_id: string;
