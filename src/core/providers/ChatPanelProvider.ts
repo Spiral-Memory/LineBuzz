@@ -63,6 +63,7 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                 this.navigatorService.openSnippet(data.snippet);
                 break;
             }
+            
             case 'sendMessage': {
                 try {
                     const MessageResponse = await this.messageService.sendMessage(data.body);
@@ -111,6 +112,15 @@ export class ChatPanelProvider extends BaseWebviewProvider {
                 }
                 break;
             }
+
+            case 'openExternal':
+                try {
+                    await vscode.env.openExternal(vscode.Uri.parse(data.url));
+                } catch (error) {
+                    console.error('Error handling openExternal:', error);
+                    vscode.window.showErrorMessage('Failed to open external link.');
+                }
+                break;
         }
     }
 

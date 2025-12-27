@@ -32,12 +32,14 @@ export class ErrorBoundary extends Component<Props, State> {
     }
 
     handleReport = () => {
-        const { error, feedback } = this.state;
-        const title = encodeURIComponent("Bug Report: Error Boundary Caught Exception");
-        const body = encodeURIComponent(
-            `**User Feedback:**\n${feedback}\n\n**Error Message:**\n${error?.message}\n\n**Stack Trace:**\n\`\`\`\n${error?.stack}\n\`\`\``
-        );
-        window.open(`mailto:zishan.barun@gmail.com?subject=${title}&body=${body}`);
+        const baseUrl = 'https://github.com/Spiral-Memory/linebuzz/issues/new';
+        const title = encodeURIComponent(`Bug Report: ${this.state.error?.message || 'Unexpected Error'}`);
+        const body = encodeURIComponent(this.state.feedback);
+        const finalUrl = `${baseUrl}?title=${title}&body=${body}`;
+        vscode.postMessage({
+            command: 'openExternal',
+            url: finalUrl
+        });
         this.setState({ hasReported: true });
     }
 
@@ -63,10 +65,12 @@ export class ErrorBoundary extends Component<Props, State> {
                     </div>
 
                     <div class={styles['actions']}>
-                        {!this.state.hasReported && (
+                        {!this.state.hasReported ? (
                             <button class={`${styles['btn']} ${styles['btn-secondary']}`} onClick={this.handleReport}>
                                 Report Issue
                             </button>
+                        ) : (
+                            <p class={styles['thank-you-message']}>Thanks for reporting, we will look into it.</p>
                         )}
                         <button class={`${styles['btn']} ${styles['btn-primary']}`} onClick={this.handleReload}>
                             Reload

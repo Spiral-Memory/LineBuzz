@@ -52,14 +52,14 @@ export const MessageContent = ({ content, className = '', isMe = false }: Messag
     const containerRef = useRef<HTMLDivElement>(null);
     const htmlContent = useMemo(() => {
         try {
-            const parsed = marked.parse(content, { async: false });
+            const parsed = marked.parse(content || '', { async: false });
             return DOMPurify.sanitize(parsed as string, {
                 ADD_ATTR: ['target'],
                 FORBID_TAGS: ['style', 'script'],
             });
         } catch (e) {
             console.error('Markdown rendering error:', e);
-            return htmlEncode(content);
+            return htmlEncode(content || '');
         }
     }, [content]);
 
