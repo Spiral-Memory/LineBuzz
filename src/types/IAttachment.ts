@@ -4,13 +4,13 @@ interface BaseAttachment {
 
 export interface Snippet extends BaseAttachment {
     type: 'code';
-    filePath: string;
-    startLine: number;
-    endLine: number;
+    file_path: string;
+    start_line: number;
+    end_line: number;
     content: string;
-    commitSha: string;
+    commit_sha: string;
     ref: string;
-    remoteUrl: string;
+    remote_url: string;
 }
 
 export type Attachment = Snippet;

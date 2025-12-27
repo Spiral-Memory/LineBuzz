@@ -92,7 +92,7 @@ export const ChatInput = ({ stagedSnippet, onClearSnippet, onRemoveSnippet, onOp
                 <div class={styles['input-attachments']}>
                     {hasAttachments && onRemoveSnippet && stagedSnippet.map((snippet, index) => (
                         <CodeInput
-                            key={`${snippet.filePath}-${index}`}
+                            key={`${snippet.file_path}-${index}`}
                             snippet={snippet}
                             onRemove={() => onRemoveSnippet(index)}
                             onOpen={() => onOpenSnippet && onOpenSnippet(snippet)}

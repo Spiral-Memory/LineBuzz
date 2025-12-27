@@ -23,9 +23,9 @@ export class SnippetService {
 
     private _isDuplicate(snippet: Snippet): boolean {
         const isDuplicate = this._currentSnippets.some(s =>
-            s.filePath === snippet.filePath &&
-            s.startLine === snippet.startLine &&
-            s.endLine === snippet.endLine
+            s.file_path === snippet.file_path &&
+            s.start_line === snippet.start_line &&
+            s.end_line === snippet.end_line
         );
         if (isDuplicate) {
             logger.info('SnippetService', 'Duplicate Snippet', snippet);
@@ -81,13 +81,13 @@ export class SnippetService {
 
         const snippetData: Snippet = {
             type: 'code',
-            filePath: relativePath,
-            startLine: selection.start.line + 1,
-            endLine: selection.end.line + 1,
+            file_path: relativePath,
+            start_line: selection.start.line + 1,
+            end_line: selection.end.line + 1,
             content: this._dedent(editor.document.getText(selection)),
-            commitSha: currentSha,
+            commit_sha: currentSha,
             ref: currentRef,
-            remoteUrl: chosenRemote.fetchUrl,
+            remote_url: chosenRemote.fetchUrl,
         };
 
         return snippetData;

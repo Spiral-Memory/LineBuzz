@@ -34,7 +34,7 @@ export class NavigatorService {
 
         let targetIdentity: string | null = null;
         try {
-            const snippetInfo = gitUrlParse(snippet.remoteUrl);
+            const snippetInfo = gitUrlParse(snippet.remote_url);
             targetIdentity = snippetInfo.full_name;
         }
         catch (e) {
@@ -52,7 +52,7 @@ export class NavigatorService {
 
         if (matchingRepo) {
             let targetUri: vscode.Uri | undefined;
-            const snippetFilePath = snippet.filePath.split('/').join(path.sep);
+            const snippetFilePath = snippet.file_path.split('/').join(path.sep);
             const candidate = path.join(matchingRepo.rootUri.fsPath, snippetFilePath);
             if (fs.existsSync(candidate)) {
                 targetUri = vscode.Uri.file(candidate);
@@ -65,8 +65,8 @@ export class NavigatorService {
 
             const editor = await vscode.window.showTextDocument(targetUri);
             const selection = new vscode.Selection(
-                new vscode.Position(snippet.startLine - 1, 0),
-                new vscode.Position(snippet.endLine - 1, 0)
+                new vscode.Position(snippet.start_line - 1, 0),
+                new vscode.Position(snippet.end_line - 1, 0)
             );
             editor.selection = selection;
             editor.revealRange(selection);

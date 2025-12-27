@@ -9,7 +9,7 @@ interface ChatAttachmentProps {
 }
 
 export const CodeInput = ({ snippet, onRemove, onOpen }: ChatAttachmentProps) => {
-    const fileName = snippet.filePath.split('/').pop() || '';
+    const fileName = snippet.file_path.split('/').pop() || '';
     return (
         <div class={styles['code-attachment']} onClick={onOpen}>
             <div class={styles['attachment-icon']}>
@@ -17,7 +17,7 @@ export const CodeInput = ({ snippet, onRemove, onOpen }: ChatAttachmentProps) =>
             </div>
             <div class={styles['attachment-info']}>
                 <span class={styles['file-name']}>{fileName}</span>
-                <span class={styles['line-range']}>:{snippet.startLine}-{snippet.endLine}</span>
+                <span class={styles['line-range']}>:{snippet.start_line}-{snippet.end_line}</span>
             </div>
             <button class={styles['remove-button']} onClick={onRemove} aria-label="Remove attachment">
                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
