@@ -6,6 +6,12 @@ import { Snippet } from "../../types/IAttachment";
 import { logger } from '../utils/logger';
 
 export class NavigatorService {
+
+    private snippetDecoration = vscode.window.createTextEditorDecorationType({
+        backgroundColor: new vscode.ThemeColor('editor.wordHighlightStrongBackground'),
+        isWholeLine: true,
+    });
+
     public async openSnippet(snippet: Snippet): Promise<void> {
         if (!snippet) return;
 
@@ -68,8 +74,11 @@ export class NavigatorService {
                 new vscode.Position(snippet.start_line - 1, 0),
                 new vscode.Position(snippet.end_line - 1, 0)
             );
-            editor.selection = selection;
             editor.revealRange(selection);
+            editor.setDecorations(this.snippetDecoration, [selection]);
+            setTimeout(() => {
+                editor.setDecorations(this.snippetDecoration, []);
+            }, 1500);
             logger.info('NavigatorService', 'Navigated to snippet', snippet);
         }
     }
